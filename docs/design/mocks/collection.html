@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock · Collection · RyuZCloud</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  .head { padding: 48px 0 32px; border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr auto; gap: 24px; align-items: end; }
+  .head h1 { font-size: clamp(36px, 5vw, 60px); letter-spacing: -0.035em; line-height: 1; margin: 12px 0 12px; font-weight: 650; }
+  .head p { color: var(--muted); margin: 0; max-width: 58ch; }
+  .facts { display: flex; gap: 28px; }
+  .facts div { text-align: right; }
+  .facts .n { font: 500 22px var(--mono); }
+  .facts .l { font-size: 14px; color: var(--subtle); }
+  @media (max-width: 760px) { .head { grid-template-columns: 1fr; } .facts div { text-align: left; } }
+
+  .tools { display: flex; gap: 8px; margin: 24px 0; flex-wrap: wrap; }
+  .chip { height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted); background: none; font: 13px var(--mono); }
+  .chip[aria-pressed="true"] { border-color: var(--sage); color: var(--sage); }
+
+  /* Editorial grid: rhythm of one wide, then smaller tiles; not a uniform wall. */
+  .mosaic { display: grid; grid-template-columns: repeat(6, 1fr); gap: 28px 20px; }
+  .mosaic .card { grid-column: span 2; }
+  .mosaic .card.wide { grid-column: span 4; grid-row: span 2; }
+  .mosaic .card.wide .thumb { aspect-ratio: auto; height: calc(100% - 58px); }
+  .mosaic .card.wide h3 { font-size: 20px; }
+  .mosaic .card.half { grid-column: span 3; }
+  @media (max-width: 1000px) { .mosaic { grid-template-columns: repeat(2, 1fr); } .mosaic .card, .mosaic .card.half { grid-column: span 1; } .mosaic .card.wide { grid-column: span 2; grid-row: auto; } .mosaic .card.wide .thumb { aspect-ratio: 16/9; height: auto; } }
+  @media (max-width: 560px) { .mosaic { grid-template-columns: 1fr; } .mosaic .card, .mosaic .card.wide, .mosaic .card.half { grid-column: span 1; } }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="logo" href="home.html"><i></i>RyuZCloud</a>
+  <nav class="nav"><a href="home.html">Watch</a><a aria-current="page" href="#">Collections</a><a href="upload.html">Upload</a></nav>
+  <span class="spacer"></span>
+  <button class="kbd-search" type="button" aria-label="Search (Ctrl K)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search clips</span><kbd>⌘K</kbd></button>
+  <a class="btn btn-ghost btn-sm" href="auth.html">Sign in</a>
+</div></header>
+<main class="wrap">
+  <div class="head">
+    <div>
+      <span class="eyebrow">Collection 02 of 08</span>
+      <h1>Coastlines</h1>
+      <p>Shorelines, tides and harbours, mostly at the edges of the day. Every clip was uploaded straight to storage and transcoded by the worker into 360p and 720p HLS.</p>
+    </div>
+    <div class="facts">
+      <div><div class="n">24</div><div class="l">clips</div></div>
+      <div><div class="n">52:10</div><div class="l">total runtime</div></div>
+      <div><div class="n">1.8 GB</div><div class="l">HLS output</div></div>
+    </div>
+  </div>
+  <div class="tools" role="group" aria-label="Sort">
+    <button class="chip" aria-pressed="true">Curated</button><button class="chip" aria-pressed="false">Newest</button><button class="chip" aria-pressed="false">Shortest</button><button class="chip" aria-pressed="false">Longest</button>
+  </div>
+  <div class="mosaic">
+    <a class="card wide" href="watch.html"><div class="thumb" data-scene="ocean" data-seed="41"><span class="dur">03:02</span></div><h3>Breakers under a grey sky</h3><div class="meta">720p · 2 renditions</div></a>
+    <a class="card" href="watch.html"><div class="thumb" data-scene="fog" data-seed="42"><span class="dur">00:48</span></div><h3>Sea stacks in mist</h3><div class="meta">720p</div></a>
+    <a class="card" href="watch.html"><div class="thumb" data-scene="dusk" data-seed="43"><span class="dur">01:15</span></div><h3>Harbour lights coming on</h3><div class="meta">720p</div></a>
+    <a class="card half" href="watch.html"><div class="thumb" data-scene="dawn" data-seed="44"><span class="dur">02:14</span></div><h3>Low tide at first light</h3><div class="meta">720p</div></a>
+    <a class="card half" href="watch.html"><div class="thumb" data-scene="ocean" data-seed="45"><span class="dur">00:32</span></div><h3>Kelp in slow water</h3><div class="meta">360p (source was 480p)</div></a>
+    <a class="card" href="watch.html"><div class="thumb" data-scene="fog" data-seed="46"><span class="dur">01:51</span></div><h3>Pier pilings, rising water</h3><div class="meta">720p</div></a>
+    <a class="card" href="watch.html"><div class="thumb" data-scene="ocean" data-seed="47"><span class="dur">00:44</span></div><h3>Gulls over the swell</h3><div class="meta">720p</div></a>
+    <a class="card" href="watch.html"><div class="thumb" data-scene="dusk" data-seed="48"><span class="dur">02:40</span></div><h3>Lighthouse beam at dusk</h3><div class="meta">720p</div></a>
+  </div>
+</main>
+<footer class="site"><div class="wrap"><span class="demo-flag">DEMO</span><span>Titles are invented. Clips are CC0, public domain, Pexels or Pixabay licensed.</span><a href="#" style="color:var(--sage)">Credits</a></div></footer>
+<script src="mock.js"></script>
+</body>
+</html>

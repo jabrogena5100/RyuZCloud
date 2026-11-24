@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock · Sign in / Sign up · RyuZCloud</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  /* Split screen: left is a contact sheet of the library (the product), right is a plain, roomy form. */
+  body { min-height: 100vh; }
+  .split { display: grid; grid-template-columns: 1.15fr 1fr; min-height: 100vh; }
+  .sheet { position: relative; overflow: hidden; background: #0d0d0d; border-right: 1px solid var(--border); }
+  .grid { position: absolute; inset: -40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; transform: rotate(-4deg) scale(1.08); opacity: 0.55; }
+  .grid .thumb { border-radius: 6px; }
+  .sheet::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, #0d0d0d 8%, rgb(13 13 13 / 0.2) 60%, rgb(13 13 13 / 0.5)); }
+  .sheet .copy { position: absolute; z-index: 1; left: clamp(24px, 5vw, 64px); right: clamp(24px, 5vw, 64px); bottom: clamp(28px, 6vh, 64px); }
+  .sheet .logo { position: absolute; z-index: 1; top: 28px; left: clamp(24px, 5vw, 64px); }
+  .sheet h2 { font-size: clamp(30px, 3.6vw, 52px); line-height: 1.02; letter-spacing: -0.035em; margin: 14px 0 16px; font-weight: 650; max-width: 16ch; }
+  .flow { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font: 13px var(--mono); color: var(--muted); }
+  .flow span { border: 1px solid var(--border-strong); border-radius: 999px; padding: 3px 10px; background: rgb(20 20 20 / 0.7); }
+  .flow i { color: var(--sage); font-style: normal; }
+
+  .pane { display: grid; place-items: center; padding: 48px clamp(20px, 5vw, 64px); }
+  .form { width: min(400px, 100%); }
+  .tabs { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); margin-bottom: 32px; }
+  .tabs a { text-align: center; padding: 12px 0; color: var(--muted); font-weight: 550; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tabs a[aria-current] { color: var(--text); border-color: var(--sage); }
+  h1 { font-size: 30px; letter-spacing: -0.025em; margin: 0 0 6px; font-weight: 650; }
+  .hint { color: var(--muted); margin: 0 0 28px; }
+  form { display: grid; gap: 18px; }
+  label { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+  .lab { display: flex; justify-content: space-between; }
+  .lab a { color: var(--sage); }
+  input { font: 16px var(--sans); color: var(--text); background: var(--s1); border: 1px solid var(--control); border-radius: 8px; padding: 12px 14px; }
+  input:focus-visible { outline: 2px solid var(--sage); outline-offset: 1px; border-color: var(--sage); }
+  .help { font-size: 14px; color: var(--subtle); }
+  .submit { height: 46px; justify-content: center; font-size: 16px; margin-top: 6px; }
+  .fine { margin-top: 22px; font-size: 14px; color: var(--subtle); }
+  .fine a { color: var(--sage); }
+
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; grid-template-rows: 280px auto; min-height: 0; }
+    .sheet { border-right: 0; border-bottom: 1px solid var(--border); }
+    .grid { grid-template-columns: repeat(3, 1fr); }
+    .sheet h2 { font-size: 30px; margin: 8px 0 12px; }
+    .pane { padding-top: 32px; place-items: start center; }
+  }
+  @media (max-width: 480px) { .flow > :nth-child(n+6) { display: none; } }
+</style>
+</head>
+<body>
+<div class="split">
+  <aside class="sheet" aria-hidden="false">
+    <div class="grid" aria-hidden="true">
+      <div class="thumb" data-scene="ocean" data-seed="61"></div><div class="thumb" data-scene="night" data-seed="62"></div><div class="thumb" data-scene="dawn" data-seed="63"></div><div class="thumb" data-scene="forest" data-seed="64"></div>
+      <div class="thumb" data-scene="snow" data-seed="65"></div><div class="thumb" data-scene="dusk" data-seed="66"></div><div class="thumb" data-scene="fog" data-seed="67"></div><div class="thumb" data-scene="desert" data-seed="68"></div>
+      <div class="thumb" data-scene="night" data-seed="69"></div><div class="thumb" data-scene="ocean" data-seed="70"></div><div class="thumb" data-scene="forest" data-seed="71"></div><div class="thumb" data-scene="dawn" data-seed="72"></div>
+      <div class="thumb" data-scene="desert" data-seed="73"></div><div class="thumb" data-scene="fog" data-seed="74"></div><div class="thumb" data-scene="dusk" data-seed="75"></div><div class="thumb" data-scene="snow" data-seed="76"></div>
+      <div class="thumb" data-scene="forest" data-seed="77"></div><div class="thumb" data-scene="ocean" data-seed="78"></div><div class="thumb" data-scene="night" data-seed="79"></div><div class="thumb" data-scene="dawn" data-seed="80"></div>
+    </div>
+    <a class="logo" href="home.html"><i></i>RyuZCloud</a>
+    <div class="copy">
+      <span class="eyebrow">186 clips · 7.4 h · all transcoded here</span>
+      <h2>Upload once. Every screen gets the right stream.</h2>
+      <div class="flow"><span>browser</span><i>→</i><span>S3</span><i>→</i><span>queue</span><i>→</i><span>FFmpeg worker</span><i>→</i><span>HLS · CloudFront</span></div>
+    </div>
+  </aside>
+  <main class="pane">
+    <div class="form">
+      <nav class="tabs" aria-label="Account"><a aria-current="page" href="#">Sign in</a><a href="#">Create account</a></nav>
+      <h1>Welcome back</h1>
+      <p class="hint">Sign in to upload and manage your clips.</p>
+      <form>
+        <label>Email<input type="email" autocomplete="email" value="viewer@example.com"></label>
+        <label><span class="lab">Password<a href="#">Show</a></span><input type="password" autocomplete="current-password" value="correct horse"></label>
+        <button class="btn btn-primary submit" type="button">Sign in</button>
+      </form>
+      <p class="fine">Demo site, no real accounts needed. New here? <a href="#">Create an account</a>, it takes 20 seconds.</p>
+    </div>
+  </main>
+</div>
+<script src="mock.js"></script>
+</body>
+</html>

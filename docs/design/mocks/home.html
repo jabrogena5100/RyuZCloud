@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock · Home · RyuZCloud</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  /* Hero: one featured clip, muted preview (poster under reduced motion), scrim only where text sits. */
+  .hero { position: relative; height: min(76vh, 720px); min-height: 460px; overflow: hidden; border-bottom: 1px solid var(--border); }
+  .hero .media { position: absolute; inset: 0; }
+  .hero .media svg { width: 100%; height: 100%; }
+  .hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgb(20 20 20 / 0.92) 0%, rgb(20 20 20 / 0.55) 42%, rgb(20 20 20 / 0) 70%), linear-gradient(0deg, var(--bg) 0%, rgb(20 20 20 / 0) 35%); }
+  .hero .copy { position: relative; z-index: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; padding-bottom: clamp(32px, 7vh, 72px); }
+  .hero .copy > * { max-width: 640px; }
+  .hero h1 { font-size: clamp(38px, 6vw, 76px); line-height: 0.98; letter-spacing: -0.035em; font-weight: 650; margin: 14px 0 16px; }
+  .hero p { color: var(--muted); font-size: 17px; margin: 0 0 26px; max-width: 46ch; }
+  .hero .actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .preview-chip { position: absolute; z-index: 1; right: clamp(16px, 4vw, 48px); top: 20px; display: flex; gap: 8px; align-items: center; font: 12px var(--mono); color: var(--muted); background: rgb(20 20 20 / 0.7); border: 1px solid var(--border); border-radius: 999px; padding: 5px 10px; }
+  .preview-chip b { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+
+  /* The system, in numbers: a quiet band, not a dashboard. */
+  .band { border-bottom: 1px solid var(--border); background: var(--s1); }
+  .band .wrap { display: grid; grid-template-columns: repeat(5, 1fr); }
+  .band div.cell { padding: 18px 0; border-right: 1px solid var(--border); padding-left: 18px; }
+  .band div.cell:first-child { padding-left: 0; }
+  .band div.cell:last-child { border-right: 0; }
+  .band .n { font: 500 22px var(--mono); letter-spacing: -0.01em; }
+  .band .l { font-size: 14px; color: var(--subtle); }
+  @media (max-width: 760px) { .band .wrap { grid-template-columns: repeat(2, 1fr); } .band div.cell { border-right: 0; padding-left: 0; } .band div.cell:last-child { display: none; } }
+
+  section.row { margin-top: 56px; }
+  .row-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 16px; }
+  .row-head h2 { font-size: 22px; letter-spacing: -0.02em; margin: 0; font-weight: 600; }
+  .row-head .count { font: 13px var(--mono); color: var(--subtle); }
+  .row-head a.more { margin-left: auto; color: var(--sage); font-size: 14px; }
+  .row-head .arrows { display: flex; gap: 6px; }
+  @media (max-width: 760px) { .row-head { flex-wrap: wrap; row-gap: 4px; } .row-head .count { order: 3; width: 100%; } .row-head .arrows { display: none; } }
+  .row-head .arrows button { width: 34px; height: 34px; border-radius: 8px; border: 1px solid var(--border-strong); background: none; color: var(--text); font-size: 16px; }
+
+  /* Rows scroll horizontally with snap; the first card of a row can be a "lead" at double width. */
+  .track { align-items: start; display: grid; grid-auto-flow: column; grid-auto-columns: clamp(240px, 22vw, 300px); gap: 18px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-bottom: 4px; }
+  .track > * { scroll-snap-align: start; }
+  .track .lead { grid-column: span 2; }
+  .track .lead .thumb { aspect-ratio: 2.39 / 1; } /* scope ratio: the lead reads as a film, not a bigger tile */
+  .track .lead h3 { font-size: 18px; }
+  @media (max-width: 760px) { .track { grid-auto-columns: 78%; } .track .lead { grid-column: span 1; } .track .lead .thumb { aspect-ratio: 16/9; } }
+
+  /* Editorial split: one large clip beside a numbered list. */
+  .split { display: grid; grid-template-columns: 1.4fr 1fr; gap: 28px; }
+  .split ol { list-style: none; margin: 0; padding: 0; counter-reset: n; display: grid; gap: 4px; }
+  .split li { counter-increment: n; display: grid; grid-template-columns: 34px 132px 1fr; gap: 14px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+  .split li::before { content: counter(n, decimal-leading-zero); font: 500 14px var(--mono); color: var(--subtle); }
+  .split li h3 { margin: 0 0 2px; font-size: 15px; font-weight: 550; }
+  .split li .thumb { border-radius: 6px; }
+  .split li .meta { font: 13px var(--mono); color: var(--muted); }
+  .split ol { align-content: start; }
+  @media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+
+  /* Freshly processed: status is part of the card. */
+  .status { display: inline-flex; align-items: center; gap: 6px; font: 500 12px var(--mono); padding: 2px 8px; border-radius: 999px; border: 1px solid var(--border-strong); color: var(--muted); }
+  .status.ready { color: var(--sage); border-color: rgb(163 177 138 / 0.45); }
+  .status.work { color: var(--amber); border-color: rgb(212 166 90 / 0.45); }
+  .bar-progress { height: 3px; background: var(--s2); border-radius: 2px; margin-top: 8px; overflow: hidden; }
+  .bar-progress i { display: block; height: 100%; background: var(--amber); }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="logo" href="#"><i></i>RyuZCloud</a>
+  <nav class="nav"><a aria-current="page" href="#">Watch</a><a href="collection.html">Collections</a><a href="upload.html">Upload</a></nav>
+  <span class="spacer"></span>
+  <button class="kbd-search" type="button" aria-label="Search (Ctrl K)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search clips</span><kbd>⌘K</kbd></button>
+  <a class="btn btn-ghost btn-sm" href="auth.html">Sign in</a>
+</div></header>
+
+<section class="hero">
+  <div class="media" data-scene="dawn" data-seed="3"></div>
+  <span class="preview-chip"><b></b>Preview · muted</span>
+  <div class="wrap copy">
+    <span class="eyebrow">Featured · Coastlines · <span class="mono">02:14</span> · 720p</span>
+    <h1>Low tide at first light</h1>
+    <p>Fog lifting off a rocky shore. One upload, sent straight to object storage and transcoded to two HLS renditions by the worker.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="watch.html"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M6 4v16l14-8z"/></svg>Play</a>
+      <a class="btn btn-ghost" href="collection.html">Open collection</a>
+    </div>
+  </div>
+</section>
+
+<div class="band"><div class="wrap">
+  <div class="cell"><div class="n">186</div><div class="l">clips in the library</div></div>
+  <div class="cell"><div class="n">7.4 h</div><div class="l">of footage</div></div>
+  <div class="cell"><div class="n">2</div><div class="l">HLS renditions each</div></div>
+  <div class="cell"><div class="n">0.31×</div><div class="l">median transcode time</div></div>
+  <div class="cell"><div class="n">0</div><div class="l">jobs lost to crashes</div></div>
+</div></div>
+
+<main class="wrap">
+  <section class="row">
+    <div class="row-head"><h2>Coastlines</h2><span class="count">24 clips · 52 min</span><a class="more" href="collection.html">View all</a><div class="arrows"><button aria-label="Previous">‹</button><button aria-label="Next">›</button></div></div>
+    <div class="track">
+      <a class="card lead" href="watch.html"><div class="thumb" data-scene="ocean" data-seed="11"><span class="dur">03:02</span></div><h3>Breakers under a grey sky</h3><div class="meta">Coastlines · 720p</div></a>
+      <a class="card" href="watch.html"><div class="thumb" data-scene="fog" data-seed="12"><span class="dur">00:48</span></div><h3>Sea stacks in mist</h3><div class="meta">Coastlines · 720p</div></a>
+      <a class="card" href="watch.html"><div class="thumb" data-scene="dusk" data-seed="13"><span class="dur">01:15</span></div><h3>Harbour lights coming on</h3><div class="meta">Coastlines · 720p</div></a>
+      <a class="card" href="watch.html"><div class="thumb" data-scene="ocean" data-seed="14"><span class="dur">00:32</span></div><h3>Kelp in slow water</h3><div class="meta">Coastlines · 360p</div></a>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-head"><h2>After dark</h2><span class="count">18 clips · 41 min</span><a class="more" href="collection.html">View all</a></div>
+    <div class="split">
+      <a class="card" href="watch.html"><div class="thumb" data-scene="night" data-seed="21"><span class="dur">04:40</span></div><h3>Rail yard, long exposure</h3><div class="meta">After dark · 720p · 2 renditions</div></a>
+      <ol>
+        <li><div class="thumb" data-scene="night" data-seed="22"></div><div><h3>Rooftops in the rain</h3><div class="meta">01:09</div></div></li>
+        <li><div class="thumb" data-scene="dusk" data-seed="23"></div><div><h3>Last ferry out</h3><div class="meta">02:31</div></div></li>
+        <li><div class="thumb" data-scene="night" data-seed="24"></div><div><h3>Neon on wet asphalt</h3><div class="meta">00:54</div></div></li>
+        <li><div class="thumb" data-scene="night" data-seed="25"></div><div><h3>Bridge traffic, 2 a.m.</h3><div class="meta">03:12</div></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="row">
+    <div class="row-head"><h2>Just processed</h2><span class="count">from the worker, newest first</span><a class="more" href="upload.html">See the pipeline</a></div>
+    <div class="track">
+      <a class="card" href="upload.html"><div class="thumb" data-scene="snow" data-seed="31"></div><h3>Ridge line in wind</h3><div class="meta"><span class="status work">● Transcoding 720p · 64%</span></div><div class="bar-progress"><i style="width:64%"></i></div></a>
+      <a class="card" href="watch.html"><div class="thumb" data-scene="forest" data-seed="32"><span class="dur">01:40</span></div><h3>Moss and running water</h3><div class="meta"><span class="status ready">✓ Ready · 38 s ago</span></div></a>
+      <a class="card" href="watch.html"><div class="thumb" data-scene="desert" data-seed="33"><span class="dur">00:57</span></div><h3>Dune crest, late sun</h3><div class="meta"><span class="status ready">✓ Ready · 2 min ago</span></div></a>
+      <a class="card" href="watch.html"><div class="thumb" data-scene="forest" data-seed="34"><span class="dur">02:05</span></div><h3>Canopy from below</h3><div class="meta"><span class="status ready">✓ Ready · 5 min ago</span></div></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site"><div class="wrap">
+  <span class="demo-flag">DEMO</span><span>Titles are invented. Clips are CC0, public domain, Pexels or Pixabay licensed.</span><a href="#" style="color:var(--sage)">Credits</a><span class="spacer"></span><span class="mono">Mock · numbers are placeholders</span>
+</div></footer>
+<script src="mock.js"></script>
+</body>
+</html>

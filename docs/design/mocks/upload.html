@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock · Upload and processing · RyuZCloud</title>
+<link rel="stylesheet" href="mock.css">
+<style>
+  .page { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 40px; padding-top: 40px; }
+  @media (max-width: 960px) { .page { grid-template-columns: 1fr; gap: 32px; } }
+  h1 { font-size: clamp(30px, 4vw, 44px); letter-spacing: -0.03em; margin: 10px 0 8px; font-weight: 650; line-height: 1.05; }
+  .lede { color: var(--muted); margin: 0 0 24px; max-width: 52ch; }
+
+  .drop { border: 1.5px dashed var(--control); border-radius: var(--radius); background: var(--s1); padding: 28px; display: grid; grid-template-columns: 64px 1fr; gap: 18px; align-items: center; }
+  .drop .file { width: 64px; aspect-ratio: 16/9; border-radius: 6px; overflow: hidden; }
+  .drop .name { font-weight: 550; }
+  .drop .sub { font: 13px var(--mono); color: var(--muted); }
+  .meter { grid-column: 1 / -1; display: grid; gap: 6px; }
+  .meter .track { height: 6px; background: var(--s2); border-radius: 3px; overflow: hidden; }
+  .meter .track i { display: block; height: 100%; width: 100%; background: var(--sage); }
+  .meter .row { display: flex; justify-content: space-between; font: 13px var(--mono); color: var(--muted); }
+
+  form { display: grid; gap: 16px; margin-top: 24px; }
+  label { display: grid; gap: 6px; font-size: 14px; color: var(--muted); }
+  input, textarea, select { font: 15px var(--sans); color: var(--text); background: var(--s1); border: 1px solid var(--control); border-radius: 8px; padding: 10px 12px; }
+  textarea { min-height: 84px; resize: vertical; }
+  .seg { display: flex; border: 1px solid var(--control); border-radius: 8px; overflow: hidden; width: max-content; }
+  .seg button { background: none; border: 0; color: var(--muted); padding: 8px 14px; font: 14px var(--sans); }
+  .seg button[aria-pressed="true"] { background: var(--s2); color: var(--text); }
+
+  /* The pipeline, live. Vertical stepper: each stage says what system did it and how long it took. */
+  .pipe { align-self: start; background: var(--s1); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; }
+  .pipe-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 20px; gap: 12px; flex-wrap: wrap; }
+  .pipe-head h2 { margin: 0; font-size: 18px; letter-spacing: -0.01em; font-weight: 600; }
+  .pipe-head .id { font: 13px var(--mono); color: var(--subtle); }
+  ol.steps { list-style: none; margin: 0; padding: 0; }
+  .steps li { display: grid; grid-template-columns: 28px 1fr auto; gap: 14px; position: relative; padding-bottom: 22px; }
+  .steps li:not(:last-child)::before { content: ""; position: absolute; left: 13px; top: 28px; bottom: 2px; width: 2px; background: var(--border-strong); }
+  .steps li.done:not(:last-child)::before { background: var(--sage); }
+  .dot { width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 600 13px var(--mono); border: 2px solid var(--border-strong); color: var(--subtle); background: var(--s1); position: relative; z-index: 1; }
+  .done .dot { background: var(--sage); border-color: var(--sage); color: var(--bg); }
+  .active .dot { border-color: var(--amber); color: var(--amber); }
+  .steps h3 { margin: 3px 0 2px; font-size: 15px; font-weight: 600; }
+  .steps .what { color: var(--muted); font-size: 14px; }
+  .steps .t { font: 13px var(--mono); color: var(--muted); padding-top: 4px; white-space: nowrap; }
+  .active .t { color: var(--amber); }
+  .sub-bars { display: grid; gap: 8px; margin-top: 10px; }
+  .sub-bars div { display: grid; grid-template-columns: 52px 1fr 44px; gap: 10px; align-items: center; font: 13px var(--mono); color: var(--muted); }
+  .sub-bars .tr { height: 4px; background: var(--s2); border-radius: 2px; overflow: hidden; }
+  .sub-bars .tr i { display: block; height: 100%; }
+  .log { margin-top: 6px; border-top: 1px solid var(--border); padding-top: 14px; font: 12.5px/1.7 var(--mono); color: var(--muted); }
+  .log b { color: var(--subtle); font-weight: 400; margin-right: 10px; }
+</style>
+</head>
+<body>
+<header class="bar"><div class="wrap">
+  <a class="logo" href="home.html"><i></i>RyuZCloud</a>
+  <nav class="nav"><a href="home.html">Watch</a><a href="collection.html">Collections</a><a aria-current="page" href="#">Upload</a></nav>
+  <span class="spacer"></span>
+  <button class="kbd-search" type="button" aria-label="Search (Ctrl K)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span>Search clips</span><kbd>⌘K</kbd></button>
+  <a class="btn btn-ghost btn-sm" href="#">Studio</a>
+</div></header>
+<main class="wrap page">
+  <section>
+    <span class="eyebrow">Upload</span>
+    <h1>Send a clip straight to storage</h1>
+    <p class="lede">Your browser uploads the file directly to S3 with a short-lived signed URL. The API never touches the bytes; a worker picks it up and builds the HLS renditions.</p>
+    <div class="drop">
+      <div class="file" data-scene="snow" data-seed="31"></div>
+      <div><div class="name">ridge-line-wind.mp4</div><div class="sub">84.2 MB · video/mp4</div></div>
+      <div class="meter"><div class="track"><i></i></div><div class="row"><span>Uploaded · 84.2 MB in 6.8 s</span><span>12.4 MB/s</span></div></div>
+    </div>
+    <form>
+      <label>Title<input value="Ridge line in wind"></label>
+      <label>Description<textarea>Spindrift blowing off a ridge in late afternoon light.</textarea></label>
+      <label>Collection<select><option>Mountains</option></select></label>
+      <div><div style="font-size:14px;color:var(--muted);margin-bottom:6px">Visibility</div><div class="seg" role="group" aria-label="Visibility"><button type="button" aria-pressed="true">Public</button><button type="button" aria-pressed="false">Unlisted</button><button type="button" aria-pressed="false">Private</button></div></div>
+    </form>
+  </section>
+
+  <section class="pipe" aria-labelledby="pipe-h" aria-live="polite">
+    <div class="pipe-head"><h2 id="pipe-h">Processing pipeline</h2><span class="id">job 7f3c…a91e · attempt 1 of 4</span></div>
+    <ol class="steps">
+      <li class="done"><span class="dot">✓</span><div><h3>Uploaded</h3><div class="what">Browser → S3, verified with HeadObject</div></div><span class="t">6.8 s</span></li>
+      <li class="done"><span class="dot">✓</span><div><h3>Queued</h3><div class="what">Job row committed, id sent to SQS</div></div><span class="t">0.4 s</span></li>
+      <li class="active"><span class="dot">3</span><div><h3>Transcoding</h3><div class="what">Worker holds a 120 s lease, renewed every 30 s</div>
+        <div class="sub-bars">
+          <div><span>360p</span><span class="tr"><i style="width:100%;background:var(--sage)"></i></span><span>done</span></div>
+          <div><span>720p</span><span class="tr"><i style="width:64%;background:var(--amber)"></i></span><span>64%</span></div>
+        </div></div><span class="t">00:27</span></li>
+      <li><span class="dot">4</span><div><h3>Thumbnail and playlist</h3><div class="what">Master playlist written last, so half a video is never playable</div></div><span class="t">—</span></li>
+      <li><span class="dot">5</span><div><h3>Ready</h3><div class="what">Playable through CloudFront with signed cookies</div></div><span class="t">—</span></li>
+    </ol>
+    <div class="log" aria-label="Worker log">
+      <div><b>14:02:11</b>job claimed by worker-1 (lease 120 s)</div>
+      <div><b>14:02:12</b>source probed: 1920×1080 h264, 2:14</div>
+      <div><b>14:02:31</b>360p rendition uploaded (34 segments)</div>
+      <div><b>14:02:38</b>720p 64%</div>
+    </div>
+  </section>
+</main>
+<footer class="site"><div class="wrap"><span class="demo-flag">DEMO</span><span>Mock · timings are placeholders, real values come from the job record.</span></div></footer>
+<script src="mock.js"></script>
+</body>
+</html>
