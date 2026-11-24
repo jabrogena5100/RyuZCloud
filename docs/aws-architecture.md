@@ -1,6 +1,6 @@
 # AWS architecture (Phase 4)
 
-Everything described here is **defined but not deployed**. `infra/terraform` creates it only when you run
+Everything described here is **defined in Terraform; applied once (2026-11-14) and destroyed**. `infra/terraform` creates it only when you run
 `terraform apply` (see [aws-runbook.md](aws-runbook.md)). Local development is unchanged and still runs on
 Docker Compose with MinIO and Redis.
 

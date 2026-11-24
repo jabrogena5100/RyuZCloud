@@ -3,7 +3,7 @@
 | Path | Purpose |
 | --- | --- |
 | `minio/` | Local development: creates the private bucket and least-privilege app user in MinIO (used by `docker-compose.yml`) |
-| `terraform/` | AWS infrastructure for production. **Written but never applied.** |
+| `terraform/` | AWS infrastructure. Applied once (2026-11-14), verified, then destroyed; rebuilt on demand. |
 
 Local development needs nothing from `terraform/` and never talks to AWS.
 
@@ -22,10 +22,10 @@ Local development needs nothing from `terraform/` and never talks to AWS.
 | `monitoring.tf` | Log metric filters, alarms, SNS, dashboard, budget |
 | `github_oidc.tf` | Optional OIDC role for the deploy workflow |
 
-Start with [docs/aws-runbook.md](../docs/aws-runbook.md). Validation without AWS credentials:
+Start with [docs/rebuild-from-zero.md](../docs/rebuild-from-zero.md). Validation without AWS credentials:
 
 ```bash
-cd ~/projects/RyuCloud
+cd ~/projects/RyuZCloud
 scripts/validate-terraform.sh       # fmt -check, init -backend=false, validate
 ```
 

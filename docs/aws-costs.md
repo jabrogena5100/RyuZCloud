@@ -1,6 +1,6 @@
 # AWS cost estimate
 
-**These are estimates, not measurements, and nothing has been deployed.** They use public on-demand list prices
+**These are estimates, not measurements (the stack has been deployed once, 2026-11-14, but its real cost has not been read from Cost Explorer).** They use public on-demand list prices
 as best known when this was written (730 hours/month), taken from `us-east-1`. **The chosen region is `us-west-2`.** To my
 knowledge Oregon list prices for ALB, RDS `db.t4g.micro`, gp3, public IPv4, S3, Secrets Manager and CloudWatch match
 `us-east-1`, and Fargate in Oregon is priced the same as Virginia (Northern California is about 15% higher), but I could

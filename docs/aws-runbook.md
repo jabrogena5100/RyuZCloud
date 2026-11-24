@@ -1,6 +1,6 @@
 # AWS deployment runbook
 
-**Nothing here runs automatically and nothing has been deployed.** Each step is a command for you to run. Steps marked
+**Nothing here runs automatically.** The stack was applied once (2026-11-14) and destroyed; to rebuild from nothing, follow [rebuild-from-zero.md](rebuild-from-zero.md), which supersedes steps 0-8 and 11 below. This file remains the reference for day-two operations (§9) and GitHub Actions (§10). Each step is a command for you to run. Steps marked
 **BILLS** start charges ([aws-costs.md](aws-costs.md)); steps marked **DESTRUCTIVE** delete data.
 
 Where a command runs: **VM** = your Ubuntu terminal in the repository, **AWS CLI** = the same terminal with AWS

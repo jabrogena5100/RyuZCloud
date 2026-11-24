@@ -1,0 +1,247 @@
+{
+  "base": "http://localhost:3100",
+  "runs": 3,
+  "date": "2026-11-23T23:46:28.278Z",
+  "result": {
+    "home": {
+      "totalBytes": {
+        "median": 199156,
+        "min": 199156,
+        "max": 199156
+      },
+      "jsBytes": {
+        "median": 131577,
+        "min": 131577,
+        "max": 131577
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 51137,
+        "min": 51137,
+        "max": 51137
+      },
+      "requests": {
+        "median": 20,
+        "min": 20,
+        "max": 20
+      },
+      "dcl": {
+        "median": 463,
+        "min": 383,
+        "max": 903
+      },
+      "load": {
+        "median": 717,
+        "min": 580,
+        "max": 905
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "login": {
+      "totalBytes": {
+        "median": 151148,
+        "min": 151148,
+        "max": 151148
+      },
+      "jsBytes": {
+        "median": 134438,
+        "min": 134438,
+        "max": 134438
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 19,
+        "min": 19,
+        "max": 19
+      },
+      "dcl": {
+        "median": 473,
+        "min": 171,
+        "max": 731
+      },
+      "load": {
+        "median": 652,
+        "min": 292,
+        "max": 731
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "register": {
+      "totalBytes": {
+        "median": 151229,
+        "min": 151229,
+        "max": 151229
+      },
+      "jsBytes": {
+        "median": 134438,
+        "min": 134438,
+        "max": 134438
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 19,
+        "min": 19,
+        "max": 19
+      },
+      "dcl": {
+        "median": 524,
+        "min": 384,
+        "max": 583
+      },
+      "load": {
+        "median": 635,
+        "min": 583,
+        "max": 694
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "upload": {
+      "totalBytes": {
+        "median": 146396,
+        "min": 146396,
+        "max": 146396
+      },
+      "jsBytes": {
+        "median": 131577,
+        "min": 131577,
+        "max": 131577
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 17,
+        "min": 17,
+        "max": 17
+      },
+      "dcl": {
+        "median": 303,
+        "min": 144,
+        "max": 332
+      },
+      "load": {
+        "median": 584,
+        "min": 520,
+        "max": 622
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "studio": {
+      "totalBytes": {
+        "median": 146389,
+        "min": 146389,
+        "max": 146389
+      },
+      "jsBytes": {
+        "median": 131577,
+        "min": 131577,
+        "max": 131577
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 17,
+        "min": 17,
+        "max": 17
+      },
+      "dcl": {
+        "median": 368,
+        "min": 340,
+        "max": 557
+      },
+      "load": {
+        "median": 628,
+        "min": 487,
+        "max": 757
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "watch": {
+      "totalBytes": {
+        "median": 550963,
+        "min": 550963,
+        "max": 550963
+      },
+      "jsBytes": {
+        "median": 135737,
+        "min": 135737,
+        "max": 135737
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 27,
+        "min": 27,
+        "max": 27
+      },
+      "dcl": {
+        "median": 389,
+        "min": 365,
+        "max": 512
+      },
+      "load": {
+        "median": 660,
+        "min": 389,
+        "max": 678
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    }
+  }
+}

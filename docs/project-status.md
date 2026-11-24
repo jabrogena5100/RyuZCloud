@@ -7,7 +7,7 @@ Last updated 2026-11-14. Evidence for every claim is in [verification.md](verifi
 | Level | Status |
 | --- | --- |
 | **Locally complete** | **Yes.** API, auth, direct-to-storage uploads, Redis queue, FFmpeg/HLS worker, crash recovery, retries, health/readiness, Next.js frontend and Compose stack all work; tests and E2E scripts pass (re-run 2026-11-10). |
-| **Cloud-ready** | **Mostly.** Terraform formats and validates offline (1.10.5), workflows and scripts pass static checks, runbook commands corrected. Not proven by a real `plan`. |
+| **Cloud-ready** | **Mostly.** Terraform formats and validates offline (1.10.5), workflows and scripts pass static checks, runbook commands corrected. A real plan (115 to add) and apply ran on 2026-11-14. |
 | **Cloud-verified** | **Yes for one session (2026-11-14).** Applied, migrated, services running, upload, processing and playback work, unsigned media is 403 on CloudFront and S3. One application bug (signed-cookie wildcard) was found by the cloud test and fixed. The stack was destroyed (94 resources) and the audit's direct checks are clean; its tag-search section reports stale entries (script flaw, see verification.md). Cookie expiry, Safari, failure drills and a restore test are untested. |
 | **Production-ready** | **No.** Needs the live checks in [phase5-plan.md](phase5-plan.md) §8 (restore test, alarm drill, one week of cost data). |
 
