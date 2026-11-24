@@ -1,5 +1,7 @@
-# One public load balancer, one hostname. /api/* goes to the Go API, everything else to the
-# Next.js frontend, so the browser sees a single origin (first-party session cookie, no CORS).
+# One public load balancer, one hostname (<domain_name>, reached through Cloudflare's flattened
+# apex CNAME). /api/* goes to the Go API, everything else to the Next.js frontend, so the browser
+# sees a single origin (first-party session cookie, no CORS). Requests for any other Host header
+# (the load balancer's own DNS name, the delegated origin name, scanners) get a plain 404.
 # Video bytes never pass through it: uploads go to S3, playback comes from CloudFront.
 
 resource "aws_lb" "main" {
@@ -75,8 +77,13 @@ resource "aws_lb_listener" "https" {
   certificate_arn   = aws_acm_certificate_validation.app.certificate_arn
 
   default_action {
-    type             = "forward"
-    target_group_arn = aws_lb_target_group.frontend.arn
+    type = "fixed-response"
+
+    fixed_response {
+      content_type = "text/plain"
+      message_body = "Not found"
+      status_code  = "404"
+    }
   }
 }
 
@@ -90,8 +97,30 @@ resource "aws_lb_listener_rule" "api" {
   }
 
   condition {
+    host_header {
+      values = [local.app_host]
+    }
+  }
+
+  condition {
     path_pattern {
       values = ["/api/*"]
+    }
+  }
+}
+
+resource "aws_lb_listener_rule" "frontend" {
+  listener_arn = aws_lb_listener.https.arn
+  priority     = 20
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.frontend.arn
+  }
+
+  condition {
+    host_header {
+      values = [local.app_host]
     }
   }
 }

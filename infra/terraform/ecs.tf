@@ -208,7 +208,7 @@ resource "aws_ecs_service" "frontend" {
     ignore_changes = [task_definition]
   }
 
-  depends_on = [aws_lb_listener.https, aws_ecs_cluster_capacity_providers.main]
+  depends_on = [aws_lb_listener_rule.frontend, aws_ecs_cluster_capacity_providers.main]
 }
 
 # ---------------------------------------------------------------- Worker

@@ -87,3 +87,16 @@ output "github_deploy_role_arn" {
 output "dashboard_url" {
   value = "https://${var.aws_region}.console.aws.amazon.com/cloudwatch/home?region=${var.aws_region}#dashboards:name=${aws_cloudwatch_dashboard.main.dashboard_name}"
 }
+
+output "cloudflare_records" {
+  description = "Records to create BY HAND in Cloudflare (all DNS only / grey cloud). Only the two validation CNAMEs can differ between sessions; compare and update if they do."
+  value = concat(
+    [
+      { type = "CNAME", name = var.domain_name, content = local.app_origin_host, purpose = "site (apex, flattened)" },
+      { type = "CNAME", name = local.media_host, content = local.media_origin_host, purpose = "media (CloudFront)" },
+    ],
+    [for ns in data.aws_route53_zone.delegated.name_servers : { type = "NS", name = var.delegated_zone_name, content = ns, purpose = "delegation to Route 53" }],
+    [for o in aws_acm_certificate.app.domain_validation_options : { type = o.resource_record_type, name = trimsuffix(o.resource_record_name, "."), content = trimsuffix(o.resource_record_value, "."), purpose = "ACM validation, load balancer (us-west-2)" }],
+    [for o in aws_acm_certificate.media.domain_validation_options : { type = o.resource_record_type, name = trimsuffix(o.resource_record_name, "."), content = trimsuffix(o.resource_record_value, "."), purpose = "ACM validation, CloudFront (us-east-1)" }],
+  )
+}

@@ -40,7 +40,7 @@ variable "aws_region" {
 # ---------------------------------------------------------------------------------------
 
 variable "domain_name" {
-  description = "Host name of the app, for example ryucloud.example.com. Media is served from media.<domain_name>. The signed CloudFront cookies need both hosts under one parent domain."
+  description = "Public host name of the site, for example example.com (an apex in Cloudflare). Media is served from media.<domain_name>. Both names live in Cloudflare DNS, made by hand (outputs cloudflare_records). The signed CloudFront cookies are scoped to this name, so it must be a parent of the media host."
   type        = string
 
   validation {
@@ -49,8 +49,23 @@ variable "domain_name" {
   }
 }
 
+variable "delegated_zone_name" {
+  description = "Name of the Route 53 hosted zone delegated from Cloudflare, for example api.example.com. It must be a subdomain of domain_name. Terraform writes the per-session alias records into it: <zone> -> load balancer, media.<zone> -> CloudFront. Cloudflare's hand-made CNAMEs point at those two names."
+  type        = string
+
+  validation {
+    condition     = can(regex("^([a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?\\.)+[a-z]{2,}$", var.delegated_zone_name))
+    error_message = "delegated_zone_name must be a lowercase DNS name such as api.example.com (no trailing dot)."
+  }
+
+  validation {
+    condition     = endswith(var.delegated_zone_name, ".${var.domain_name}")
+    error_message = "delegated_zone_name must be a subdomain of domain_name (for example api.example.com under example.com)."
+  }
+}
+
 variable "hosted_zone_id" {
-  description = "ID of the existing Route 53 public hosted zone that contains domain_name."
+  description = "ID of the existing Route 53 public hosted zone named delegated_zone_name. Created by hand, outside this stack, so its name servers (copied into Cloudflare) never change."
   type        = string
 
   validation {
