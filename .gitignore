@@ -37,3 +37,7 @@ tfplan
 .vscode/
 *.swp
 .DS_Store
+
+# Playwright output
+frontend/test-results/
+frontend/playwright-report/

@@ -43,6 +43,66 @@ export type Video = {
   processing_progress: number | null;
   /** Owner-facing reason when status is "failed". */
   processing_error: string | null;
+  /** The curated collection the video belongs to, if any. */
+  collection: CollectionRef | null;
+};
+
+export type CollectionRef = { slug: string; title: string };
+
+/** Counts cover public, ready videos only. */
+export type Collection = {
+  slug: string;
+  title: string;
+  description: string;
+  video_count: number;
+  total_seconds: number;
+  hls_bytes: number;
+  cover_url: string | null;
+};
+
+export type CollectionPage = VideoPage & { collection: Collection };
+
+/** Aggregates of the public library, computed by the API from stored rows. */
+export type LibraryStats = {
+  videos: number;
+  total_seconds: number;
+  renditions: number;
+  hls_bytes: number;
+  jobs_succeeded: number;
+  jobs_retried: number;
+  /** Median processing wall time / video duration; null until a job has finished. */
+  median_processing_ratio: number | null;
+};
+
+export type Rendition = {
+  name: string;
+  width: number;
+  height: number;
+  bandwidth_bps: number;
+  segment_count: number;
+  size_bytes: number;
+};
+
+export type JobState = "queued" | "processing" | "retry" | "succeeded" | "failed";
+
+/** How one video moved through upload, queue and worker. */
+export type Pipeline = {
+  video_id: string;
+  status: VideoStatus;
+  duration_seconds: number | null;
+  upload: { size_bytes: number; content_type: string; created_at: string; completed_at: string | null } | null;
+  job: {
+    state: JobState;
+    /** Worker stage: queued, starting, downloading, analyzing, "transcoding 360p", thumbnail, uploading, done, failed, "waiting to retry". */
+    stage: string;
+    progress: number;
+    attempts: number;
+    max_attempts: number;
+    created_at: string;
+    started_at: string | null;
+    finished_at: string | null;
+  } | null;
+  renditions: Rendition[];
 };
 
 export type VideoPage = {
@@ -93,15 +153,15 @@ export type ApiErrorDetail = {
   type: string;
 };
 
-/** Display model for a video card, shared by real API videos and placeholders. */
+/** Display model for a video card. */
 export type VideoCardData = {
   id: string;
   title: string;
   channelName: string;
-  views: number;
   publishedAt: string | null;
   durationSeconds: number | null;
   thumbnailUrl: string | null;
-  /** Where clicking the card goes; omitted for placeholders. */
+  collectionTitle?: string | null;
+  /** Where clicking the card goes; omitted when the video is not watchable yet. */
   href?: string;
 };

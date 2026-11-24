@@ -1,6 +1,10 @@
 import type {
   ApiErrorDetail,
   Channel,
+  Collection,
+  CollectionPage,
+  LibraryStats,
+  Pipeline,
   InitiatedUpload,
   Upload,
   UploadLimits,
@@ -78,8 +82,14 @@ export const api = {
   register: (input: { email: string; password: string; display_name: string }) =>
     apiFetch<User>("/auth/register", { method: "POST", body: JSON.stringify(input) }),
   logout: () => apiFetch<void>("/auth/logout", { method: "POST" }),
-  listVideos: ({ limit = 24, offset = 0 } = {}) =>
-    apiFetch<VideoPage>(`/videos?limit=${limit}&offset=${offset}`),
+  listVideos: ({ limit = 24, offset = 0, q = "" }: { limit?: number; offset?: number; q?: string } = {}) =>
+    apiFetch<VideoPage>(`/videos?limit=${limit}&offset=${offset}${q ? `&q=${encodeURIComponent(q)}` : ""}`),
+  featuredVideo: () => apiFetch<Video>("/videos/featured"),
+  collections: () => apiFetch<{ items: Collection[] }>("/collections"),
+  collection: (slug: string, { limit = 24, offset = 0 } = {}) =>
+    apiFetch<CollectionPage>(`/collections/${encodeURIComponent(slug)}?limit=${limit}&offset=${offset}`),
+  stats: () => apiFetch<LibraryStats>("/stats"),
+  pipeline: (id: string) => apiFetch<Pipeline>(`/videos/${encodeURIComponent(id)}/pipeline`),
 
   myChannels: () => apiFetch<Channel[]>("/channels/mine"),
   createChannel: (input: { handle: string; name: string }) =>

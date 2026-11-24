@@ -1,11 +1,125 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens (docs/design/README.md). One dark theme; contrast ratios are computed there.
+ * Tailwind utilities come from these names: bg-bg, bg-s1, text-muted, border-control, text-sage ...
+ */
+@theme {
+  --color-bg: #141414;
+  --color-s1: #20201f;
+  --color-s2: #2c2c2a;
+  --color-line: #3a3a37;
+  --color-line-strong: #5a5955;
+  --color-control: #6c6b67; /* input outlines: 3.45:1 on bg, 3.06:1 on s1 */
+  --color-text: #eceae4;
+  --color-muted: #b2aea6;
+  --color-subtle: #8f8c84; /* bg and s1 only, >= 14px */
+  --color-sage: #a3b18a;
+  --color-sage-hover: #b7c4a0;
+  --color-amber: #d4a65a;
+  --color-danger: #e8998d; /* 8.22:1 on bg, 7.28:1 on s1; failed states only */
+
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  --ease-out-soft: cubic-bezier(0.2, 0, 0, 1);
+  --radius-card: 10px;
+}
+
 :root {
-  color-scheme: light dark;
+  color-scheme: dark;
+}
+
+html {
+  background: var(--color-bg);
 }
 
 body {
-  @apply bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100;
-  font-family:
-    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* User-written titles can be one long word ("somethingFrommyLecture"); break it only when it
+   cannot fit, so a narrow phone never scrolls sideways. */
+h1,
+h2,
+h3,
+p,
+dd,
+li {
+  overflow-wrap: anywhere;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-sage);
+  outline-offset: 3px;
+}
+
+::selection {
+  background: color-mix(in oklab, var(--color-sage) 40%, transparent);
+}
+
+/* Mono text for durations, counts, statuses and timestamps. */
+.tnum {
+  font-family: var(--font-mono);
+  font-feature-settings: "tnum";
+  letter-spacing: 0.02em;
+}
+
+.eyebrow {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+
+/* Horizontal shelves scroll natively; the scrollbar is hidden, the arrows and keys stay. */
+.no-scrollbar {
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Motion: 120-240 ms, opacity/transform only, gone under reduced motion. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Page content width with fluid side margins. */
+@utility wrap {
+  width: min(1360px, 100% - 2 * clamp(16px, 4vw, 48px));
+  margin-inline: auto;
+}
+
+/* Hero title words rise into place (opacity/transform only). */
+@keyframes pull-up {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }

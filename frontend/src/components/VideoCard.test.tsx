@@ -3,14 +3,14 @@ import { describe, expect, it } from "vitest";
 import { VideoCard } from "./VideoCard";
 
 describe("VideoCard", () => {
-  it("renders title, channel, views and duration", () => {
+  it("renders title, channel, collection and duration", () => {
     render(
       <VideoCard
         video={{
           id: "v1",
           title: "Intro to S3",
           channelName: "Cloud Native Notes",
-          views: 1200,
+          collectionTitle: "Coastlines",
           publishedAt: null,
           durationSeconds: 245,
           thumbnailUrl: null,
@@ -19,7 +19,7 @@ describe("VideoCard", () => {
     );
     expect(screen.getByRole("heading", { name: "Intro to S3" })).toBeInTheDocument();
     expect(screen.getByText("Cloud Native Notes")).toBeInTheDocument();
-    expect(screen.getByText("1.2K views")).toBeInTheDocument();
+    expect(screen.getByText("· Coastlines", { exact: false })).toBeInTheDocument();
     expect(screen.getByText("4:05")).toBeInTheDocument();
   });
 });
@@ -29,7 +29,6 @@ describe("VideoCard links", () => {
     id: "v1",
     title: "Watchable",
     channelName: "Chan",
-    views: 0,
     publishedAt: null,
     durationSeconds: null,
     thumbnailUrl: "/api/v1/videos/v1/thumbnail",
@@ -40,7 +39,7 @@ describe("VideoCard links", () => {
     expect(screen.getByRole("link")).toHaveAttribute("href", "/watch/v1");
   });
 
-  it("is not a link for placeholders", () => {
+  it("is not a link while the video is not watchable", () => {
     render(<VideoCard video={base} />);
     expect(screen.queryByRole("link")).not.toBeInTheDocument();
   });

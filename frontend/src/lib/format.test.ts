@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { formatBytes, formatDuration, formatRelativeTime, formatViews } from "./format";
+import { formatBytes, formatClips, formatDuration, formatRelativeTime, formatViews } from "./format";
 
 describe("formatDuration", () => {
   it.each([
@@ -49,4 +49,12 @@ describe("formatBytes", () => {
   ])("%d bytes -> %s", (bytes, expected) => {
     expect(formatBytes(bytes)).toBe(expected);
   });
+});
+
+describe("formatClips", () => {
+  it.each([
+    [1, "1 clip"],
+    [24, "24 clips"],
+    [1200, "1,200 clips"],
+  ])("%s -> %s", (n, expected) => expect(formatClips(n)).toBe(expected));
 });

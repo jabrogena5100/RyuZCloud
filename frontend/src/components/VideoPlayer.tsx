@@ -93,7 +93,7 @@ export function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
   }, [src]);
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col">
       <video
         ref={videoRef}
         controls
@@ -101,10 +101,10 @@ export function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         preload="metadata"
         poster={poster ?? undefined}
         aria-label={title}
-        className="aspect-video w-full rounded-xl bg-black"
+        className="block aspect-video w-full bg-black"
       />
       {error && (
-        <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+        <p role="alert" className="border-t border-danger/40 bg-s1 px-4 py-2.5 text-sm text-danger">
           {error}
         </p>
       )}

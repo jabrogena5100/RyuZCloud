@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import { Dropzone } from "@/components/Dropzone";
+import { LivePipeline } from "@/components/LivePipeline";
+import { INPUT as BASE_INPUT, PRIMARY_BUTTON, SECONDARY_BUTTON } from "@/components/ui";
 import { api, describeError } from "@/lib/api";
 import { useAuth } from "@/lib/auth-context";
 import { formatBytes } from "@/lib/format";
@@ -16,12 +18,8 @@ import {
 } from "@/lib/upload";
 import { runUpload, type UploadStage } from "@/lib/uploadFlow";
 
-const INPUT =
-  "w-full rounded-lg border border-neutral-300 bg-transparent px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 dark:border-neutral-700";
-const PRIMARY_BUTTON =
-  "rounded-full bg-blue-600 px-5 py-2 font-medium text-white hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-60";
-const SECONDARY_BUTTON =
-  "rounded-full border border-neutral-300 px-5 py-2 font-medium hover:bg-neutral-100 disabled:opacity-60 dark:border-neutral-700 dark:hover:bg-neutral-800";
+const INPUT = `${BASE_INPUT} py-2.5 text-[15px]`;
+const LABEL = "text-sm text-muted";
 
 const STAGE_LABEL: Record<UploadStage, string> = {
   starting: "Preparing upload…",
@@ -36,12 +34,9 @@ const VISIBILITY_HELP: Record<VideoVisibility, string> = {
 };
 
 function Alert({ children, tone }: { children: string; tone: "error" | "info" }) {
-  const colors =
-    tone === "error"
-      ? "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300"
-      : "bg-neutral-100 text-neutral-700 dark:bg-neutral-800 dark:text-neutral-300";
+  const colors = tone === "error" ? "border-danger/40 text-danger" : "border-line text-muted";
   return (
-    <p role={tone === "error" ? "alert" : "status"} className={`rounded-lg px-3 py-2 text-sm ${colors}`}>
+    <p role={tone === "error" ? "alert" : "status"} className={`rounded-lg border bg-s1 px-3 py-2 text-sm ${colors}`}>
       {children}
     </p>
   );
@@ -67,17 +62,17 @@ function CreateChannelForm({ onCreated }: { onCreated: (channel: Channel) => voi
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-4 rounded-[var(--radius-card)] border border-line bg-s1 p-6">
       <div>
         <h2 className="text-lg font-semibold">Create your channel</h2>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">Videos are uploaded to a channel. You only need to do this once.</p>
+        <p className="text-sm text-muted">Videos are uploaded to a channel. You only need to do this once.</p>
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="channel-name" className="text-sm font-medium">Channel name</label>
+        <label htmlFor="channel-name" className={LABEL}>Channel name</label>
         <input id="channel-name" required maxLength={100} value={name} onChange={(e) => setName(e.target.value)} className={INPUT} />
       </div>
       <div className="flex flex-col gap-1">
-        <label htmlFor="channel-handle" className="text-sm font-medium">Handle</label>
+        <label htmlFor="channel-handle" className={LABEL}>Handle</label>
         <input
           id="channel-handle"
           required
@@ -88,7 +83,7 @@ function CreateChannelForm({ onCreated }: { onCreated: (channel: Channel) => voi
           onChange={(e) => setHandle(e.target.value)}
           className={INPUT}
         />
-        <p className="text-xs text-neutral-500">3-30 letters, numbers, underscores or hyphens. It can&apos;t be changed later.</p>
+        <p className="text-sm text-subtle">3-30 letters, numbers, underscores or hyphens. It can&apos;t be changed later.</p>
       </div>
       {error && <Alert tone="error">{error}</Alert>}
       <button type="submit" disabled={submitting} className={`self-start ${PRIMARY_BUTTON}`}>
@@ -117,6 +112,7 @@ export default function UploadPage() {
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [completedTitle, setCompletedTitle] = useState<string | null>(null);
+  const [videoId, setVideoId] = useState<string | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   // Load what the form needs once we know who is signed in.
@@ -182,7 +178,7 @@ export default function UploadPage() {
     setProgress({ loaded: 0, total: file.size });
     setStage("starting");
     try {
-      await runUpload(
+      const result = await runUpload(
         { channelId, title: title.trim(), description, visibility, file, contentType: contentTypeFor(file) },
         {
           signal: controller.signal,
@@ -191,6 +187,7 @@ export default function UploadPage() {
         },
       );
       setCompletedTitle(title.trim());
+      setVideoId(result?.session?.video?.id ?? null);
     } catch (err) {
       if (err instanceof UploadAbortedError) {
         setNotice("Upload cancelled. Nothing was saved.");
@@ -205,6 +202,7 @@ export default function UploadPage() {
 
   function resetForm() {
     setCompletedTitle(null);
+    setVideoId(null);
     setFile(null);
     setTitle("");
     setDescription("");
@@ -213,15 +211,15 @@ export default function UploadPage() {
   }
 
   if (status === "loading") {
-    return <div className="mx-auto h-64 w-full max-w-2xl animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-900" />;
+    return <div aria-busy="true" aria-label="Loading" className="wrap mt-10 h-64 rounded-[var(--radius-card)] bg-s1" />;
   }
 
   if (!user) {
     return (
-      <div className="mx-auto mt-6 w-full max-w-md rounded-2xl border border-neutral-200 p-6 text-center dark:border-neutral-800">
-        <h1 className="mb-2 text-xl font-semibold">Sign in to upload</h1>
-        <p className="mb-4 text-sm text-neutral-600 dark:text-neutral-400">You need an account to upload videos.</p>
-        <Link href="/login" className={PRIMARY_BUTTON + " inline-block"}>
+      <div className="wrap max-w-md py-20 text-center">
+        <h1 className="mb-2 text-2xl font-semibold">Sign in to upload</h1>
+        <p className="mb-6 text-muted">You need an account to upload videos. It takes a few seconds, and any email works.</p>
+        <Link href="/login" className={PRIMARY_BUTTON}>
           Sign in
         </Link>
       </div>
@@ -231,13 +229,21 @@ export default function UploadPage() {
   const percent = progress.total > 0 ? Math.min(100, Math.round((progress.loaded / progress.total) * 100)) : 0;
 
   return (
-    <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
-      <h1 className="text-2xl font-semibold">Upload video</h1>
+    <div className="wrap grid gap-8 pt-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] lg:gap-10">
+      <div className="flex min-w-0 flex-col gap-6">
+      <div>
+        <p className="eyebrow">Upload</p>
+        <h1 className="mt-2.5 text-[clamp(30px,4vw,44px)] leading-[1.05] font-[650] tracking-[-0.03em]">Send a clip straight to storage</h1>
+        <p className="mt-2 max-w-[52ch] text-muted">
+          Your browser uploads the file directly to object storage with a short-lived signed URL. The API never touches the
+          bytes; a worker picks the job up and builds the HLS renditions.
+        </p>
+      </div>
 
       {loadError && <Alert tone="error">{loadError}</Alert>}
 
       {completedTitle !== null ? (
-        <div className="flex flex-col gap-3 rounded-2xl border border-green-300 bg-green-50 p-6 dark:border-green-800 dark:bg-green-950/40">
+        <div className="flex flex-col gap-3 rounded-[var(--radius-card)] border border-sage/45 bg-s1 p-6">
           <h2 className="text-lg font-semibold">Upload complete</h2>
           <p className="text-sm">
             “{completedTitle}” was uploaded and verified. It&apos;s now <strong>queued for processing</strong>: it will be
@@ -254,7 +260,7 @@ export default function UploadPage() {
           </div>
         </div>
       ) : channels === null || limits === null ? (
-        !loadError && <div className="h-64 animate-pulse rounded-2xl bg-neutral-100 dark:bg-neutral-900" />
+        !loadError && <div aria-busy="true" aria-label="Loading" className="h-64 rounded-[var(--radius-card)] bg-s1" />
       ) : channels.length === 0 ? (
         <CreateChannelForm
           onCreated={(channel) => {
@@ -270,13 +276,13 @@ export default function UploadPage() {
             accept={[...limits.allowed_extensions, ...limits.allowed_content_types].join(",")}
             onFile={handleFile}
           />
-          <p className="-mt-3 text-xs text-neutral-500">
+          <p className="tnum -mt-3 text-sm text-subtle">
             {limits.allowed_extensions.join(", ")} · up to {formatBytes(limits.max_bytes)}
           </p>
 
           {channels.length > 1 && (
             <div className="flex flex-col gap-1">
-              <label htmlFor="channel" className="text-sm font-medium">Channel</label>
+              <label htmlFor="channel" className={LABEL}>Channel</label>
               <select id="channel" value={channelId} disabled={uploading} onChange={(e) => setChannelId(e.target.value)} className={INPUT}>
                 {channels.map((channel) => (
                   <option key={channel.id} value={channel.id}>
@@ -288,12 +294,12 @@ export default function UploadPage() {
           )}
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="title" className="text-sm font-medium">Title</label>
+            <label htmlFor="title" className={LABEL}>Title</label>
             <input id="title" required maxLength={100} value={title} disabled={uploading} onChange={(e) => setTitle(e.target.value)} className={INPUT} />
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="description" className="text-sm font-medium">Description</label>
+            <label htmlFor="description" className={LABEL}>Description</label>
             <textarea
               id="description"
               rows={4}
@@ -306,7 +312,7 @@ export default function UploadPage() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="visibility" className="text-sm font-medium">Visibility</label>
+            <label htmlFor="visibility" className={LABEL}>Visibility</label>
             <select
               id="visibility"
               value={visibility}
@@ -318,12 +324,12 @@ export default function UploadPage() {
               <option value="unlisted">Unlisted</option>
               <option value="public">Public</option>
             </select>
-            <p className="text-xs text-neutral-500">{VISIBILITY_HELP[visibility]}</p>
+            <p className="text-sm text-subtle">{VISIBILITY_HELP[visibility]}</p>
           </div>
 
           {stage && (
             <div className="flex flex-col gap-2">
-              <div className="flex justify-between text-sm">
+              <div className="tnum flex justify-between text-sm text-muted">
                 <span>{STAGE_LABEL[stage]}</span>
                 <span>
                   {stage === "uploading" ? `${percent}% · ${formatBytes(progress.loaded)} of ${formatBytes(progress.total)}` : ""}
@@ -335,10 +341,10 @@ export default function UploadPage() {
                 aria-valuemin={0}
                 aria-valuemax={100}
                 aria-valuenow={stage === "uploading" ? percent : stage === "finalizing" ? 100 : 0}
-                className="h-2 overflow-hidden rounded-full bg-neutral-200 dark:bg-neutral-800"
+                className="h-1.5 overflow-hidden rounded-full bg-s2"
               >
                 <div
-                  className="h-full bg-blue-600 transition-[width]"
+                  className="h-full bg-sage transition-[width] duration-200"
                   style={{ width: `${stage === "uploading" ? percent : stage === "finalizing" ? 100 : 0}%` }}
                 />
               </div>
@@ -359,6 +365,10 @@ export default function UploadPage() {
             )}
           </div>
         </form>
+      )}
+      </div>
+      {channels !== null && channels.length > 0 && (
+        <LivePipeline videoId={videoId} uploadStage={stage} uploadPercent={percent} />
       )}
     </div>
   );
