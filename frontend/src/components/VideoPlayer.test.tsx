@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import { cleanup, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { VideoPlayer } from "./VideoPlayer";
 
@@ -9,8 +9,13 @@ const hlsInstance = {
   attachMedia: vi.fn(),
   destroy: vi.fn(),
 };
+// The component calls `new Hls(config)`. Vitest 4+ only constructs mocks whose implementation is a
+// `function` or `class` (an arrow function throws on `new`); returning an object from a
+// constructor function makes `new` yield that object.
 const HlsMock = Object.assign(
-  vi.fn(() => hlsInstance),
+  vi.fn(function () {
+    return hlsInstance;
+  }),
   { isSupported: vi.fn(() => true), Events: { ERROR: "hlsError" } },
 );
 vi.mock("hls.js", () => ({ default: HlsMock }));
@@ -18,9 +23,12 @@ vi.mock("hls.js", () => ({ default: HlsMock }));
 beforeEach(() => {
   vi.clearAllMocks();
   HlsMock.isSupported.mockReturnValue(true);
+  // jsdom does not implement media loading; the native-HLS cleanup calls video.load().
+  vi.spyOn(HTMLMediaElement.prototype, "load").mockImplementation(() => {});
 });
 
 afterEach(() => {
+  cleanup(); // unmount while the load() stub is still in place
   vi.restoreAllMocks();
 });
 
