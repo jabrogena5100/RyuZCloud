@@ -235,3 +235,71 @@ func TestPipelineIsVisibleToViewersOnly(t *testing.T) {
 		t.Errorf("renditions should be ordered by height: %v", renditions)
 	}
 }
+
+func TestVideoCreditCanBeSetShownAndCleared(t *testing.T) {
+	app := newTestApp(t)
+	alice, channelID := aliceWithChannel(app)
+	id := str(alice.createVideo(channelID, nil), "id")
+	publish(t, id)
+
+	credit := map[string]any{
+		"source":          "Pixabay",
+		"source_page_url": "https://pixabay.com/videos/id-1844/",
+		"author":          "  someone  ",
+		"author_url":      "https://pixabay.com/users/someone-1/",
+		"license_name":    "Pixabay Content License",
+		"license_url":     "",
+	}
+	resp := alice.patch("/api/v1/videos/"+id, map[string]any{"credit": credit})
+	expectStatus(t, resp, http.StatusOK)
+
+	resp = app.browser().get("/api/v1/videos/" + id)
+	expectStatus(t, resp, http.StatusOK)
+	got, _ := resp.object(t)["credit"].(map[string]any)
+	if str(got, "author") != "someone" || str(got, "source") != "Pixabay" || got["license_url"] != nil {
+		t.Fatalf("credit should be trimmed and empty URLs stored as null: %s", resp.body)
+	}
+
+	resp = alice.patch("/api/v1/videos/"+id, map[string]any{"title": "Renamed"})
+	expectStatus(t, resp, http.StatusOK)
+	if resp.object(t)["credit"] == nil {
+		t.Errorf("an unrelated update must keep the credit: %s", resp.body)
+	}
+
+	resp = alice.patch("/api/v1/videos/"+id, map[string]any{"credit": nil})
+	expectStatus(t, resp, http.StatusOK)
+	if resp.object(t)["credit"] != nil {
+		t.Errorf("null should clear the credit: %s", resp.body)
+	}
+}
+
+func TestVideoCreditIsValidated(t *testing.T) {
+	app := newTestApp(t)
+	alice, channelID := aliceWithChannel(app)
+	id := str(alice.createVideo(channelID, nil), "id")
+	valid := func() map[string]any {
+		return map[string]any{"source": "Wikimedia Commons", "source_page_url": "https://commons.wikimedia.org/wiki/File:X.webm",
+			"author": "A", "author_url": nil, "license_name": "CC0", "license_url": "http://creativecommons.org/publicdomain/zero/1.0/"}
+	}
+	cases := map[string]func(map[string]any){
+		"missing author":   func(c map[string]any) { delete(c, "author") },
+		"javascript url":   func(c map[string]any) { c["source_page_url"] = "javascript:alert(1)" },
+		"unknown field":    func(c map[string]any) { c["extra"] = "x" },
+		"bad optional url": func(c map[string]any) { c["author_url"] = "ftp://example.com" },
+		"overlong licence": func(c map[string]any) { c["license_name"] = fmt.Sprintf("%0201d", 0) },
+	}
+	for name, mutate := range cases {
+		c := valid()
+		mutate(c)
+		resp := alice.patch("/api/v1/videos/"+id, map[string]any{"credit": c})
+		if resp.status != http.StatusUnprocessableEntity || !resp.hasDetail(t, "credit") {
+			t.Errorf("%s: want 422 on credit, got %d %s", name, resp.status, resp.body)
+		}
+	}
+	expectStatus(t, alice.patch("/api/v1/videos/"+id, map[string]any{"credit": valid()}), http.StatusOK)
+
+	// Only the owner may set it.
+	publish(t, id)
+	resp := app.signedIn("bob@example.com").patch("/api/v1/videos/"+id, map[string]any{"credit": valid()})
+	expectStatus(t, resp, http.StatusForbidden)
+}

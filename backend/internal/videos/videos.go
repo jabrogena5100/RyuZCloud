@@ -67,6 +67,8 @@ type Video struct {
 	ProcessingError *string `json:"processing_error"`
 	// The curated collection the video belongs to, if any.
 	Collection *CollectionRef `json:"collection"`
+	// Who made the footage and under which licence, when the uploader did not; null otherwise.
+	Credit *Credit `json:"credit"`
 
 	ownerID      string
 	thumbnailKey *string
@@ -120,7 +122,7 @@ func (h *Handler) Routes(mux *http.ServeMux, prefix string) {
 const (
 	selectVideos = `SELECT v.id, v.title, v.description, v.status, v.visibility, v.duration_seconds,
 		v.view_count, v.created_at, v.published_at, v.thumbnail_object_key, v.hls_manifest_key,
-		c.id, c.handle, c.name, c.owner_id, j.progress, v.processing_error, col.slug, col.title
+		c.id, c.handle, c.name, c.owner_id, j.progress, v.processing_error, col.slug, col.title, v.credit
 	FROM videos v JOIN channels c ON c.id = v.channel_id
 	LEFT JOIN processing_jobs j ON j.video_id = v.id
 	LEFT JOIN collections col ON col.id = v.collection_id`
@@ -141,7 +143,7 @@ func scanVideo(row scanner) (Video, error) {
 	err := row.Scan(&v.ID, &v.Title, &v.Description, &v.Status, &v.Visibility, &v.DurationSeconds,
 		&v.ViewCount, &v.CreatedAt, &v.PublishedAt, &v.thumbnailKey, &v.manifestKey,
 		&v.Channel.ID, &v.Channel.Handle, &v.Channel.Name, &v.ownerID, &progress, &v.ProcessingError,
-		&collectionSlug, &collTitle)
+		&collectionSlug, &collTitle, &v.Credit)
 	if collectionSlug != nil && collTitle != nil {
 		v.Collection = &CollectionRef{Slug: *collectionSlug, Title: *collTitle}
 	}
@@ -384,6 +386,12 @@ func (h *Handler) update(w http.ResponseWriter, r *http.Request, user auth.User)
 	// "collection": a slug moves the video into that collection, null or "" removes it.
 	collectionPresent := f.Has("collection")
 	collectionSlug, collectionNull := f.NullableString("collection", 0, 60)
+	// "credit": attribution for footage the owner did not make; null removes it.
+	creditPresent := f.Has("credit")
+	credit, creditErr := parseCredit(f.Raw("credit"))
+	if creditPresent && creditErr != nil {
+		f.AddError("credit", "value_error", creditErr.Error())
+	}
 	if s, ok := f.TrimmedString("title", false, 1, 100); ok {
 		title = &s
 	}
@@ -398,6 +406,11 @@ func (h *Handler) update(w http.ResponseWriter, r *http.Request, user auth.User)
 	}
 
 	ctx := r.Context()
+	if creditPresent {
+		if _, err := h.db.Exec(ctx, `UPDATE videos SET credit = $2, updated_at = now() WHERE id = $1`, v.ID, credit); err != nil {
+			return err
+		}
+	}
 	if collectionPresent {
 		var collectionID *string
 		if !collectionNull && collectionSlug != "" {

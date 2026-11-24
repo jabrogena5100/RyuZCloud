@@ -84,13 +84,28 @@ the raw output was not kept.
 | ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | L0 | Local library before seeding | 1 public ready clip, 159 s, 2 renditions, 7,421,000 B of HLS; median processing time ÷ length **0.89×** (n = 1, so not a representative figure) | n/a | Local Compose, worker 2 CPU / 2 GB defaults (`WORKER_CPUS`, `WORKER_MEMORY` not confirmed for that run) | 2026-11-24 | Run (owner's terminal, output pasted) | `curl -s http://localhost:8000/api/v1/stats` |
+| L1 | Library seeded through the real upload path | Not measured yet (20 clips downloaded, 979 s kept per `library.py status`) | | Local Compose; `WORKER_CONCURRENCY` 1, `WORKER_CPUS` 2, `FFMPEG_THREADS` 2 unless changed in `.env` | | Not run | `python3 scripts/seed.py run`; raw: `docs/evidence/metrics/seed-<date>-<host>.json` |
+| L2 | Original bytes vs HLS bytes of the library | Not measured yet | | as L1 | | Not run | `summary.original_bytes`, `summary.hls_bytes` in the seed evidence file |
+| P1 | Transcode realtime factor (worker job wall time ÷ clip duration; median, min–max, n) | Not measured yet (only L0: 0.89×, n = 1) | | as L1 | | Not run | `summary.realtime_factor` in the seed evidence file |
+| P7 | Total seed time and browser-equivalent upload throughput | Not measured yet. **The first run (2026-11-24) includes about 1 h of worker outage**, so its total seed time is not a pipeline figure (see the note below) | | as L1, uploads from the VM to MinIO | | Not run | `summary.seed_wall_seconds_this_run`, `summary.upload_mbit_per_s` |
+
+**Note on the first seed run (2026-11-24, owner-reported).** The worker crash-looped for about the first hour of the run
+(`go: go.mod file not found`): its container was created before the project folder was renamed from `RyuCloud` to
+`RyuZCloud`, so its bind mount still pointed at the old path. No job was claimed until the owner recreated the container
+(`docker compose up -d --force-recreate --no-deps worker`). Consequences for the rows above:
+- **P7 total seed time** includes that hour of idle queue. It will be recorded as measured, with this caveat, and is not
+  a measure of how long seeding takes. Upload throughput (`upload_mbit_per_s`) is timed per PUT and is not affected.
+- **P1 realtime factor** is not affected: it is measured from a job's first claim (`started_at`) to `finished_at`, so time
+  spent queued does not count. The first job after the recreate also excludes the worker's `go run` compile, which
+  happens before any claim.
+- Database status counts before the fix, as reported: draft 4, failed 4, queued 39, ready 5, uploading 4.
+- Since then `seed.py` stops with an error when no pending job moves for `SEED_STALL_MINUTES` (default 15).
 
 ### Wanted next (Not run; listed so the gaps are visible)
 
 | ID | Metric | Phase |
 | --- | --- | --- |
-| L1 | Library: videos, total hours, original GB, HLS GB, renditions per video, thumbnails | 4 |
-| P1 | Transcode realtime factor per ladder, local (stated CPU and memory) and Fargate | 4 to 6 |
+| P1b | Transcode realtime factor on Fargate (stated CPU and memory) | 6 |
 | P2 | Largest direct-to-storage upload (multipart is not implemented, so multipart throughput cannot be measured) | 4 |
 | P3 | Time to first frame and rebuffer count on a throttled mobile profile | 5 |
 | P4 | Lighthouse mobile and desktop per main page, before and after the redesign (page weight before is row W1) | 5 (Lighthouse is not installed) |

@@ -447,6 +447,11 @@ components:
         description: { type: string, maxLength: 5000 }
         visibility: { $ref: "#/components/schemas/Visibility" }
         collection: { type: [string, "null"], description: "Collection slug; null or empty removes the video from its collection" }
+        credit:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Credit"
+          description: "Attribution for footage you did not make; null removes it"
     Visibility: { type: string, enum: [public, unlisted, private] }
     Video:
       type: object
@@ -474,6 +479,21 @@ components:
           oneOf:
             - type: "null"
             - { type: object, properties: { slug: { type: string }, title: { type: string } } }
+        credit:
+          oneOf:
+            - type: "null"
+            - $ref: "#/components/schemas/Credit"
+    Credit:
+      type: object
+      required: [source, source_page_url, author, license_name]
+      additionalProperties: false
+      properties:
+        source: { type: string, maxLength: 200, examples: [Pixabay] }
+        source_page_url: { type: string, format: uri, maxLength: 500 }
+        author: { type: string, maxLength: 200 }
+        author_url: { type: [string, "null"], format: uri, maxLength: 500 }
+        license_name: { type: string, maxLength: 200, examples: [Pixabay Content License, CC0] }
+        license_url: { type: [string, "null"], format: uri, maxLength: 500 }
     Collection:
       type: object
       properties:

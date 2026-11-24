@@ -143,7 +143,7 @@ Read-only, public. Counts and sums cover **public, ready** videos only.
 | `GET /stats` | `videos`, `total_seconds`, `renditions`, `hls_bytes`, `jobs_succeeded`, `jobs_retried` (succeeded after more than one attempt), `median_processing_ratio` (median of processing wall time ÷ duration, first claim to finish; null until a job has finished) |
 | `GET /videos/{id}/pipeline` | Same visibility as `GET /videos/{id}`. `upload` (size, type, created/completed), `job` (state, stage, progress, attempts, created/started/finished), `renditions[]`. Never storage keys, worker IDs or error details |
 
-`PATCH /videos/{id}` also accepts `"collection": "<slug>"` (404 `collection_not_found` if unknown) or `null` / `""` to remove
+`PATCH /videos/{id}` also accepts `"credit": {source, source_page_url, author, author_url, license_name, license_url}` (attribution for footage the owner did not make; http(s) URLs only, unknown keys rejected; `null` removes it; every video response includes `credit`) and `"collection": "<slug>"` (404 `collection_not_found` if unknown) or `null` / `""` to remove
 the video from its collection. Every video response includes `collection: {slug, title} | null`. Collections and the
 featured flag are curated by the operator (seed script or SQL); there is no endpoint that creates them.
 

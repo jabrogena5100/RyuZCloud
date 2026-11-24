@@ -108,6 +108,11 @@ func (f *Fields) Has(name string) bool {
 	return present
 }
 
+// Raw returns the field's undecoded JSON, or nil when the field is absent.
+func (f *Fields) Raw(name string) json.RawMessage {
+	return f.raw[name]
+}
+
 // NullableString reads an optional string field that may be JSON null. It returns the trimmed
 // value and whether the field was null; an absent field returns ("", false) and adds no error.
 func (f *Fields) NullableString(name string, minLen, maxLen int) (value string, isNull bool) {
