@@ -1,7 +1,7 @@
-# Design proposal (Phase 2): awaiting approval
+# Design (Phases 2 and 3)
 
-Status, 2026-11-23: mocks and a 21st.dev shortlist exist. **No 21st.dev component has been retrieved and no app code has
-changed.** Phase 3 starts after the owner approves this page.
+Status: the proposal below was approved by the owner on 2026-11-24 and built in Phase 3. All 7 shortlisted components
+were retrieved (paid `get_component`, 2026-11-24) and adapted; see "Retrieved components" for authors, licences and changes.
 
 ## Concept: a screening room that shows its machinery
 
@@ -83,7 +83,25 @@ read from each component's 21st.dev page at retrieval time and recorded in the t
 Retrieval plan: 7 `get_component` calls, one per row, only after approval. Each retrieved component gets a row here with
 its name, author, URL, the licence as stated on 21st.dev, and what was changed.
 
-## API and schema work the design needs (Phase 3)
+## Retrieved components (Phase 3)
+
+Every component was rewritten as a dependency-free React and Tailwind component: no `motion`/`framer-motion`,
+`lucide-react`, shadcn `Button` or `react-icons` was added. Each source file's header comment repeats the kept/changed list.
+
+| Component (author) | URL | Licence as stated | Became | Main changes |
+| --- | --- | --- | --- | --- |
+| Split Login (Mohammad Shehadeh / Hirael) | https://21st.dev/@mohammadshehadeh/components/login-03 | **MIT** (header of the retrieved source) | `components/AuthSplit.tsx` | Email/password instead of GitHub-only; static contact sheet of real thumbnails instead of animated paths; pipeline pills; no serif, glows or motion |
+| PrismaHero (rahil1202) | https://21st.dev/@rahil1202/components/prisma-hero | Not stated in the retrieved source; check the component page | `components/Hero.tsx` | Featured clip's own HLS (muted, lowest rendition, starts after load, never under reduced motion or Save-Data); CSS word reveal; no nav, noise or framer-motion |
+| Snap Carousel (ddoemonn) | https://21st.dev/@ddoemonn/components/snap-carousel | Not stated; check the page | `components/Shelf.tsx` | Native scroll-snap instead of drag physics; several items visible with a double-width lead; slides stay tabbable |
+| HoverPlayCard (ruixen.ui) | https://21st.dev/@ruixen.ui/components/hover-play-card | Not stated; check the page | `components/VideoCard.tsx` | **No sound ever** (click-to-unmute removed); 350 ms delay; also on focus; HLS 360p; off on touch, reduced motion, Save-Data |
+| UploadThing Dropzone (elements-) | https://21st.dev/@elements-/components/uploadthing-dropzone | Not stated; check the page | `components/Dropzone.tsx` | Single file; real XHR progress on the page instead of a simulated timer; no uploaded-file list or blob URLs |
+| Steps (adit-firdaus) | https://21st.dev/@adit-firdaus/components/steps | Not stated; check the page | `components/PipelineSteps.tsx` | Vertical, read-only; per-step system and measured time; sage/amber/danger statuses; no sliding thumb or press feedback |
+| Command Palette (vovalopuh13) | https://21st.dev/@vovalopuh13/components/command-palette | Not stated; check the page | `components/CommandPalette.tsx` | API title search (debounced) plus "Go to" pages; thumbnail preview; no amber gradient, glow, tilt or framer-motion |
+
+**Owner action:** open each URL above and record the licence the page states in this column before the next commit that
+mentions these components publicly. Six of the seven retrieved sources carry no licence line.
+
+## API and schema work (built in Phase 3)
 
 These are gaps found in Phase 0. None is built yet:
 

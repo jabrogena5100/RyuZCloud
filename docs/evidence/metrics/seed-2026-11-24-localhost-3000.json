@@ -1,0 +1,786 @@
+{
+  "summary": {
+    "date": "2026-11-24",
+    "api_host": "localhost:3000",
+    "clips_uploaded": 40,
+    "clips_ready": 40,
+    "clips_failed": 0,
+    "clips_retried": 0,
+    "footage_seconds": 971,
+    "seed_wall_seconds_this_run": 394.5,
+    "original_bytes": 430635085,
+    "hls_bytes": 288496910,
+    "hls_to_original_ratio": 0.67,
+    "upload_put_seconds_total": 3.2,
+    "upload_mbit_per_s": 1067.9,
+    "realtime_factor": {
+      "definition": "worker job wall time (first claim to finish: download, probe, all renditions, thumbnail, upload) / clip duration",
+      "n": 40,
+      "median": 0.768,
+      "min": 0.321,
+      "max": 2.789
+    }
+  },
+  "clips": {
+    "commons:File:Une plage à Miami Beach (Floride) en février 2022.webm": {
+      "video_id": "4ede5ad2-b88b-4e09-aff6-2f4fd8b31ae2",
+      "size_bytes": 15305454,
+      "put_seconds": 0.175,
+      "upload_started": "2026-11-24T10:31:56+00:00",
+      "upload_completed": "2026-11-24T10:31:56+00:00",
+      "status": "ready",
+      "duration_seconds": 22,
+      "job_started": "2026-11-24T11:19:33.076367Z",
+      "job_finished": "2026-11-24T11:20:11.846267Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 12510614,
+      "job_seconds": 38.77,
+      "realtime_factor": 1.762
+    },
+    "commons:File:Unfinished hotel on east coast of Kalem Island.webm": {
+      "video_id": "d23e91f1-5991-46dc-908b-18dd2f4fa501",
+      "size_bytes": 10768401,
+      "put_seconds": 0.212,
+      "upload_started": "2026-11-24T10:31:56+00:00",
+      "upload_completed": "2026-11-24T10:31:57+00:00",
+      "status": "ready",
+      "duration_seconds": 26,
+      "job_started": "2026-11-24T11:20:11.872044Z",
+      "job_finished": "2026-11-24T11:20:32.702715Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 14071452,
+      "job_seconds": 20.831,
+      "realtime_factor": 0.801
+    },
+    "pixabay:365737": {
+      "video_id": "d5451b76-d938-4e36-964e-21f577e710ca",
+      "size_bytes": 40426613,
+      "put_seconds": 0.22,
+      "upload_started": "2026-11-24T10:31:57+00:00",
+      "upload_completed": "2026-11-24T10:31:57+00:00",
+      "status": "ready",
+      "duration_seconds": 60,
+      "job_started": "2026-11-24T11:20:32.716377Z",
+      "job_finished": "2026-11-24T11:21:19.671923Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 31422282,
+      "job_seconds": 46.956,
+      "realtime_factor": 0.783
+    },
+    "pixabay:388064": {
+      "video_id": "6b5ec8b6-c511-4aeb-8575-3825e14b0756",
+      "size_bytes": 16038944,
+      "put_seconds": 0.099,
+      "upload_started": "2026-11-24T10:31:57+00:00",
+      "upload_completed": "2026-11-24T10:31:57+00:00",
+      "status": "ready",
+      "duration_seconds": 24,
+      "job_started": "2026-11-24T11:21:19.695347Z",
+      "job_finished": "2026-11-24T11:21:38.47465Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 12640710,
+      "job_seconds": 18.779,
+      "realtime_factor": 0.782
+    },
+    "commons:File:2020-10-13 - Artemis I Core Stage On B-Stand At Night 4K Timelapse (738733679097).webm": {
+      "video_id": "82091556-2ebe-4402-b937-5360d7c694ae",
+      "size_bytes": 13061539,
+      "put_seconds": 0.084,
+      "upload_started": "2026-11-24T10:31:57+00:00",
+      "upload_completed": "2026-11-24T10:31:57+00:00",
+      "status": "ready",
+      "duration_seconds": 20,
+      "job_started": "2026-11-24T11:21:38.488778Z",
+      "job_finished": "2026-11-24T11:22:00.694991Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 5017310,
+      "job_seconds": 22.206,
+      "realtime_factor": 1.11
+    },
+    "commons:File:Dusk to night at Joshua Tree (30497809811).webm": {
+      "video_id": "e7e98a0d-796e-4199-8fc1-25473595c232",
+      "size_bytes": 6458966,
+      "put_seconds": 0.073,
+      "upload_started": "2026-11-24T10:31:57+00:00",
+      "upload_completed": "2026-11-24T10:31:58+00:00",
+      "status": "ready",
+      "duration_seconds": 23,
+      "job_started": "2026-11-24T11:22:00.711291Z",
+      "job_finished": "2026-11-24T11:22:14.093409Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 2856250,
+      "job_seconds": 13.382,
+      "realtime_factor": 0.582
+    },
+    "pixabay:130331": {
+      "video_id": "c418cf5f-44d9-4f5d-8caf-417ba5de052a",
+      "size_bytes": 6245375,
+      "put_seconds": 0.066,
+      "upload_started": "2026-11-24T10:31:58+00:00",
+      "upload_completed": "2026-11-24T10:31:58+00:00",
+      "status": "ready",
+      "duration_seconds": 30,
+      "job_started": "2026-11-24T11:22:14.109537Z",
+      "job_finished": "2026-11-24T11:22:32.705606Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 4994812,
+      "job_seconds": 18.596,
+      "realtime_factor": 0.62
+    },
+    "pixabay:344181": {
+      "video_id": "4158ee81-5650-43ea-a90a-aa9df7b551b6",
+      "size_bytes": 8697915,
+      "put_seconds": 0.07,
+      "upload_started": "2026-11-24T10:31:58+00:00",
+      "upload_completed": "2026-11-24T10:31:58+00:00",
+      "status": "ready",
+      "duration_seconds": 8,
+      "job_started": "2026-11-24T11:22:32.718686Z",
+      "job_finished": "2026-11-24T11:22:40.573184Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 3231374,
+      "job_seconds": 7.854,
+      "realtime_factor": 0.982
+    },
+    "pixabay:130330": {
+      "video_id": "3c3e5ba2-9bc0-441d-9b80-a6c7f9a2eb37",
+      "size_bytes": 7174056,
+      "put_seconds": 0.054,
+      "upload_started": "2026-11-24T10:31:58+00:00",
+      "upload_completed": "2026-11-24T10:31:58+00:00",
+      "status": "ready",
+      "duration_seconds": 37,
+      "job_started": "2026-11-24T11:22:40.590258Z",
+      "job_finished": "2026-11-24T11:23:01.758789Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 5906548,
+      "job_seconds": 21.169,
+      "realtime_factor": 0.572
+    },
+    "pixabay:361362": {
+      "video_id": "6042729b-4371-4688-b633-2eabcc16d989",
+      "size_bytes": 5940967,
+      "put_seconds": 0.053,
+      "upload_started": "2026-11-24T10:31:58+00:00",
+      "upload_completed": "2026-11-24T10:31:58+00:00",
+      "status": "ready",
+      "duration_seconds": 16,
+      "job_started": "2026-11-24T11:23:01.776819Z",
+      "job_finished": "2026-11-24T11:23:13.846511Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 2438076,
+      "job_seconds": 12.07,
+      "realtime_factor": 0.754
+    },
+    "pixabay:22555": {
+      "video_id": "5bc9aeb7-7732-415c-a063-ad3d6e0c13ee",
+      "size_bytes": 4312379,
+      "put_seconds": 0.043,
+      "upload_started": "2026-11-24T10:31:58+00:00",
+      "upload_completed": "2026-11-24T10:31:59+00:00",
+      "status": "ready",
+      "duration_seconds": 17,
+      "job_started": "2026-11-24T11:23:13.861308Z",
+      "job_finished": "2026-11-24T11:23:24.167917Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 2536400,
+      "job_seconds": 10.307,
+      "realtime_factor": 0.606
+    },
+    "pixabay:1844": {
+      "video_id": "cb4362aa-dcfd-4db2-a50c-415c644676b3",
+      "size_bytes": 7418875,
+      "put_seconds": 0.089,
+      "upload_started": "2026-11-24T10:31:59+00:00",
+      "upload_completed": "2026-11-24T10:31:59+00:00",
+      "status": "ready",
+      "duration_seconds": 28,
+      "job_started": "2026-11-24T11:23:24.1826Z",
+      "job_finished": "2026-11-24T11:23:40.482159Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 4854564,
+      "job_seconds": 16.3,
+      "realtime_factor": 0.582
+    },
+    "pixabay:13441": {
+      "video_id": "f626ef41-5d54-4bc4-990d-435e852a4cf0",
+      "size_bytes": 5959882,
+      "put_seconds": 0.049,
+      "upload_started": "2026-11-24T10:31:59+00:00",
+      "upload_completed": "2026-11-24T10:31:59+00:00",
+      "status": "ready",
+      "duration_seconds": 27,
+      "job_started": "2026-11-24T11:23:40.498488Z",
+      "job_finished": "2026-11-24T11:23:52.501684Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 5128668,
+      "job_seconds": 12.003,
+      "realtime_factor": 0.445
+    },
+    "pixabay:212404": {
+      "video_id": "d409ae30-49e3-4a48-a49c-994d89e2e8e5",
+      "size_bytes": 8701354,
+      "put_seconds": 0.057,
+      "upload_started": "2026-11-24T10:31:59+00:00",
+      "upload_completed": "2026-11-24T10:31:59+00:00",
+      "status": "ready",
+      "duration_seconds": 12,
+      "job_started": "2026-11-24T11:23:52.515697Z",
+      "job_finished": "2026-11-24T11:24:04.214282Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 6701164,
+      "job_seconds": 11.699,
+      "realtime_factor": 0.975
+    },
+    "pixabay:58580": {
+      "video_id": "fca3e033-8060-4196-b409-6863be7aeb4a",
+      "size_bytes": 10436133,
+      "put_seconds": 0.061,
+      "upload_started": "2026-11-24T10:31:59+00:00",
+      "upload_completed": "2026-11-24T10:31:59+00:00",
+      "status": "ready",
+      "duration_seconds": 27,
+      "job_started": "2026-11-24T11:24:04.228492Z",
+      "job_finished": "2026-11-24T11:24:20.112839Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 13869352,
+      "job_seconds": 15.884,
+      "realtime_factor": 0.588
+    },
+    "pixabay:44703": {
+      "video_id": "39529bab-625a-4bc4-a369-895d04603c1a",
+      "size_bytes": 2832727,
+      "put_seconds": 0.042,
+      "upload_started": "2026-11-24T10:31:59+00:00",
+      "upload_completed": "2026-11-24T10:31:59+00:00",
+      "status": "ready",
+      "duration_seconds": 22,
+      "job_started": "2026-11-24T11:24:20.12888Z",
+      "job_finished": "2026-11-24T11:24:28.685368Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 1659818,
+      "job_seconds": 8.556,
+      "realtime_factor": 0.389
+    },
+    "commons:File:Alexander Mountain and Stone Canyon Fires (CIRA 2024-07-31 - nolabels).webm": {
+      "video_id": "dc764b75-6391-4408-84e5-29b4e8641fbd",
+      "size_bytes": 9862195,
+      "put_seconds": 0.068,
+      "upload_started": "2026-11-24T10:31:59+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 20,
+      "job_started": "2026-11-24T11:24:28.698594Z",
+      "job_finished": "2026-11-24T11:24:46.722921Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 8428006,
+      "job_seconds": 18.024,
+      "realtime_factor": 0.901
+    },
+    "commons:File:Mountain Fire Burns Northwest of Los Angeles (CIRA 2024-11-07 - labels).webm": {
+      "video_id": "6eeaa31a-4487-4e03-8984-37481f4b7cba",
+      "size_bytes": 3789178,
+      "put_seconds": 0.039,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 9,
+      "job_started": "2026-11-24T11:25:32.541757Z",
+      "job_finished": "2026-11-24T11:25:41.865257Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 3183622,
+      "job_seconds": 9.323,
+      "realtime_factor": 1.036
+    },
+    "pixabay:52170": {
+      "video_id": "78ebe457-0db7-4c58-956a-f1f81a685cb3",
+      "size_bytes": 16150707,
+      "put_seconds": 0.088,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 47,
+      "job_started": "2026-11-24T11:25:41.881441Z",
+      "job_finished": "2026-11-24T11:26:13.543651Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 19297662,
+      "job_seconds": 31.662,
+      "realtime_factor": 0.674
+    },
+    "pixabay:52161": {
+      "video_id": "764710fe-57b6-4fd3-8be0-9518351bdf8f",
+      "size_bytes": 2680928,
+      "put_seconds": 0.034,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 11,
+      "job_started": "2026-11-24T11:26:13.556008Z",
+      "job_finished": "2026-11-24T11:26:19.702855Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 1830022,
+      "job_seconds": 6.147,
+      "realtime_factor": 0.559
+    },
+    "pixabay:106963": {
+      "video_id": "a8e7c213-5c14-4a99-bf46-a8fb6b318e4e",
+      "size_bytes": 5217467,
+      "put_seconds": 0.045,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 25,
+      "job_started": "2026-11-24T11:24:46.736767Z",
+      "job_finished": "2026-11-24T11:25:02.358548Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 3628804,
+      "job_seconds": 15.622,
+      "realtime_factor": 0.625
+    },
+    "pixabay:107336": {
+      "video_id": "36cda578-0ccf-4c1d-8ba3-bb53ed1b3397",
+      "size_bytes": 5913276,
+      "put_seconds": 0.051,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 39,
+      "job_started": "2026-11-24T11:25:02.372349Z",
+      "job_finished": "2026-11-24T11:25:22.527637Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 4101936,
+      "job_seconds": 20.155,
+      "realtime_factor": 0.517
+    },
+    "pixabay:24105": {
+      "video_id": "cd1f0e29-1752-446b-aa46-641a687313cd",
+      "size_bytes": 4592943,
+      "put_seconds": 0.04,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:00+00:00",
+      "status": "ready",
+      "duration_seconds": 29,
+      "job_started": "2026-11-24T11:25:22.544897Z",
+      "job_finished": "2026-11-24T11:25:32.526917Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 3716788,
+      "job_seconds": 9.982,
+      "realtime_factor": 0.344
+    },
+    "pixabay:17869": {
+      "video_id": "bb8dc4fa-848f-474c-947d-13a606b694d6",
+      "size_bytes": 1377421,
+      "put_seconds": 0.031,
+      "upload_started": "2026-11-24T10:32:00+00:00",
+      "upload_completed": "2026-11-24T10:32:01+00:00",
+      "status": "ready",
+      "duration_seconds": 20,
+      "job_started": "2026-11-24T11:26:19.718421Z",
+      "job_finished": "2026-11-24T11:26:26.132116Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 1376314,
+      "job_seconds": 6.414,
+      "realtime_factor": 0.321
+    },
+    "pixabay:71457": {
+      "video_id": "a75d6f78-3bd4-4c70-ba9d-94c4e04d31b1",
+      "size_bytes": 4884058,
+      "put_seconds": 0.043,
+      "upload_started": "2026-11-24T10:32:01+00:00",
+      "upload_completed": "2026-11-24T10:32:01+00:00",
+      "status": "ready",
+      "duration_seconds": 31,
+      "job_started": "2026-11-24T11:26:26.146023Z",
+      "job_finished": "2026-11-24T11:26:38.530935Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 4222758,
+      "job_seconds": 12.385,
+      "realtime_factor": 0.4
+    },
+    "pixabay:23263": {
+      "video_id": "0ad6add0-abfa-4cac-8b7e-9d07c3403712",
+      "size_bytes": 8659731,
+      "put_seconds": 0.052,
+      "upload_started": "2026-11-24T10:32:01+00:00",
+      "upload_completed": "2026-11-24T10:32:01+00:00",
+      "status": "ready",
+      "duration_seconds": 33,
+      "job_started": "2026-11-24T11:26:38.546328Z",
+      "job_finished": "2026-11-24T11:26:53.585588Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 6810390,
+      "job_seconds": 15.039,
+      "realtime_factor": 0.456
+    },
+    "pixabay:72763": {
+      "video_id": "1306d8c4-0bb2-4d44-b25a-3e64dc625ff5",
+      "size_bytes": 2883839,
+      "put_seconds": 0.051,
+      "upload_started": "2026-11-24T10:32:01+00:00",
+      "upload_completed": "2026-11-24T10:32:01+00:00",
+      "status": "ready",
+      "duration_seconds": 21,
+      "job_started": "2026-11-24T11:26:53.602213Z",
+      "job_finished": "2026-11-24T11:27:02.089941Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 2322518,
+      "job_seconds": 8.488,
+      "realtime_factor": 0.404
+    },
+    "commons:File:Otehake River - Hot pools - Video 1 (June 2025).webm": {
+      "video_id": "391c8c5e-a186-4e30-a0be-621d29f9adff",
+      "size_bytes": 8127128,
+      "put_seconds": 0.075,
+      "upload_started": "2026-11-24T10:32:01+00:00",
+      "upload_completed": "2026-11-24T10:32:01+00:00",
+      "status": "ready",
+      "duration_seconds": 11,
+      "job_started": "2026-11-24T11:27:02.105481Z",
+      "job_finished": "2026-11-24T11:27:19.900477Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 4222886,
+      "job_seconds": 17.795,
+      "realtime_factor": 1.618
+    },
+    "commons:File:River Bank-Closeup.webm": {
+      "video_id": "bfd0f6b1-a5a6-46b5-93e5-be9df0f0907b",
+      "size_bytes": 5702964,
+      "put_seconds": 0.043,
+      "upload_started": "2026-11-24T10:32:01+00:00",
+      "upload_completed": "2026-11-24T10:32:01+00:00",
+      "status": "ready",
+      "duration_seconds": 11,
+      "job_started": "2026-11-24T11:27:19.916414Z",
+      "job_finished": "2026-11-24T11:27:34.704157Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 6597702,
+      "job_seconds": 14.788,
+      "realtime_factor": 1.344
+    },
+    "commons:File:Smith River Falls Recreation Site (34664512116).webm": {
+      "video_id": "32704627-7cec-4eae-815d-370f69b84749",
+      "size_bytes": 11087037,
+      "put_seconds": 0.08,
+      "upload_started": "2026-11-24T10:32:01+00:00",
+      "upload_completed": "2026-11-24T10:32:02+00:00",
+      "status": "ready",
+      "duration_seconds": 27,
+      "job_started": "2026-11-24T11:27:34.72231Z",
+      "job_finished": "2026-11-24T11:27:56.803561Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 13176948,
+      "job_seconds": 22.081,
+      "realtime_factor": 0.818
+    },
+    "commons:File:Troops Passing Over Mooder River (John Bennett-Stanford, 1899).webm": {
+      "video_id": "20678de6-cae2-4b7b-bc9b-7a802dcac45c",
+      "size_bytes": 16240918,
+      "put_seconds": 0.119,
+      "upload_started": "2026-11-24T10:32:02+00:00",
+      "upload_completed": "2026-11-24T10:32:02+00:00",
+      "status": "ready",
+      "duration_seconds": 42,
+      "job_started": "2026-11-24T11:27:56.817355Z",
+      "job_finished": "2026-11-24T11:28:24.843402Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 19723420,
+      "job_seconds": 28.026,
+      "realtime_factor": 0.667
+    },
+    "commons:File:Lightning storm over Colorado, USA.ogg": {
+      "video_id": "efa742b4-142c-48c0-bba1-d52565cf48d3",
+      "size_bytes": 7425357,
+      "put_seconds": 0.073,
+      "upload_started": "2026-11-24T10:32:02+00:00",
+      "upload_completed": "2026-11-24T10:32:02+00:00",
+      "status": "ready",
+      "duration_seconds": 25,
+      "job_started": "2026-11-24T11:28:24.860598Z",
+      "job_finished": "2026-11-24T11:28:44.516976Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 5368180,
+      "job_seconds": 19.656,
+      "realtime_factor": 0.786
+    },
+    "commons:File:Clouds Flow Over Gulf and Atlantic (CIRA 2026-02-01 - nolabels).webm": {
+      "video_id": "2cd6d7e4-2e6b-48f3-b354-9a58e4b23b28",
+      "size_bytes": 7705091,
+      "put_seconds": 0.062,
+      "upload_started": "2026-11-24T10:32:02+00:00",
+      "upload_completed": "2026-11-24T10:32:02+00:00",
+      "status": "ready",
+      "duration_seconds": 15,
+      "job_started": "2026-11-24T11:28:44.531377Z",
+      "job_finished": "2026-11-24T11:28:59.604817Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 8469492,
+      "job_seconds": 15.073,
+      "realtime_factor": 1.005
+    },
+    "commons:File:Bilbao-nieve-01.webm": {
+      "video_id": "643c4427-d303-4d4c-9ada-662a6e35ebfb",
+      "size_bytes": 14356824,
+      "put_seconds": 0.075,
+      "upload_started": "2026-11-24T10:32:02+00:00",
+      "upload_completed": "2026-11-24T10:32:02+00:00",
+      "status": "ready",
+      "duration_seconds": 22,
+      "job_started": "2026-11-24T11:28:59.620787Z",
+      "job_finished": "2026-11-24T11:29:39.546226Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 10637382,
+      "job_seconds": 39.925,
+      "realtime_factor": 1.815
+    },
+    "commons:File:GranVia-2020 01 09-11.webm": {
+      "video_id": "8cfb1e79-adbf-44da-9e63-f3500e2f623c",
+      "size_bytes": 49035277,
+      "put_seconds": 0.229,
+      "upload_started": "2026-11-24T10:32:02+00:00",
+      "upload_completed": "2026-11-24T10:32:03+00:00",
+      "status": "ready",
+      "duration_seconds": 11,
+      "job_started": "2026-11-24T11:29:39.561099Z",
+      "job_finished": "2026-11-24T11:30:08.977352Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 6583226,
+      "job_seconds": 29.416,
+      "realtime_factor": 2.674
+    },
+    "commons:File:GranVia-2020 01 09-12.webm": {
+      "video_id": "bee4fddf-af09-4625-8487-ffdb5e631403",
+      "size_bytes": 33786051,
+      "put_seconds": 0.168,
+      "upload_started": "2026-11-24T10:32:03+00:00",
+      "upload_completed": "2026-11-24T10:32:03+00:00",
+      "status": "ready",
+      "duration_seconds": 9,
+      "job_started": "2026-11-24T11:30:08.992297Z",
+      "job_finished": "2026-11-24T11:30:34.094669Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 5381154,
+      "job_seconds": 25.102,
+      "realtime_factor": 2.789
+    },
+    "commons:File:Artemis II - Sunrise (KSC-20260324-MH-GEB01-0001-Artemis II Sunrise Timelapse-M18703).webm": {
+      "video_id": "6aecb5df-d71c-442a-8042-3a506594f7c5",
+      "size_bytes": 19910231,
+      "put_seconds": 0.128,
+      "upload_started": "2026-11-24T10:32:03+00:00",
+      "upload_completed": "2026-11-24T10:32:03+00:00",
+      "status": "ready",
+      "duration_seconds": 34,
+      "job_started": "2026-11-24T11:30:34.112999Z",
+      "job_finished": "2026-11-24T11:31:11.234869Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 6733122,
+      "job_seconds": 37.122,
+      "realtime_factor": 1.092
+    },
+    "commons:File:Artemis II Rollout (KSC-20260117-MH-DNS01-0001-Artemis II Rollout Timelapse LC 39 Press Site-M18870).webm": {
+      "video_id": "5dd693d6-914e-45b5-b873-efbf05e8350a",
+      "size_bytes": 6028230,
+      "put_seconds": 0.048,
+      "upload_started": "2026-11-24T10:32:03+00:00",
+      "upload_completed": "2026-11-24T10:32:03+00:00",
+      "status": "ready",
+      "duration_seconds": 12,
+      "job_started": "2026-11-24T11:31:11.249963Z",
+      "job_finished": "2026-11-24T11:31:21.370981Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 3965764,
+      "job_seconds": 10.121,
+      "realtime_factor": 0.843
+    },
+    "commons:File:Artemis II Rollout for Launch - Timelapse - LC 39 Press Site (KSC-20260320-MH-JBS01-0001-Artemis II Rollout Timelapse Press Site-M19827).webm": {
+      "video_id": "23687819-a8ab-402a-aaa4-35ce5ed436a8",
+      "size_bytes": 7949924,
+      "put_seconds": 0.054,
+      "upload_started": "2026-11-24T10:32:03+00:00",
+      "upload_completed": "2026-11-24T10:32:03+00:00",
+      "status": "ready",
+      "duration_seconds": 53,
+      "job_started": "2026-11-24T11:31:21.386848Z",
+      "job_finished": "2026-11-24T11:32:01.254831Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 3477524,
+      "job_seconds": 39.868,
+      "realtime_factor": 0.752
+    },
+    "commons:File:Sunset timelapse on the beach in Libreville, Gabon.webm": {
+      "video_id": "682895d7-dca6-4ceb-b555-03fa0dc14e20",
+      "size_bytes": 7488730,
+      "put_seconds": 0.083,
+      "upload_started": "2026-11-24T11:32:01+00:00",
+      "upload_completed": "2026-11-24T11:32:02+00:00",
+      "status": "ready",
+      "duration_seconds": 15,
+      "job_started": "2026-11-24T11:32:02.030027Z",
+      "job_finished": "2026-11-24T11:32:15.682797Z",
+      "attempts": 1,
+      "renditions": [
+        "360p",
+        "720p"
+      ],
+      "hls_bytes": 5401896,
+      "job_seconds": 13.653,
+      "realtime_factor": 0.91
+    }
+  }
+}

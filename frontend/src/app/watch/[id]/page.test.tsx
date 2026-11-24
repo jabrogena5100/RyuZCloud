@@ -95,4 +95,25 @@ describe("WatchPage", () => {
     expect(await screen.findByRole("heading", { name: "Couldn't load this video" })).toBeInTheDocument();
     expect(screen.getByText("Object storage is unavailable.")).toBeInTheDocument();
   });
+
+  it("credits the footage's author, source and licence", async () => {
+    vi.mocked(api.getVideo).mockResolvedValue(
+      makeVideo({
+        status: "ready",
+        playback_url: "/api/v1/videos/vid-1/hls/master.m3u8",
+        credit: {
+          source: "Pixabay",
+          source_page_url: "https://pixabay.com/videos/id-1844/",
+          author: "someone",
+          author_url: "https://pixabay.com/users/someone-1/",
+          license_name: "Pixabay Content License",
+          license_url: null,
+        },
+      }),
+    );
+    render(<WatchPage />);
+    expect(await screen.findByRole("link", { name: "someone" })).toHaveAttribute("href", "https://pixabay.com/users/someone-1/");
+    expect(screen.getByRole("link", { name: "Pixabay" })).toHaveAttribute("href", "https://pixabay.com/videos/id-1844/");
+    expect(screen.getByText(/Pixabay Content License/)).toBeInTheDocument(); // no licence URL: plain text
+  });
 });

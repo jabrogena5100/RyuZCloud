@@ -37,10 +37,10 @@ the raw output was not kept.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | T1 | Go test packages passing | 9 of 9 `ok` | n/a | Go 1.26.10 image, Postgres 17 container | 2026-11-10 | Run | `docker compose run --rm backend go test ./... -count=1` |
 | T2 | Go test functions | 232 `func Test…` in 23 files | n/a | Grep count, so table-driven subtests are not counted separately | 2026-11-23 | Documented | `grep -rhoE '^func Test[A-Za-z0-9_]+' backend --include=*_test.go \| wc -l` |
-| T3 | Frontend tests | 106 of 106 passing, 14 files | 2026-11-23 Vitest 3 → 5 upgrade: 104 of 106 (owner's container run, output pasted) → 106 of 106 after fixing the hls.js mock | Vitest 5.1.1, jsdom; 2026-11-10 run: Vitest 3 in the container, 3 consecutive runs; 2026-11-23 run: host Node 22.22.1, 1 run | 2026-11-23 | Run | `npx vitest run` (host); container: `docker compose run --rm --no-deps frontend npm test` |
+| T3 | Frontend tests | 106 of 106 passing, 14 files (2026-11-24 after Phase 3: **116 of 116, 15 files** in the owner's container run; 119 of 119 on the host after adding `formatClips` tests) | 2026-11-23 Vitest 3 → 5 upgrade: 104 of 106 (owner's container run, output pasted) → 106 of 106 after fixing the hls.js mock | Vitest 5.1.1, jsdom; 2026-11-10 run: Vitest 3 in the container, 3 consecutive runs; 2026-11-23 run: host Node 22.22.1, 1 run | 2026-11-23 | Run | `npx vitest run` (host); container: `docker compose run --rm --no-deps frontend npm test` |
 | T4 | Real-FFmpeg transcode tests | all pass, 11.9 s | n/a | worker image | 2026-11-10 | Run | `docker compose run --rm --no-deps worker go test ./internal/transcode -v` |
 | T5 | CloudFront signed-cookie regression test (`TestGrantPlaybackPolicyKeepsLiteralWildcard`) | PASS (with `TestGrantPlaybackSetsScopedSecureCookies`) | n/a | backend container | 2026-11-23 | Run (owner's terminal, output pasted) | `docker compose run --rm backend go test ./internal/integrations -run TestGrantPlayback -v -count=1` |
-| T6 | Playwright and axe: pages checked and violations | Not measured | | | | Not run | Phase 3 |
+| T6 | Playwright and axe: pages checked and violations | **Real local stack: 8 of 8 browser tests pass**; 9 pages × 2 widths (390, 1440): **0** WCAG 2.1 A/AA violations; 0 px sideways overflow at 320 px; focus visible on the first 12 Tab stops; reduced motion honoured; player playable and pausable by keyboard alone | axe: 2 violations (`link-in-text-block`, /login and /register) → 0. Overflow at 320 px: the watch page scrolled 15 px with a one-word title (owner's run) → 0 after `overflow-wrap: anywhere` | Compose stack (`next dev`), 1 public ready video, Chromium 1255, Playwright 1.65, 1 run each. The first run was against a fixture API (26 placeholder clips) | 2026-11-24 | Run (8/8 on the real stack by me; 7/8 + the overflow failure in the owner's run, output pasted) | `BASE_URL=http://localhost:3000 npx playwright test` (frontend/) |
 | T7 | Terraform `resource` blocks | 88 in 14 files (some use `for_each`, so the real resource count is higher; see C1) | n/a | Grep count | 2026-11-23 | Documented | `cat infra/terraform/*.tf \| grep -c '^resource '` |
 
 ### Security
@@ -56,7 +56,7 @@ the raw output was not kept.
 | ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | B1 | Production image size | api 30.3 MB, worker 212 MB (includes FFmpeg), frontend 354 MB | n/a | `docker build --network host`, single build each | 2026-11-10 | Run | verification.md |
-| B3 | Next.js First Load JS (current UI) | 102 kB shared; 108–113 kB per route | before (redesign pending) | `next build`, commit `f14c846` | 2026-11-23 | Run | `next build` route table; see design/README.md |
+| B3 | Next.js First Load JS per route | after the redesign: 102 kB shared; 103–114 kB per route (11 routes) | before 108–113 kB (8 routes) → after 103–114 kB; no animation library added | `next build`, before = commit `f14c846`, after = Phase 3 working tree | 2026-11-24 | Run | `next build` route table |
 | B2 | Production image build time | api 157 s, worker 49 s, frontend 466 s (1 run each, so not a median) | n/a | As B1, VM on a throttled link | 2026-11-10 | Run | verification.md |
 
 ### Cloud session
@@ -79,12 +79,33 @@ the raw output was not kept.
 | W2 | Horizontal overflow at 390 / 820 / 1440 px, current UI | 0 px on all 6 pages | before | as W1 | 2026-11-23 | Run | as W1 (`overflow_*` fields) |
 | A1 | Token contrast (WCAG 2) | all text pairs ≥ 4.86:1 except subtle on s2 (4.17, banned); new `control` border 3.45:1 on bg | n/a | Python luminance formula | 2026-11-23 | Documented | design/README.md, "Tokens" |
 
+### Library and pipeline (from `GET /stats`)
+
+| ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| L0 | Local library before seeding | 1 public ready clip, 159 s, 2 renditions, 7,421,000 B of HLS; median processing time ÷ length **0.89×** (n = 1, so not a representative figure) | n/a | Local Compose, worker 2 CPU / 2 GB defaults (`WORKER_CPUS`, `WORKER_MEMORY` not confirmed for that run) | 2026-11-24 | Run (owner's terminal, output pasted) | `curl -s http://localhost:8000/api/v1/stats` |
+| L1 | Library seeded through the real upload path | Not measured yet (20 clips downloaded, 979 s kept per `library.py status`) | | Local Compose; `WORKER_CONCURRENCY` 1, `WORKER_CPUS` 2, `FFMPEG_THREADS` 2 unless changed in `.env` | | Not run | `python3 scripts/seed.py run`; raw: `docs/evidence/metrics/seed-<date>-<host>.json` |
+| L2 | Original bytes vs HLS bytes of the library | Not measured yet | | as L1 | | Not run | `summary.original_bytes`, `summary.hls_bytes` in the seed evidence file |
+| P1 | Transcode realtime factor (worker job wall time ÷ clip duration; median, min–max, n) | Not measured yet (only L0: 0.89×, n = 1) | | as L1 | | Not run | `summary.realtime_factor` in the seed evidence file |
+| P7 | Total seed time and browser-equivalent upload throughput | Not measured yet. **The first run (2026-11-24) includes about 1 h of worker outage**, so its total seed time is not a pipeline figure (see the note below) | | as L1, uploads from the VM to MinIO | | Not run | `summary.seed_wall_seconds_this_run`, `summary.upload_mbit_per_s` |
+
+**Note on the first seed run (2026-11-24, owner-reported).** The worker crash-looped for about the first hour of the run
+(`go: go.mod file not found`): its container was created before the project folder was renamed from `RyuCloud` to
+`RyuZCloud`, so its bind mount still pointed at the old path. No job was claimed until the owner recreated the container
+(`docker compose up -d --force-recreate --no-deps worker`). Consequences for the rows above:
+- **P7 total seed time** includes that hour of idle queue. It will be recorded as measured, with this caveat, and is not
+  a measure of how long seeding takes. Upload throughput (`upload_mbit_per_s`) is timed per PUT and is not affected.
+- **P1 realtime factor** is not affected: it is measured from a job's first claim (`started_at`) to `finished_at`, so time
+  spent queued does not count. The first job after the recreate also excludes the worker's `go run` compile, which
+  happens before any claim.
+- Database status counts before the fix, as reported: draft 4, failed 4, queued 39, ready 5, uploading 4.
+- Since then `seed.py` stops with an error when no pending job moves for `SEED_STALL_MINUTES` (default 15).
+
 ### Wanted next (Not run; listed so the gaps are visible)
 
 | ID | Metric | Phase |
 | --- | --- | --- |
-| L1 | Library: videos, total hours, original GB, HLS GB, renditions per video, thumbnails | 4 |
-| P1 | Transcode realtime factor per ladder, local (stated CPU and memory) and Fargate | 4 to 6 |
+| P1b | Transcode realtime factor on Fargate (stated CPU and memory) | 6 |
 | P2 | Largest direct-to-storage upload (multipart is not implemented, so multipart throughput cannot be measured) | 4 |
 | P3 | Time to first frame and rebuffer count on a throttled mobile profile | 5 |
 | P4 | Lighthouse mobile and desktop per main page, before and after the redesign (page weight before is row W1) | 5 (Lighthouse is not installed) |

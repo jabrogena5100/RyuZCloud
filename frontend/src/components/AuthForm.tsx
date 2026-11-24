@@ -2,6 +2,7 @@
 
 import { useState, type FormEvent } from "react";
 import { describeError } from "@/lib/api";
+import { INPUT, LABEL, PRIMARY_BUTTON } from "./ui";
 
 export type AuthFormValues = {
   email: string;
@@ -14,14 +15,12 @@ type AuthFormProps = {
   onSubmit: (values: AuthFormValues) => Promise<void>;
 };
 
-const INPUT =
-  "w-full rounded-lg border border-neutral-300 bg-transparent px-3 py-2 outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 dark:border-neutral-700";
-
 export function AuthForm({ mode, onSubmit }: AuthFormProps) {
   const isRegister = mode === "register";
   const [values, setValues] = useState<AuthFormValues>({ email: "", password: "", displayName: "" });
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const update = (field: keyof AuthFormValues) => (event: { target: { value: string } }) =>
     setValues((current) => ({ ...current, [field]: event.target.value }));
@@ -40,10 +39,10 @@ export function AuthForm({ mode, onSubmit }: AuthFormProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-[18px]">
       {isRegister && (
-        <div className="flex flex-col gap-1">
-          <label htmlFor="displayName" className="text-sm font-medium">
+        <div className="flex flex-col gap-1.5">
+          <label htmlFor="displayName" className={LABEL}>
             Display name
           </label>
           <input
@@ -58,8 +57,8 @@ export function AuthForm({ mode, onSubmit }: AuthFormProps) {
           />
         </div>
       )}
-      <div className="flex flex-col gap-1">
-        <label htmlFor="email" className="text-sm font-medium">
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor="email" className={LABEL}>
           Email
         </label>
         <input
@@ -73,36 +72,49 @@ export function AuthForm({ mode, onSubmit }: AuthFormProps) {
           className={INPUT}
         />
       </div>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="password" className="text-sm font-medium">
-          Password
-        </label>
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-baseline justify-between">
+          <label htmlFor="password" className={LABEL}>
+            Password
+          </label>
+          <button
+            type="button"
+            onClick={() => setShowPassword((value) => !value)}
+            aria-controls="password"
+            aria-pressed={showPassword}
+            className="text-sm text-sage hover:text-sage-hover"
+          >
+            {showPassword ? "Hide" : "Show"}
+            <span className="sr-only"> password</span>
+          </button>
+        </div>
         <input
           id="password"
           name="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           autoComplete={isRegister ? "new-password" : "current-password"}
           required
           minLength={isRegister ? 8 : undefined}
           maxLength={128}
           value={values.password}
           onChange={update("password")}
+          aria-describedby={isRegister ? "password-help" : undefined}
           className={INPUT}
         />
-        {isRegister && <p className="text-xs text-neutral-500">At least 8 characters.</p>}
+        {isRegister && (
+          <p id="password-help" className="text-sm text-subtle">
+            At least 8 characters.
+          </p>
+        )}
       </div>
 
       {error && (
-        <p role="alert" className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-950 dark:text-red-300">
+        <p role="alert" className="rounded-lg border border-danger/40 bg-s1 px-3 py-2 text-sm text-danger">
           {error}
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={submitting}
-        className="rounded-full bg-blue-600 px-4 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-60"
-      >
+      <button type="submit" disabled={submitting} className={`${PRIMARY_BUTTON} mt-1.5 w-full text-base`}>
         {submitting ? "Please wait…" : isRegister ? "Create account" : "Sign in"}
       </button>
     </form>

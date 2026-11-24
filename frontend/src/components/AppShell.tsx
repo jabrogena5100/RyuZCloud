@@ -1,37 +1,36 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useCallback, useEffect, useState, type ReactNode } from "react";
-import { Navbar } from "./Navbar";
-import { Sidebar } from "./Sidebar";
+import type { ReactNode } from "react";
+import { TopBar } from "./TopBar";
 
-const DESKTOP_QUERY = "(min-width: 1024px)"; // Tailwind's lg breakpoint
+/** Sign-in and sign-up are full-screen split layouts with their own brand header. */
+const BARE_ROUTES = ["/login", "/register"];
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const [collapsed, setCollapsed] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false);
   const pathname = usePathname();
-
-  // Close the mobile drawer after navigating.
-  useEffect(() => {
-    setDrawerOpen(false);
-  }, [pathname]);
-
-  const toggleNavigation = useCallback(() => {
-    if (window.matchMedia(DESKTOP_QUERY).matches) {
-      setCollapsed((value) => !value);
-    } else {
-      setDrawerOpen((value) => !value);
-    }
-  }, []);
-
+  if (BARE_ROUTES.includes(pathname)) {
+    return <>{children}</>;
+  }
   return (
-    <div className="min-h-screen">
-      <Navbar onMenuClick={toggleNavigation} />
-      <div className="flex">
-        <Sidebar collapsed={collapsed} drawerOpen={drawerOpen} onClose={() => setDrawerOpen(false)} />
-        <main className="min-w-0 flex-1 px-4 py-6 sm:px-6">{children}</main>
-      </div>
+    <div className="flex min-h-screen flex-col">
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-sage focus:px-3 focus:py-2 focus:text-bg">
+        Skip to content
+      </a>
+      <TopBar />
+      <main id="main" className="flex-1">
+        {children}
+      </main>
+      <footer className="mt-[72px] border-t border-line py-7 text-sm text-muted">
+        <div className="wrap flex flex-wrap items-center gap-x-7 gap-y-3">
+          <span className="tnum rounded border border-amber/40 px-1.5 py-0.5 text-[11px] tracking-[0.1em] text-amber">DEMO</span>
+          <span>A portfolio project. Titles are invented; clips come from Pixabay and Wikimedia Commons (CC0 or public domain).</span>
+          <Link href="/credits" className="text-sage hover:text-sage-hover">
+            Credits
+          </Link>
+        </div>
+      </footer>
     </div>
   );
 }

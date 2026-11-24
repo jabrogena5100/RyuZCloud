@@ -1267,10 +1267,20 @@ func TestMigrationBackfillsPhase2VideosWithoutLosingData(t *testing.T) {
 	userID := insertUser(t, "legacy@example.com")
 	channelID := insertChannel(t, userID)
 
-	// Roll back to the Phase 2 schema and create the state Phase 2 left behind: a verified
-	// upload whose video sits in "processing" with nothing to process it.
-	if err := database.Migrate(ctx, testConfig.DatabaseURL, "down"); err != nil {
-		t.Fatal(err)
+	// Roll back to the Phase 2 schema (version 2; "down" undoes one migration at a time, so
+	// step down past every later migration) and create the state Phase 2 left behind: a
+	// verified upload whose video sits in "processing" with nothing to process it.
+	for {
+		version, err := database.AppliedSchemaVersion(ctx, testPool)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if version <= 2 {
+			break
+		}
+		if err := database.Migrate(ctx, testConfig.DatabaseURL, "down"); err != nil {
+			t.Fatal(err)
+		}
 	}
 	t.Cleanup(func() {
 		_ = database.Migrate(ctx, testConfig.DatabaseURL, "up")

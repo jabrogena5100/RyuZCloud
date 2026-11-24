@@ -1,0 +1,7 @@
+# Working files of scripts/library.py. Committed: collections.json, keep.txt, manifest.json.
+cache/
+media/
+shortlist.json
+review.html
+*.tmp
+seed-state/

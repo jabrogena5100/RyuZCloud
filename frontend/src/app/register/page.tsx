@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AuthForm } from "@/components/AuthForm";
+import { AuthSplit } from "@/components/AuthSplit";
 import { useAuth } from "@/lib/auth-context";
 
 export default function RegisterPage() {
@@ -10,9 +11,20 @@ export default function RegisterPage() {
   const router = useRouter();
 
   return (
-    <div className="mx-auto mt-6 w-full max-w-sm rounded-2xl border border-neutral-200 p-6 dark:border-neutral-800">
-      <h1 className="mb-1 text-2xl font-semibold">Create your account</h1>
-      <p className="mb-6 text-sm text-neutral-600 dark:text-neutral-400">Join RyuCloud</p>
+    <AuthSplit
+      mode="register"
+      title="Create your account"
+      hint="Upload a clip and watch the worker turn it into a stream."
+      footer={
+        <>
+          Already have an account?{" "}
+          <Link href="/login" className="text-sage underline underline-offset-4 hover:text-sage-hover">
+            Sign in
+          </Link>
+          . Demo site: no email is ever sent.
+        </>
+      }
+    >
       <AuthForm
         mode="register"
         onSubmit={async (values) => {
@@ -20,12 +32,6 @@ export default function RegisterPage() {
           router.push("/");
         }}
       />
-      <p className="mt-6 text-sm text-neutral-600 dark:text-neutral-400">
-        Already have an account?{" "}
-        <Link href="/login" className="font-medium text-blue-600 hover:underline dark:text-blue-400">
-          Sign in
-        </Link>
-      </p>
-    </div>
+    </AuthSplit>
   );
 }

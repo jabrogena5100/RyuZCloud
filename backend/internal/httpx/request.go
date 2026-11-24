@@ -102,6 +102,31 @@ func (f *Fields) str(name string, required bool, minLen, maxLen int, trim bool) 
 	return value, true
 }
 
+// Has reports whether the field is present in the body, including as an explicit null.
+func (f *Fields) Has(name string) bool {
+	_, present := f.raw[name]
+	return present
+}
+
+// Raw returns the field's undecoded JSON, or nil when the field is absent.
+func (f *Fields) Raw(name string) json.RawMessage {
+	return f.raw[name]
+}
+
+// NullableString reads an optional string field that may be JSON null. It returns the trimmed
+// value and whether the field was null; an absent field returns ("", false) and adds no error.
+func (f *Fields) NullableString(name string, minLen, maxLen int) (value string, isNull bool) {
+	raw, present := f.raw[name]
+	if !present {
+		return "", false
+	}
+	if bytes.Equal(bytes.TrimSpace(raw), []byte("null")) {
+		return "", true
+	}
+	value, _ = f.str(name, false, minLen, maxLen, true)
+	return value, false
+}
+
 // Int64 reads an integer field that must be within [minVal, maxVal].
 // It reports whether a valid value was present.
 func (f *Fields) Int64(name string, required bool, minVal, maxVal int64) (int64, bool) {

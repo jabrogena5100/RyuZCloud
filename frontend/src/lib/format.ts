@@ -48,3 +48,8 @@ export function formatBytes(bytes: number): string {
   const digits = unit === 0 || value >= 100 ? 0 : 1;
   return `${value.toFixed(digits)} ${units[unit]}`;
 }
+
+/** "1 clip", "24 clips". */
+export function formatClips(count: number): string {
+  return `${count.toLocaleString("en")} ${count === 1 ? "clip" : "clips"}`;
+}
