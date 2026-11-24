@@ -4,3 +4,4 @@ media/
 shortlist.json
 review.html
 *.tmp
+seed-state/

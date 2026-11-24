@@ -62,7 +62,7 @@ PIXABAY_LICENSE = ("Pixabay Content License", "https://pixabay.com/service/licen
 CACHE_TTL_SECONDS = 24 * 3600  # Pixabay: "requests must be cached for 24 hours"
 API_PAUSE_SECONDS = {"pixabay.com": 1.0, "commons.wikimedia.org": 3.0}  # well under both services' limits
 MAX_RETRIES = 3
-DOWNLOAD_PAUSE_SECONDS = 2.0    # one file at a time, with a pause: no bulk downloading
+DOWNLOAD_PAUSE_SECONDS = {"upload.wikimedia.org": 10.0}  # per host; 2 s elsewhere. One file at a time: no bulk downloading
 MIN_SECONDS, MAX_SECONDS = 8, 60
 MIN_HEIGHT = 720                # the worker's top rendition is 720p and it never upscales
 CANDIDATES_PER_COLLECTION = 2   # shortlist up to this many times the collection's target
@@ -338,12 +338,26 @@ def sha256_of(path: Path) -> str:
 
 
 def download(url: str, target: Path) -> None:
+    """Download one file, honouring HTTP 429 Retry-After (Wikimedia's media servers throttle per client)."""
     tmp = target.with_suffix(target.suffix + ".part")
     request = urllib.request.Request(url, headers={"User-Agent": user_agent()})
-    with urllib.request.urlopen(request, timeout=120) as response, tmp.open("wb") as out:
-        while chunk := response.read(1 << 20):
-            out.write(chunk)
-    tmp.replace(target)
+    try:
+        for attempt in range(MAX_RETRIES + 1):
+            try:
+                with urllib.request.urlopen(request, timeout=120) as response, tmp.open("wb") as out:
+                    while chunk := response.read(1 << 20):
+                        out.write(chunk)
+                break
+            except urllib.error.HTTPError as err:
+                if err.code == 429 and attempt < MAX_RETRIES:
+                    wait = int(err.headers.get("Retry-After") or 0) or 60 * (attempt + 1)
+                    print(f"    {urllib.parse.urlparse(url).netloc} asked us to slow down (HTTP 429); waiting {wait} s", file=sys.stderr)
+                    time.sleep(wait)
+                    continue
+                raise
+        tmp.replace(target)
+    finally:
+        tmp.unlink(missing_ok=True)  # never leave a half-written .part behind
 
 
 def cmd_download() -> None:
@@ -374,19 +388,23 @@ def cmd_download() -> None:
             "download_url": cand["download_url"],
         })
         items.append(entry)
-        time.sleep(DOWNLOAD_PAUSE_SECONDS)
+        time.sleep(DOWNLOAD_PAUSE_SECONDS.get(urllib.parse.urlparse(cand["download_url"]).netloc, 2.0))
     write_json(MANIFEST, {"generated": today(), "items": items})
     write_credits(items)
     total = sum(i["size_bytes"] for i in items)
+    missing = len(wanted) - len(items)
     print(f"\n{len(items)} clips, {total / 1e6:.1f} MB in {MEDIA.relative_to(ROOT)}; manifest and credits written.")
+    if missing:
+        print(f"{missing} kept clip(s) failed to download; run `download` again later (finished files are skipped).")
 
 
 def write_credits(items: list[dict]) -> None:
     """The public credits list served by the frontend (no file paths, hashes or download URLs)."""
     plan = load_json(PLAN, {"collections": []})
     titles = {c["slug"]: c["title"] for c in plan["collections"]}
+    moved = {k: v.get("collection") for k, v in load_json(CONTENT / "titles.json", {}).items() if v.get("collection")}
     public = [{
-        "key": i["key"], "collection": titles.get(i["collection"], i["collection"]), "source": i["source"],
+        "key": i["key"], "collection": titles.get(moved.get(i["key"], i["collection"]), i["collection"]), "source": i["source"],
         "source_page_url": i["source_page_url"], "author": i["author"], "author_url": i["author_url"],
         "license_name": i["license_name"], "license_url": i["license_url"], "retrieved": i["retrieved"],
     } for i in items]
@@ -427,7 +445,14 @@ def cmd_status() -> None:
           f"Pixabay-reported size {known / 1e6:.0f} MB (+{unknown} Commons files of unreported size)")
 
 
-COMMANDS = {"search": cmd_search, "download": cmd_download, "verify": cmd_verify, "status": cmd_status}
+def cmd_credits() -> None:
+    """Rewrite frontend/public/credits.json from the manifest (e.g. after editing content/titles.json)."""
+    manifest = load_json(MANIFEST, None) or fail("no manifest yet")
+    write_credits(manifest["items"])
+    print(f"wrote {CREDITS.relative_to(ROOT)} ({len(manifest['items'])} clips)")
+
+
+COMMANDS = {"search": cmd_search, "download": cmd_download, "verify": cmd_verify, "status": cmd_status, "credits": cmd_credits}
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in COMMANDS:

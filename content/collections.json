@@ -6,40 +6,88 @@
       "title": "Coastlines",
       "description": "Shorelines, tides and harbours, mostly at the edges of the day.",
       "target": 20,
-      "pixabay": ["ocean waves", "coast aerial", "harbor", "beach sunset"],
-      "commons": ["ocean waves", "coast"]
+      "pixabay": [
+        "ocean waves",
+        "coast aerial",
+        "harbor",
+        "beach sunset"
+      ],
+      "commons": [
+        "ocean waves",
+        "coast"
+      ]
     },
     {
       "slug": "after-dark",
       "title": "After dark",
       "description": "Cities, roads and rail after sunset, mostly timelapse.",
       "target": 20,
-      "pixabay": ["city night timelapse", "night traffic", "neon lights"],
-      "commons": ["night timelapse"]
+      "pixabay": [
+        "city night timelapse",
+        "night traffic",
+        "neon lights"
+      ],
+      "commons": [
+        "night timelapse"
+      ]
     },
     {
       "slug": "high-ground",
       "title": "High ground",
       "description": "Ridges, snow, cloud and wind.",
       "target": 20,
-      "pixabay": ["mountains", "snow mountain", "clouds timelapse"],
-      "commons": ["mountain", "glacier"]
+      "pixabay": [
+        "mountains",
+        "snow mountain",
+        "clouds timelapse"
+      ],
+      "commons": [
+        "mountain",
+        "glacier"
+      ]
+    },
+    {
+      "slug": "in-bloom",
+      "title": "In bloom",
+      "description": "Flowers opening and seeds letting go, in time-lapse.",
+      "target": 10,
+      "pixabay": [
+        "flower timelapse",
+        "blossom timelapse"
+      ],
+      "commons": []
     },
     {
       "slug": "slow-water",
       "title": "Slow water",
       "description": "Moss, streams, lakes and still pools.",
       "target": 20,
-      "pixabay": ["river", "waterfall", "forest stream", "lake"],
-      "commons": ["waterfall", "river"]
+      "pixabay": [
+        "river",
+        "waterfall",
+        "forest stream",
+        "lake"
+      ],
+      "commons": [
+        "waterfall",
+        "river"
+      ]
     },
     {
       "slug": "weather",
       "title": "Weather",
       "description": "Rain, fog, storms and the sky changing its mind.",
       "target": 20,
-      "pixabay": ["rain", "fog", "storm", "lightning"],
-      "commons": ["clouds", "storm"]
+      "pixabay": [
+        "rain",
+        "fog",
+        "storm",
+        "lightning"
+      ],
+      "commons": [
+        "clouds",
+        "storm"
+      ]
     },
     {
       "slug": "from-orbit",
@@ -47,7 +95,13 @@
       "description": "The Earth from orbit. Public-domain footage (mostly NASA) via Wikimedia Commons.",
       "target": 10,
       "pixabay": [],
-      "commons": ["International Space Station Earth", "Earth from space", "aurora from space", "NASA Earth timelapse", "space station view"]
+      "commons": [
+        "International Space Station Earth",
+        "Earth from space",
+        "aurora from space",
+        "NASA Earth timelapse",
+        "space station view"
+      ]
     }
   ]
 }

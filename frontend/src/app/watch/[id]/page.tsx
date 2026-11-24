@@ -9,7 +9,7 @@ import { VideoPlayer } from "@/components/VideoPlayer";
 import { ApiError, api, describeError } from "@/lib/api";
 import { formatBytes, formatRelativeTime } from "@/lib/format";
 import { formatSeconds } from "@/lib/pipeline";
-import type { Pipeline, Video } from "@/lib/types";
+import type { Credit, Pipeline, Video } from "@/lib/types";
 import { toVideoCardData } from "@/lib/videos";
 
 const POLL_MS = 3000;
@@ -27,6 +27,29 @@ async function maybe<T>(load: () => Promise<T>): Promise<T | null> {
   } catch {
     return null;
   }
+}
+
+const CREDIT_LINK = "text-sage underline underline-offset-4 hover:text-sage-hover";
+
+/** Footage credit: author, source page and licence, each linked when a URL exists. */
+function CreditLine({ credit }: { credit: Credit }) {
+  const link = (href: string | null, text: string) =>
+    href ? (
+      <a href={href} target="_blank" rel="noopener noreferrer" className={CREDIT_LINK}>
+        {text}
+      </a>
+    ) : (
+      text
+    );
+  return (
+    <p className="mt-4 text-sm text-muted">
+      Footage: {link(credit.author_url, credit.author)} on {link(credit.source_page_url, credit.source)} ·{" "}
+      {link(credit.license_url, credit.license_name)} ·{" "}
+      <Link href="/credits" className={CREDIT_LINK}>
+        All credits
+      </Link>
+    </p>
+  );
 }
 
 /** "How this video got here": the pipeline record of one ready video. */
@@ -214,6 +237,7 @@ export default function WatchPage() {
               {video.visibility !== "public" && <span>{video.visibility}</span>}
             </p>
             {video.description && <p className="mt-5 max-w-[70ch] whitespace-pre-wrap text-muted">{video.description}</p>}
+            {video.credit && <CreditLine credit={video.credit} />}
           </div>
           {pipeline && <PipelinePanel pipeline={pipeline} />}
         </div>

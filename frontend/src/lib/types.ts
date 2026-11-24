@@ -45,6 +45,17 @@ export type Video = {
   processing_error: string | null;
   /** The curated collection the video belongs to, if any. */
   collection: CollectionRef | null;
+  /** Who made the footage and under which licence, when the uploader did not. */
+  credit: Credit | null;
+};
+
+export type Credit = {
+  source: string;
+  source_page_url: string;
+  author: string;
+  author_url: string | null;
+  license_name: string;
+  license_url: string | null;
 };
 
 export type CollectionRef = { slug: string; title: string };

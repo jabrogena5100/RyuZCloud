@@ -2,6 +2,39 @@
   "generated": "2026-11-24",
   "items": [
     {
+      "key": "commons:File:Sunset timelapse on the beach in Libreville, Gabon.webm",
+      "collection": "Coastlines",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Sunset_timelapse_on_the_beach_in_Libreville,_Gabon.webm",
+      "author": "In Old News",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Une plage à Miami Beach (Floride) en février 2022.webm",
+      "collection": "Coastlines",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Une_plage_%C3%A0_Miami_Beach_(Floride)_en_f%C3%A9vrier_2022.webm",
+      "author": "Benoît Prieur",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Unfinished hotel on east coast of Kalem Island.webm",
+      "collection": "Coastlines",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Unfinished_hotel_on_east_coast_of_Kalem_Island.webm",
+      "author": "Tomhannen",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
       "key": "pixabay:365737",
       "collection": "Coastlines",
       "source": "Pixabay",
@@ -21,6 +54,28 @@
       "author_url": "https://pixabay.com/users/Mario_Krimer-34815979/",
       "license_name": "Pixabay Content License",
       "license_url": "https://pixabay.com/service/license-summary/",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:2020-10-13 - Artemis I Core Stage On B-Stand At Night 4K Timelapse (738733679097).webm",
+      "collection": "After dark",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:2020-10-13_-_Artemis_I_Core_Stage_On_B-Stand_At_Night_4K_Timelapse_(738733679097).webm",
+      "author": "Uploaded by Patricia Moore",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Dusk to night at Joshua Tree (30497809811).webm",
+      "collection": "After dark",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Dusk_to_night_at_Joshua_Tree_(30497809811).webm",
+      "author": "Joshua Tree National Park",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
       "retrieved": "2026-11-24"
     },
     {
@@ -79,6 +134,17 @@
       "retrieved": "2026-11-24"
     },
     {
+      "key": "pixabay:1844",
+      "collection": "After dark",
+      "source": "Pixabay",
+      "source_page_url": "https://pixabay.com/videos/id-1844/",
+      "author": "bellergy",
+      "author_url": "https://pixabay.com/users/bellergy-1846871/",
+      "license_name": "Pixabay Content License",
+      "license_url": "https://pixabay.com/service/license-summary/",
+      "retrieved": "2026-11-24"
+    },
+    {
       "key": "pixabay:13441",
       "collection": "After dark",
       "source": "Pixabay",
@@ -113,7 +179,7 @@
     },
     {
       "key": "pixabay:24105",
-      "collection": "After dark",
+      "collection": "In bloom",
       "source": "Pixabay",
       "source_page_url": "https://pixabay.com/videos/id-24105/",
       "author": "adege",
@@ -124,7 +190,7 @@
     },
     {
       "key": "pixabay:17869",
-      "collection": "After dark",
+      "collection": "In bloom",
       "source": "Pixabay",
       "source_page_url": "https://pixabay.com/videos/id-17869/",
       "author": "adege",
@@ -135,7 +201,7 @@
     },
     {
       "key": "pixabay:71457",
-      "collection": "After dark",
+      "collection": "In bloom",
       "source": "Pixabay",
       "source_page_url": "https://pixabay.com/videos/id-71457/",
       "author": "adege",
@@ -157,7 +223,7 @@
     },
     {
       "key": "pixabay:23263",
-      "collection": "After dark",
+      "collection": "In bloom",
       "source": "Pixabay",
       "source_page_url": "https://pixabay.com/videos/id-23263/",
       "author": "adege",
@@ -168,13 +234,35 @@
     },
     {
       "key": "pixabay:72763",
-      "collection": "After dark",
+      "collection": "In bloom",
       "source": "Pixabay",
       "source_page_url": "https://pixabay.com/videos/id-72763/",
       "author": "adege",
       "author_url": "https://pixabay.com/users/adege-4994132/",
       "license_name": "Pixabay Content License",
       "license_url": "https://pixabay.com/service/license-summary/",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Alexander Mountain and Stone Canyon Fires (CIRA 2024-07-31 - nolabels).webm",
+      "collection": "High ground",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Alexander_Mountain_and_Stone_Canyon_Fires_(CIRA_2024-07-31_-_nolabels).webm",
+      "author": "GOES imagery: CSU/CIRA & NOAA",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Mountain Fire Burns Northwest of Los Angeles (CIRA 2024-11-07 - labels).webm",
+      "collection": "High ground",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Mountain_Fire_Burns_Northwest_of_Los_Angeles_(CIRA_2024-11-07_-_labels).webm",
+      "author": "GOES imagery: CSU/CIRA & NOAA",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
       "retrieved": "2026-11-24"
     },
     {
@@ -219,6 +307,138 @@
       "author_url": "https://pixabay.com/users/adege-4994132/",
       "license_name": "Pixabay Content License",
       "license_url": "https://pixabay.com/service/license-summary/",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Otehake River - Hot pools - Video 1 (June 2025).webm",
+      "collection": "Slow water",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Otehake_River_-_Hot_pools_-_Video_1_(June_2025).webm",
+      "author": "David Nind",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:River Bank-Closeup.webm",
+      "collection": "Slow water",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:River_Bank-Closeup.webm",
+      "author": "Chazzie1769",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Smith River Falls Recreation Site (34664512116).webm",
+      "collection": "Slow water",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Smith_River_Falls_Recreation_Site_(34664512116).webm",
+      "author": "BLM Oregon & Washington",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Troops Passing Over Mooder River (John Bennett-Stanford, 1899).webm",
+      "collection": "Slow water",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Troops_Passing_Over_Mooder_River_(John_Bennett-Stanford,_1899).webm",
+      "author": "John Bennett-Stanford",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Lightning storm over Colorado, USA.ogg",
+      "collection": "Weather",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Lightning_storm_over_Colorado,_USA.ogg",
+      "author": "NathanScientific",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Clouds Flow Over Gulf and Atlantic (CIRA 2026-02-01 - nolabels).webm",
+      "collection": "Weather",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Clouds_Flow_Over_Gulf_and_Atlantic_(CIRA_2026-02-01_-_nolabels).webm",
+      "author": "GOES imagery: CSU/CIRA & NOAA",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Bilbao-nieve-01.webm",
+      "collection": "Weather",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Bilbao-nieve-01.webm",
+      "author": "Nicolas Vigier",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:GranVia-2020 01 09-11.webm",
+      "collection": "Weather",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:GranVia-2020_01_09-11.webm",
+      "author": "Nicolas Vigier",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:GranVia-2020 01 09-12.webm",
+      "collection": "Weather",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:GranVia-2020_01_09-12.webm",
+      "author": "Nicolas Vigier",
+      "author_url": null,
+      "license_name": "CC0",
+      "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Artemis II - Sunrise (KSC-20260324-MH-GEB01-0001-Artemis II Sunrise Timelapse-M18703).webm",
+      "collection": "From orbit",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Artemis_II_-_Sunrise_(KSC-20260324-MH-GEB01-0001-Artemis_II_Sunrise_Timelapse-M18703).webm",
+      "author": "NASA Kennedy Space Center",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Artemis II Rollout (KSC-20260117-MH-DNS01-0001-Artemis II Rollout Timelapse LC 39 Press Site-M18870).webm",
+      "collection": "From orbit",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Artemis_II_Rollout_(KSC-20260117-MH-DNS01-0001-Artemis_II_Rollout_Timelapse_LC_39_Press_Site-M18870).webm",
+      "author": "NASA Kennedy Space Center",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
+      "retrieved": "2026-11-24"
+    },
+    {
+      "key": "commons:File:Artemis II Rollout for Launch - Timelapse - LC 39 Press Site (KSC-20260320-MH-JBS01-0001-Artemis II Rollout Timelapse Press Site-M19827).webm",
+      "collection": "From orbit",
+      "source": "Wikimedia Commons",
+      "source_page_url": "https://commons.wikimedia.org/wiki/File:Artemis_II_Rollout_for_Launch_-_Timelapse_-_LC_39_Press_Site_(KSC-20260320-MH-JBS01-0001-Artemis_II_Rollout_Timelapse_Press_Site-M19827).webm",
+      "author": "NASA Kennedy Space Center",
+      "author_url": null,
+      "license_name": "Public domain",
+      "license_url": null,
       "retrieved": "2026-11-24"
     }
   ]

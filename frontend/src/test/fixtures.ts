@@ -45,6 +45,7 @@ export function makeVideo(overrides: Partial<Video> = {}): Video {
     processing_progress: null,
     processing_error: null,
     collection: null,
+    credit: null,
     ...overrides,
   };
 }
