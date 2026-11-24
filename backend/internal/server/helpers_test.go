@@ -55,7 +55,7 @@ func newTestAppWithStorage(t *testing.T, storage integrations.ObjectStorage) *te
 func truncateTables(t *testing.T) {
 	t.Helper()
 	if _, err := testPool.Exec(context.Background(),
-		`TRUNCATE users, auth_sessions, channels, videos, video_uploads, processing_jobs, video_renditions RESTART IDENTITY CASCADE`); err != nil {
+		`TRUNCATE users, auth_sessions, channels, videos, video_uploads, processing_jobs, video_renditions, collections RESTART IDENTITY CASCADE`); err != nil {
 		t.Fatalf("truncate: %v", err)
 	}
 }

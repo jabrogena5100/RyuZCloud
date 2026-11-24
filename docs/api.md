@@ -130,6 +130,23 @@ created in the same transaction and published to the worker queue. It is **not p
 everyone but its owner, until the worker finishes (`ready`). Poll `GET /videos/{id}` (or the channel video list)
 for `status` and `processing_progress`.
 
+## Catalog (Phase 3 redesign)
+
+Read-only, public. Counts and sums cover **public, ready** videos only.
+
+| Method and path | Returns |
+| --- | --- |
+| `GET /videos?q=…` | The home feed filtered by a case-insensitive substring of title or description (at most 100 characters; `%` and `_` match literally) |
+| `GET /videos/featured` | The most recently featured video (`videos.featured_at`), else the newest; 404 `video_not_found` when the library is empty |
+| `GET /collections` | `{items: Collection[]}` in curated order: slug, title, description, `video_count`, `total_seconds`, `hls_bytes`, `cover_url` |
+| `GET /collections/{slug}?limit&offset` | `{collection, items, limit, offset}`; 404 `collection_not_found` |
+| `GET /stats` | `videos`, `total_seconds`, `renditions`, `hls_bytes`, `jobs_succeeded`, `jobs_retried` (succeeded after more than one attempt), `median_processing_ratio` (median of processing wall time ÷ duration, first claim to finish; null until a job has finished) |
+| `GET /videos/{id}/pipeline` | Same visibility as `GET /videos/{id}`. `upload` (size, type, created/completed), `job` (state, stage, progress, attempts, created/started/finished), `renditions[]`. Never storage keys, worker IDs or error details |
+
+`PATCH /videos/{id}` also accepts `"collection": "<slug>"` (404 `collection_not_found` if unknown) or `null` / `""` to remove
+the video from its collection. Every video response includes `collection: {slug, title} | null`. Collections and the
+featured flag are curated by the operator (seed script or SQL); there is no endpoint that creates them.
+
 ## Errors
 
 Every non-2xx response uses this envelope, and every response carries an

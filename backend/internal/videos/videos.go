@@ -18,6 +18,7 @@ import (
 	"errors"
 	"log/slog"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/jackc/pgx/v5"
@@ -64,10 +65,18 @@ type Video struct {
 	ProcessingProgress *int `json:"processing_progress"`
 	// Why processing failed, in words meant for the owner; null unless failed.
 	ProcessingError *string `json:"processing_error"`
+	// The curated collection the video belongs to, if any.
+	Collection *CollectionRef `json:"collection"`
 
 	ownerID      string
 	thumbnailKey *string
 	manifestKey  *string
+}
+
+// CollectionRef names a video's collection inside a video response.
+type CollectionRef struct {
+	Slug  string `json:"slug"`
+	Title string `json:"title"`
 }
 
 // Page is a paginated list of videos.
@@ -105,14 +114,16 @@ func (h *Handler) Routes(mux *http.ServeMux, prefix string) {
 	mux.Handle("GET "+prefix+"/videos/{id}/hls/{path...}", h.auth.Optional(h.hls))
 	mux.Handle("GET "+prefix+"/videos/{id}/thumbnail", h.auth.Optional(h.thumbnail))
 	mux.Handle("GET "+prefix+"/channels/{handle}/videos", h.auth.Optional(h.channelVideos))
+	h.catalogRoutes(mux, prefix)
 }
 
 const (
 	selectVideos = `SELECT v.id, v.title, v.description, v.status, v.visibility, v.duration_seconds,
 		v.view_count, v.created_at, v.published_at, v.thumbnail_object_key, v.hls_manifest_key,
-		c.id, c.handle, c.name, c.owner_id, j.progress, v.processing_error
+		c.id, c.handle, c.name, c.owner_id, j.progress, v.processing_error, col.slug, col.title
 	FROM videos v JOIN channels c ON c.id = v.channel_id
-	LEFT JOIN processing_jobs j ON j.video_id = v.id`
+	LEFT JOIN processing_jobs j ON j.video_id = v.id
+	LEFT JOIN collections col ON col.id = v.collection_id`
 	publiclyListed = `v.visibility = 'public' AND v.status = 'ready'`
 	newestFirst    = `ORDER BY v.published_at DESC NULLS LAST, v.created_at DESC, v.id`
 )
@@ -123,12 +134,17 @@ type scanner interface {
 
 func scanVideo(row scanner) (Video, error) {
 	var (
-		v        Video
-		progress *int16
+		v                         Video
+		progress                  *int16
+		collectionSlug, collTitle *string
 	)
 	err := row.Scan(&v.ID, &v.Title, &v.Description, &v.Status, &v.Visibility, &v.DurationSeconds,
 		&v.ViewCount, &v.CreatedAt, &v.PublishedAt, &v.thumbnailKey, &v.manifestKey,
-		&v.Channel.ID, &v.Channel.Handle, &v.Channel.Name, &v.ownerID, &progress, &v.ProcessingError)
+		&v.Channel.ID, &v.Channel.Handle, &v.Channel.Name, &v.ownerID, &progress, &v.ProcessingError,
+		&collectionSlug, &collTitle)
+	if collectionSlug != nil && collTitle != nil {
+		v.Collection = &CollectionRef{Slug: *collectionSlug, Title: *collTitle}
+	}
 	if progress != nil && (v.Status == StatusQueued || v.Status == StatusProcessing) {
 		p := int(*progress)
 		v.ProcessingProgress = &p
@@ -222,14 +238,43 @@ func pagination(r *http.Request) (limit, offset int, err error) {
 	return limit, offset, nil
 }
 
-// feed is the home feed: public, ready videos, newest first.
+// maxQueryLength bounds the ?q= search text.
+const maxQueryLength = 100
+
+// likePattern turns user text into a substring ILIKE pattern, escaping the LIKE wildcards
+// (backslash is PostgreSQL's default LIKE escape character).
+func likePattern(q string) string {
+	escaped := strings.NewReplacer(`\`, `\\`, `%`, `\%`, `_`, `\_`).Replace(q)
+	return "%" + escaped + "%"
+}
+
+// searchQuery reads the optional ?q= parameter (trimmed, at most maxQueryLength characters).
+func searchQuery(r *http.Request) (string, error) {
+	q := strings.TrimSpace(r.URL.Query().Get("q"))
+	if len([]rune(q)) > maxQueryLength {
+		return "", httpx.Invalid(httpx.Detail{Loc: []string{"query", "q"}, Msg: "must be at most 100 characters", Type: "string_too_long"})
+	}
+	return q, nil
+}
+
+// feed is the home feed: public, ready videos, newest first. With ?q= it is a title and
+// description search over the same set.
 func (h *Handler) feed(w http.ResponseWriter, r *http.Request) error {
 	limit, offset, err := pagination(r)
 	if err != nil {
 		return err
 	}
+	q, err := searchQuery(r)
+	if err != nil {
+		return err
+	}
+	where, args := publiclyListed, []any{limit, offset}
+	if q != "" {
+		where += ` AND (v.title ILIKE $3 OR v.description ILIKE $3)`
+		args = append(args, likePattern(q))
+	}
 	videos, err := h.list(r.Context(),
-		selectVideos+` WHERE `+publiclyListed+` `+newestFirst+` LIMIT $1 OFFSET $2`, limit, offset)
+		selectVideos+` WHERE `+where+` `+newestFirst+` LIMIT $1 OFFSET $2`, args...)
 	if err != nil {
 		return err
 	}
@@ -336,6 +381,9 @@ func (h *Handler) update(w http.ResponseWriter, r *http.Request, user auth.User)
 	}
 	// nil means "leave unchanged"; COALESCE keeps the current value.
 	var title, description, visibility *string
+	// "collection": a slug moves the video into that collection, null or "" removes it.
+	collectionPresent := f.Has("collection")
+	collectionSlug, collectionNull := f.NullableString("collection", 0, 60)
 	if s, ok := f.TrimmedString("title", false, 1, 100); ok {
 		title = &s
 	}
@@ -350,6 +398,23 @@ func (h *Handler) update(w http.ResponseWriter, r *http.Request, user auth.User)
 	}
 
 	ctx := r.Context()
+	if collectionPresent {
+		var collectionID *string
+		if !collectionNull && collectionSlug != "" {
+			var id string
+			err := h.db.QueryRow(ctx, `SELECT id FROM collections WHERE slug = $1`, collectionSlug).Scan(&id)
+			if errors.Is(err, pgx.ErrNoRows) {
+				return errCollectionNotFound
+			}
+			if err != nil {
+				return err
+			}
+			collectionID = &id
+		}
+		if _, err := h.db.Exec(ctx, `UPDATE videos SET collection_id = $2, updated_at = now() WHERE id = $1`, v.ID, collectionID); err != nil {
+			return err
+		}
+	}
 	if _, err := h.db.Exec(ctx,
 		`UPDATE videos
 		 SET title = COALESCE($2, title), description = COALESCE($3, description),

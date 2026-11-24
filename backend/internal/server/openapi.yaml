@@ -119,8 +119,11 @@ paths:
   /videos:
     get:
       tags: [videos]
-      summary: "Home feed: public, ready videos, newest first"
-      parameters: [{ $ref: "#/components/parameters/Limit" }, { $ref: "#/components/parameters/Offset" }]
+      summary: "Home feed: public, ready videos, newest first; with q, a title/description search"
+      parameters:
+        - { $ref: "#/components/parameters/Limit" }
+        - { $ref: "#/components/parameters/Offset" }
+        - { name: q, in: query, schema: { type: string, maxLength: 100 }, description: "Case-insensitive substring; % and _ match literally" }
       responses:
         "200": { $ref: "#/components/responses/VideoPage" }
         default: { $ref: "#/components/responses/Error" }
@@ -131,6 +134,53 @@ paths:
       requestBody: { required: true, content: { application/json: { schema: { $ref: "#/components/schemas/VideoCreate" } } } }
       responses:
         "201": { $ref: "#/components/responses/Video" }
+        default: { $ref: "#/components/responses/Error" }
+  /videos/featured:
+    get:
+      tags: [catalog]
+      summary: The most recently featured public, ready video (the newest one when none is featured)
+      responses:
+        "200": { $ref: "#/components/responses/Video" }
+        default: { $ref: "#/components/responses/Error" }
+  /videos/{id}/pipeline:
+    parameters: [{ $ref: "#/components/parameters/VideoID" }]
+    get:
+      tags: [catalog]
+      summary: How the video moved through upload, queue and worker (same visibility as GET /videos/{id})
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Pipeline" } } } }
+        default: { $ref: "#/components/responses/Error" }
+  /collections:
+    get:
+      tags: [catalog]
+      summary: Curated collections in display order; counts cover public, ready videos
+      responses:
+        "200":
+          description: OK
+          content: { application/json: { schema: { type: object, properties: { items: { type: array, items: { $ref: "#/components/schemas/Collection" } } } } } }
+        default: { $ref: "#/components/responses/Error" }
+  /collections/{slug}:
+    parameters: [{ name: slug, in: path, required: true, schema: { type: string } }]
+    get:
+      tags: [catalog]
+      summary: One collection and a page of its public, ready videos, newest first
+      parameters: [{ $ref: "#/components/parameters/Limit" }, { $ref: "#/components/parameters/Offset" }]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - { $ref: "#/components/schemas/VideoPage" }
+                  - { type: object, properties: { collection: { $ref: "#/components/schemas/Collection" } } }
+        default: { $ref: "#/components/responses/Error" }
+  /stats:
+    get:
+      tags: [catalog]
+      summary: Aggregates of the public library and the jobs that produced it
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { $ref: "#/components/schemas/Stats" } } } }
         default: { $ref: "#/components/responses/Error" }
   /videos/{id}:
     parameters: [{ $ref: "#/components/parameters/VideoID" }]
@@ -396,6 +446,7 @@ components:
         title: { type: string, minLength: 1, maxLength: 100 }
         description: { type: string, maxLength: 5000 }
         visibility: { $ref: "#/components/schemas/Visibility" }
+        collection: { type: [string, "null"], description: "Collection slug; null or empty removes the video from its collection" }
     Visibility: { type: string, enum: [public, unlisted, private] }
     Video:
       type: object
@@ -419,6 +470,69 @@ components:
         playback_url: { type: [string, "null"], description: "Set once the video is ready. The HLS master playlist, served by GET /videos/{id}/hls/master.m3u8" }
         processing_progress: { type: [integer, "null"], minimum: 0, maximum: 100, description: "While queued or processing; otherwise null" }
         processing_error: { type: [string, "null"], description: "Why processing failed, for the owner; null unless failed" }
+        collection:
+          oneOf:
+            - type: "null"
+            - { type: object, properties: { slug: { type: string }, title: { type: string } } }
+    Collection:
+      type: object
+      properties:
+        slug: { type: string }
+        title: { type: string }
+        description: { type: string }
+        video_count: { type: integer }
+        total_seconds: { type: integer }
+        hls_bytes: { type: integer, format: int64 }
+        cover_url: { type: [string, "null"] }
+    Stats:
+      type: object
+      properties:
+        videos: { type: integer }
+        total_seconds: { type: integer }
+        renditions: { type: integer }
+        hls_bytes: { type: integer, format: int64 }
+        jobs_succeeded: { type: integer }
+        jobs_retried: { type: integer, description: "Succeeded jobs that needed more than one attempt" }
+        median_processing_ratio: { type: [number, "null"], description: "Median of processing wall time / video duration (first claim to finish)" }
+    Pipeline:
+      type: object
+      properties:
+        video_id: { type: string, format: uuid }
+        status: { type: string }
+        duration_seconds: { type: [integer, "null"] }
+        upload:
+          oneOf:
+            - type: "null"
+            - type: object
+              properties:
+                size_bytes: { type: integer, format: int64 }
+                content_type: { type: string }
+                created_at: { type: string, format: date-time }
+                completed_at: { type: [string, "null"], format: date-time }
+        job:
+          oneOf:
+            - type: "null"
+            - type: object
+              properties:
+                state: { type: string }
+                stage: { type: string }
+                progress: { type: integer }
+                attempts: { type: integer }
+                max_attempts: { type: integer }
+                created_at: { type: string, format: date-time }
+                started_at: { type: [string, "null"], format: date-time }
+                finished_at: { type: [string, "null"], format: date-time }
+        renditions:
+          type: array
+          items:
+            type: object
+            properties:
+              name: { type: string }
+              width: { type: integer }
+              height: { type: integer }
+              bandwidth_bps: { type: integer }
+              segment_count: { type: integer }
+              size_bytes: { type: integer, format: int64 }
     VideoPage:
       type: object
       properties:
