@@ -25,7 +25,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       <footer className="mt-[72px] border-t border-line py-7 text-sm text-muted">
         <div className="wrap flex flex-wrap items-center gap-x-7 gap-y-3">
           <span className="tnum rounded border border-amber/40 px-1.5 py-0.5 text-[11px] tracking-[0.1em] text-amber">DEMO</span>
-          <span>A portfolio project. Titles are invented; clips are CC0, public domain, Pexels or Pixabay licensed.</span>
+          <span>A portfolio project. Titles are invented; clips come from Pixabay and Wikimedia Commons (CC0 or public domain).</span>
           <Link href="/credits" className="text-sage hover:text-sage-hover">
             Credits
           </Link>
