@@ -28,6 +28,7 @@ type AuthSplitProps = {
 };
 
 const FLOW = ["browser", "S3", "queue", "FFmpeg worker", "HLS · CloudFront"];
+const MOBILE_TILES = 12;
 
 export function AuthSplit({ mode, title, hint, children, footer }: AuthSplitProps) {
   const [thumbs, setThumbs] = useState<string[]>([]);
@@ -56,7 +57,8 @@ export function AuthSplit({ mode, title, hint, children, footer }: AuthSplitProp
       <aside className="relative h-[280px] overflow-hidden border-b border-line bg-[#0d0d0d] lg:h-auto lg:border-r lg:border-b-0">
         <div aria-hidden="true" className="absolute -inset-10 grid rotate-[-4deg] scale-[1.08] grid-cols-3 gap-2.5 opacity-55 lg:grid-cols-4">
           {tiles.map((src, i) => (
-            <div key={i} className="aspect-video overflow-hidden rounded-md bg-s2">
+            // The 280 px band on small screens shows about 3 x 4 tiles; hidden tiles never fetch their lazy images.
+            <div key={i} className={`aspect-video overflow-hidden rounded-md bg-s2 ${i >= MOBILE_TILES ? "max-lg:hidden" : ""}`}>
               {src && <img src={src} alt="" loading="lazy" decoding="async" className="h-full w-full object-cover" />}
             </div>
           ))}

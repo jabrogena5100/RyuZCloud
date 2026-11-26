@@ -35,22 +35,31 @@ export async function startPreview(video: HTMLVideoElement, src: string): Promis
   video.loop = true;
   const crossOrigin = isCrossOrigin(src);
 
-  if (video.canPlayType("application/vnd.apple.mpegurl")) {
+  // hls.js first wherever MSE exists: only it honours startLevel 0, the player-size cap and the 8 s
+  // buffer. Chrome 14x+ also plays HLS natively, and checking canPlayType first handed Chrome its own
+  // player, which applies none of them (see docs/metrics.md, row W1b). Native is the fallback.
+  const native = () => {
     if (crossOrigin) {
       video.crossOrigin = "use-credentials";
     }
     video.src = src;
-    await video.play().catch(() => undefined);
+    void video.play().catch(() => undefined);
     return () => {
       video.pause();
       video.removeAttribute("src");
       video.load();
     };
-  }
+  };
+  const nativeOk = video.canPlayType("application/vnd.apple.mpegurl") !== "";
 
-  const { default: Hls } = await import("hls.js");
+  let Hls: typeof import("hls.js").default;
+  try {
+    Hls = (await import("hls.js")).default;
+  } catch {
+    return nativeOk ? native() : () => undefined;
+  }
   if (!Hls.isSupported()) {
-    return () => undefined;
+    return nativeOk ? native() : () => undefined;
   }
   const hls = new Hls({
     startLevel: 0,

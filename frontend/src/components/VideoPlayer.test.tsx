@@ -33,7 +33,7 @@ afterEach(() => {
 });
 
 describe("VideoPlayer", () => {
-  it("plays the master playlist through hls.js where HLS is not native", async () => {
+  it("plays the master playlist through hls.js", async () => {
     vi.spyOn(HTMLMediaElement.prototype, "canPlayType").mockReturnValue("");
     const { unmount } = render(<VideoPlayer src="/api/v1/videos/v1/hls/master.m3u8" poster="/api/v1/videos/v1/thumbnail" title="Demo" />);
 
@@ -45,11 +45,20 @@ describe("VideoPlayer", () => {
     expect(hlsInstance.destroy).toHaveBeenCalled();
   });
 
-  it("uses native HLS (Safari) without loading hls.js", () => {
+  it("prefers hls.js even where the browser also plays HLS natively (Chrome 14x+)", async () => {
     vi.spyOn(HTMLMediaElement.prototype, "canPlayType").mockReturnValue("maybe");
+    render(<VideoPlayer src="/api/v1/videos/v1/hls/master.m3u8" title="Both" />);
+
+    await waitFor(() => expect(hlsInstance.loadSource).toHaveBeenCalledWith("/api/v1/videos/v1/hls/master.m3u8"));
+    expect(screen.getByLabelText("Both")).not.toHaveAttribute("src");
+  });
+
+  it("falls back to native HLS where there is no Media Source Extensions (older iOS)", async () => {
+    vi.spyOn(HTMLMediaElement.prototype, "canPlayType").mockReturnValue("maybe");
+    HlsMock.isSupported.mockReturnValue(false);
     render(<VideoPlayer src="/api/v1/videos/v1/hls/master.m3u8" title="Native" />);
 
-    expect(screen.getByLabelText("Native")).toHaveAttribute("src", "/api/v1/videos/v1/hls/master.m3u8");
+    await waitFor(() => expect(screen.getByLabelText("Native")).toHaveAttribute("src", "/api/v1/videos/v1/hls/master.m3u8"));
     expect(HlsMock).not.toHaveBeenCalled();
   });
 
@@ -91,10 +100,11 @@ describe("VideoPlayer", () => {
     expect((HlsMock.mock.calls[0] as unknown[])[0]).toEqual({});
   });
 
-  it("asks native players to send cookies to a cross-origin CDN", () => {
+  it("asks native players to send cookies to a cross-origin CDN", async () => {
     vi.spyOn(HTMLMediaElement.prototype, "canPlayType").mockReturnValue("maybe");
+    HlsMock.isSupported.mockReturnValue(false);
     render(<VideoPlayer src="https://media.example.com/videos/v1/hls/master.m3u8" title="Native CDN" />);
 
-    expect(screen.getByLabelText("Native CDN")).toHaveAttribute("crossorigin", "use-credentials");
+    await waitFor(() => expect(screen.getByLabelText("Native CDN")).toHaveAttribute("crossorigin", "use-credentials"));
   });
 });
