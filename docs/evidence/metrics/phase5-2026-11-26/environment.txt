@@ -1,0 +1,8 @@
+date_utc: 2026-11-26T04:47:35Z
+before: f14c846d71639c663216f844d1b6accee63286f2
+after: 19e92e7ba49f00193d0341f7816656369c12d8bb
+node: v22.22.1
+next: 15.5.29
+cpu: AMD Ryzen AI 5 340 w/ Radeon 840M x 4
+memory: 7 GiB
+library: {"videos":40,"total_seconds":971,"renditions":80,"hls_bytes":288496910,"jobs_succeeded":40,"jobs_retried":0,"median_processing_ratio":0.7684133541666667}

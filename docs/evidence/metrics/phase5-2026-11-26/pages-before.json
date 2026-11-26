@@ -1,0 +1,252 @@
+{
+  "base": "http://localhost:3101",
+  "runs": 3,
+  "date": "2026-11-26T04:51:09.492Z",
+  "watch_id": "682895d7-dca6-4ceb-b555-03fa0dc14e20",
+  "skipped": [
+    "/collections",
+    "/credits"
+  ],
+  "result": {
+    "home": {
+      "totalBytes": {
+        "median": 842809,
+        "min": 842809,
+        "max": 842809
+      },
+      "jsBytes": {
+        "median": 131885,
+        "min": 131885,
+        "max": 131885
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 687842,
+        "min": 687842,
+        "max": 687842
+      },
+      "requests": {
+        "median": 51,
+        "min": 51,
+        "max": 51
+      },
+      "dcl": {
+        "median": 432,
+        "min": 432,
+        "max": 519
+      },
+      "load": {
+        "median": 519,
+        "min": 432,
+        "max": 658
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "login": {
+      "totalBytes": {
+        "median": 151507,
+        "min": 151507,
+        "max": 151507
+      },
+      "jsBytes": {
+        "median": 134769,
+        "min": 134769,
+        "max": 134769
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 19,
+        "min": 19,
+        "max": 19
+      },
+      "dcl": {
+        "median": 594,
+        "min": 408,
+        "max": 641
+      },
+      "load": {
+        "median": 594,
+        "min": 408,
+        "max": 641
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "register": {
+      "totalBytes": {
+        "median": 151588,
+        "min": 151588,
+        "max": 151588
+      },
+      "jsBytes": {
+        "median": 134769,
+        "min": 134769,
+        "max": 134769
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 19,
+        "min": 19,
+        "max": 19
+      },
+      "dcl": {
+        "median": 225,
+        "min": 105,
+        "max": 361
+      },
+      "load": {
+        "median": 373,
+        "min": 309,
+        "max": 505
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "upload": {
+      "totalBytes": {
+        "median": 146728,
+        "min": 146728,
+        "max": 146728
+      },
+      "jsBytes": {
+        "median": 131885,
+        "min": 131885,
+        "max": 131885
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 17,
+        "min": 17,
+        "max": 17
+      },
+      "dcl": {
+        "median": 148,
+        "min": 74,
+        "max": 467
+      },
+      "load": {
+        "median": 422,
+        "min": 288,
+        "max": 468
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "studio": {
+      "totalBytes": {
+        "median": 146718,
+        "min": 146718,
+        "max": 146718
+      },
+      "jsBytes": {
+        "median": 131885,
+        "min": 131885,
+        "max": 131885
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 17,
+        "min": 17,
+        "max": 17
+      },
+      "dcl": {
+        "median": 178,
+        "min": 85,
+        "max": 303
+      },
+      "load": {
+        "median": 463,
+        "min": 329,
+        "max": 468
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "watch": {
+      "totalBytes": {
+        "median": 1794407,
+        "min": 1794407,
+        "max": 1794407
+      },
+      "jsBytes": {
+        "median": 136053,
+        "min": 136053,
+        "max": 136053
+      },
+      "cssBytes": {
+        "median": 5962,
+        "min": 5962,
+        "max": 5962
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 27,
+        "min": 27,
+        "max": 27
+      },
+      "dcl": {
+        "median": 274,
+        "min": 233,
+        "max": 519
+      },
+      "load": {
+        "median": 439,
+        "min": 432,
+        "max": 723
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    }
+  }
+}

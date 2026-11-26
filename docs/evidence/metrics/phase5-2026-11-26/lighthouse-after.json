@@ -1,0 +1,951 @@
+{
+  "base": "http://localhost:3102",
+  "date": "2026-11-26T04:57:27.536Z",
+  "runs": 3,
+  "lighthouse": "13.6.0",
+  "chromium": "chromium-1255",
+  "throttling": "simulate (Lighthouse defaults)",
+  "results": {
+    "mobile /": {
+      "performance": {
+        "median": 57,
+        "min": 55,
+        "max": 61
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 842,
+        "min": 830,
+        "max": 871
+      },
+      "lcp_ms": {
+        "median": 4364,
+        "min": 3791,
+        "max": 4502
+      },
+      "tbt_ms": {
+        "median": 1956,
+        "min": 1660,
+        "max": 3184
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "si_ms": {
+        "median": 2726,
+        "min": 2449,
+        "max": 3304
+      },
+      "transfer_bytes": {
+        "median": 2598936,
+        "min": 2598936,
+        "max": 3122007
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 55,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 871,
+          "lcp_ms": 4364,
+          "tbt_ms": 3184,
+          "cls": 0,
+          "si_ms": 3304,
+          "transfer_bytes": 3122007,
+          "runtime_error": null
+        },
+        {
+          "performance": 61,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 842,
+          "lcp_ms": 3791,
+          "tbt_ms": 1956,
+          "cls": 0,
+          "si_ms": 2449,
+          "transfer_bytes": 2598936,
+          "runtime_error": null
+        },
+        {
+          "performance": 57,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 830,
+          "lcp_ms": 4502,
+          "tbt_ms": 1660,
+          "cls": 0,
+          "si_ms": 2726,
+          "transfer_bytes": 2598936,
+          "runtime_error": null
+        }
+      ]
+    },
+    "desktop /": {
+      "performance": {
+        "median": 91,
+        "min": 90,
+        "max": 95
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 298,
+        "min": 297,
+        "max": 324
+      },
+      "lcp_ms": {
+        "median": 1230,
+        "min": 1188,
+        "max": 1536
+      },
+      "tbt_ms": {
+        "median": 167,
+        "min": 127,
+        "max": 188
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "si_ms": {
+        "median": 1142,
+        "min": 1105,
+        "max": 1193
+      },
+      "transfer_bytes": {
+        "median": 2700639,
+        "min": 2696786,
+        "max": 3219857
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 91,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 297,
+          "lcp_ms": 1230,
+          "tbt_ms": 188,
+          "cls": 0,
+          "si_ms": 1193,
+          "transfer_bytes": 3219857,
+          "runtime_error": null
+        },
+        {
+          "performance": 90,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 298,
+          "lcp_ms": 1536,
+          "tbt_ms": 167,
+          "cls": 0,
+          "si_ms": 1105,
+          "transfer_bytes": 2700639,
+          "runtime_error": null
+        },
+        {
+          "performance": 95,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 324,
+          "lcp_ms": 1188,
+          "tbt_ms": 127,
+          "cls": 0,
+          "si_ms": 1142,
+          "transfer_bytes": 2696786,
+          "runtime_error": null
+        }
+      ]
+    },
+    "mobile /login": {
+      "performance": {
+        "median": 81,
+        "min": 74,
+        "max": 83
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 824,
+        "min": 824,
+        "max": 828
+      },
+      "lcp_ms": {
+        "median": 824,
+        "min": 824,
+        "max": 828
+      },
+      "tbt_ms": {
+        "median": 807,
+        "min": 670,
+        "max": 1459
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0.004
+      },
+      "si_ms": {
+        "median": 1128,
+        "min": 875,
+        "max": 1277
+      },
+      "transfer_bytes": {
+        "median": 895738,
+        "min": 895738,
+        "max": 895738
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 74,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 824,
+          "lcp_ms": 824,
+          "tbt_ms": 1459,
+          "cls": 0.004,
+          "si_ms": 1277,
+          "transfer_bytes": 895738,
+          "runtime_error": null
+        },
+        {
+          "performance": 83,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 824,
+          "lcp_ms": 824,
+          "tbt_ms": 670,
+          "cls": 0,
+          "si_ms": 1128,
+          "transfer_bytes": 895738,
+          "runtime_error": null
+        },
+        {
+          "performance": 81,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 828,
+          "lcp_ms": 828,
+          "tbt_ms": 807,
+          "cls": 0,
+          "si_ms": 875,
+          "transfer_bytes": 895738,
+          "runtime_error": null
+        }
+      ]
+    },
+    "desktop /login": {
+      "performance": {
+        "median": 99,
+        "min": 95,
+        "max": 99
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 290,
+        "min": 270,
+        "max": 297
+      },
+      "lcp_ms": {
+        "median": 290,
+        "min": 270,
+        "max": 297
+      },
+      "tbt_ms": {
+        "median": 99,
+        "min": 84,
+        "max": 183
+      },
+      "cls": {
+        "median": 0.001,
+        "min": 0.001,
+        "max": 0.001
+      },
+      "si_ms": {
+        "median": 538,
+        "min": 521,
+        "max": 542
+      },
+      "transfer_bytes": {
+        "median": 895738,
+        "min": 895738,
+        "max": 895738
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 95,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 297,
+          "lcp_ms": 297,
+          "tbt_ms": 183,
+          "cls": 0.001,
+          "si_ms": 542,
+          "transfer_bytes": 895738,
+          "runtime_error": null
+        },
+        {
+          "performance": 99,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 290,
+          "lcp_ms": 290,
+          "tbt_ms": 99,
+          "cls": 0.001,
+          "si_ms": 538,
+          "transfer_bytes": 895738,
+          "runtime_error": null
+        },
+        {
+          "performance": 99,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 270,
+          "lcp_ms": 270,
+          "tbt_ms": 84,
+          "cls": 0.001,
+          "si_ms": 521,
+          "transfer_bytes": 895738,
+          "runtime_error": null
+        }
+      ]
+    },
+    "mobile /credits": {
+      "performance": {
+        "median": 78,
+        "min": 71,
+        "max": 78
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 786,
+        "min": 784,
+        "max": 803
+      },
+      "lcp_ms": {
+        "median": 786,
+        "min": 784,
+        "max": 803
+      },
+      "tbt_ms": {
+        "median": 1050,
+        "min": 988,
+        "max": 2251
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0.058
+      },
+      "si_ms": {
+        "median": 1329,
+        "min": 1047,
+        "max": 2052
+      },
+      "transfer_bytes": {
+        "median": 309768,
+        "min": 309768,
+        "max": 309768
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 78,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 784,
+          "lcp_ms": 784,
+          "tbt_ms": 1050,
+          "cls": 0,
+          "si_ms": 1329,
+          "transfer_bytes": 309768,
+          "runtime_error": null
+        },
+        {
+          "performance": 78,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 786,
+          "lcp_ms": 786,
+          "tbt_ms": 988,
+          "cls": 0,
+          "si_ms": 1047,
+          "transfer_bytes": 309768,
+          "runtime_error": null
+        },
+        {
+          "performance": 71,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 803,
+          "lcp_ms": 803,
+          "tbt_ms": 2251,
+          "cls": 0.058,
+          "si_ms": 2052,
+          "transfer_bytes": 309768,
+          "runtime_error": null
+        }
+      ]
+    },
+    "desktop /credits": {
+      "performance": {
+        "median": 76,
+        "min": 76,
+        "max": 77
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 230,
+        "min": 228,
+        "max": 247
+      },
+      "lcp_ms": {
+        "median": 230,
+        "min": 228,
+        "max": 247
+      },
+      "tbt_ms": {
+        "median": 85,
+        "min": 64,
+        "max": 98
+      },
+      "cls": {
+        "median": 0.666,
+        "min": 0.666,
+        "max": 0.668
+      },
+      "si_ms": {
+        "median": 357,
+        "min": 355,
+        "max": 405
+      },
+      "transfer_bytes": {
+        "median": 309768,
+        "min": 309768,
+        "max": 309768
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 76,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 247,
+          "lcp_ms": 247,
+          "tbt_ms": 98,
+          "cls": 0.666,
+          "si_ms": 355,
+          "transfer_bytes": 309768,
+          "runtime_error": null
+        },
+        {
+          "performance": 77,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 230,
+          "lcp_ms": 230,
+          "tbt_ms": 64,
+          "cls": 0.666,
+          "si_ms": 405,
+          "transfer_bytes": 309768,
+          "runtime_error": null
+        },
+        {
+          "performance": 76,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 228,
+          "lcp_ms": 228,
+          "tbt_ms": 85,
+          "cls": 0.668,
+          "si_ms": 357,
+          "transfer_bytes": 309768,
+          "runtime_error": null
+        }
+      ]
+    },
+    "mobile /collections": {
+      "performance": {
+        "median": 71,
+        "min": 63,
+        "max": 73
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 785,
+        "min": 784,
+        "max": 812
+      },
+      "lcp_ms": {
+        "median": 3710,
+        "min": 3643,
+        "max": 3880
+      },
+      "tbt_ms": {
+        "median": 748,
+        "min": 672,
+        "max": 1453
+      },
+      "cls": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "si_ms": {
+        "median": 1201,
+        "min": 1039,
+        "max": 1440
+      },
+      "transfer_bytes": {
+        "median": 478549,
+        "min": 478549,
+        "max": 478549
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 73,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 785,
+          "lcp_ms": 3643,
+          "tbt_ms": 672,
+          "cls": 0,
+          "si_ms": 1039,
+          "transfer_bytes": 478549,
+          "runtime_error": null
+        },
+        {
+          "performance": 71,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 784,
+          "lcp_ms": 3710,
+          "tbt_ms": 748,
+          "cls": 0,
+          "si_ms": 1201,
+          "transfer_bytes": 478549,
+          "runtime_error": null
+        },
+        {
+          "performance": 63,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 812,
+          "lcp_ms": 3880,
+          "tbt_ms": 1453,
+          "cls": 0,
+          "si_ms": 1440,
+          "transfer_bytes": 478549,
+          "runtime_error": null
+        }
+      ]
+    },
+    "desktop /collections": {
+      "performance": {
+        "median": 98,
+        "min": 91,
+        "max": 98
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 243,
+        "min": 236,
+        "max": 269
+      },
+      "lcp_ms": {
+        "median": 980,
+        "min": 896,
+        "max": 1026
+      },
+      "tbt_ms": {
+        "median": 85,
+        "min": 69,
+        "max": 219
+      },
+      "cls": {
+        "median": 0.017,
+        "min": 0.017,
+        "max": 0.019
+      },
+      "si_ms": {
+        "median": 422,
+        "min": 391,
+        "max": 737
+      },
+      "transfer_bytes": {
+        "median": 486068,
+        "min": 486068,
+        "max": 486068
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 91,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 269,
+          "lcp_ms": 1026,
+          "tbt_ms": 219,
+          "cls": 0.017,
+          "si_ms": 737,
+          "transfer_bytes": 486068,
+          "runtime_error": null
+        },
+        {
+          "performance": 98,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 236,
+          "lcp_ms": 896,
+          "tbt_ms": 85,
+          "cls": 0.017,
+          "si_ms": 391,
+          "transfer_bytes": 486068,
+          "runtime_error": null
+        },
+        {
+          "performance": 98,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 243,
+          "lcp_ms": 980,
+          "tbt_ms": 69,
+          "cls": 0.019,
+          "si_ms": 422,
+          "transfer_bytes": 486068,
+          "runtime_error": null
+        }
+      ]
+    },
+    "mobile /watch/682895d7-dca6-4ceb-b555-03fa0dc14e20": {
+      "performance": {
+        "median": 64,
+        "min": 63,
+        "max": 66
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 793,
+        "min": 786,
+        "max": 828
+      },
+      "lcp_ms": {
+        "median": 3583,
+        "min": 3502,
+        "max": 3703
+      },
+      "tbt_ms": {
+        "median": 720,
+        "min": 697,
+        "max": 852
+      },
+      "cls": {
+        "median": 0.17,
+        "min": 0.17,
+        "max": 0.17
+      },
+      "si_ms": {
+        "median": 1246,
+        "min": 1215,
+        "max": 1401
+      },
+      "transfer_bytes": {
+        "median": 2123676,
+        "min": 2123676,
+        "max": 2123676
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 63,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 793,
+          "lcp_ms": 3583,
+          "tbt_ms": 852,
+          "cls": 0.17,
+          "si_ms": 1246,
+          "transfer_bytes": 2123676,
+          "runtime_error": null
+        },
+        {
+          "performance": 64,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 786,
+          "lcp_ms": 3703,
+          "tbt_ms": 720,
+          "cls": 0.17,
+          "si_ms": 1401,
+          "transfer_bytes": 2123676,
+          "runtime_error": null
+        },
+        {
+          "performance": 66,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 828,
+          "lcp_ms": 3502,
+          "tbt_ms": 697,
+          "cls": 0.17,
+          "si_ms": 1215,
+          "transfer_bytes": 2123676,
+          "runtime_error": null
+        }
+      ]
+    },
+    "desktop /watch/682895d7-dca6-4ceb-b555-03fa0dc14e20": {
+      "performance": {
+        "median": 97,
+        "min": 96,
+        "max": 99
+      },
+      "accessibility": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "best_practices": {
+        "median": 96,
+        "min": 96,
+        "max": 96
+      },
+      "seo": {
+        "median": 100,
+        "min": 100,
+        "max": 100
+      },
+      "fcp_ms": {
+        "median": 244,
+        "min": 243,
+        "max": 252
+      },
+      "lcp_ms": {
+        "median": 889,
+        "min": 843,
+        "max": 970
+      },
+      "tbt_ms": {
+        "median": 131,
+        "min": 77,
+        "max": 136
+      },
+      "cls": {
+        "median": 0.012,
+        "min": 0.012,
+        "max": 0.012
+      },
+      "si_ms": {
+        "median": 631,
+        "min": 598,
+        "max": 652
+      },
+      "transfer_bytes": {
+        "median": 2122364,
+        "min": 2122364,
+        "max": 2645192
+      },
+      "runtime_errors": [],
+      "samples": [
+        {
+          "performance": 99,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 243,
+          "lcp_ms": 843,
+          "tbt_ms": 77,
+          "cls": 0.012,
+          "si_ms": 631,
+          "transfer_bytes": 2122364,
+          "runtime_error": null
+        },
+        {
+          "performance": 97,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 244,
+          "lcp_ms": 889,
+          "tbt_ms": 131,
+          "cls": 0.012,
+          "si_ms": 652,
+          "transfer_bytes": 2645192,
+          "runtime_error": null
+        },
+        {
+          "performance": 96,
+          "accessibility": 100,
+          "best_practices": 96,
+          "seo": 100,
+          "fcp_ms": 252,
+          "lcp_ms": 970,
+          "tbt_ms": 136,
+          "cls": 0.012,
+          "si_ms": 598,
+          "transfer_bytes": 2122364,
+          "runtime_error": null
+        }
+      ]
+    }
+  },
+  "skipped": []
+}
