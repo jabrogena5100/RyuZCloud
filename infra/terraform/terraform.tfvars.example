@@ -14,14 +14,23 @@ alert_email         = "REPLACE@example.com" # your personal address; AWS emails 
 deploy_services = false
 
 # Deployment profile (docs/aws-costs.md, "On-demand vs always-on"):
+#   protect_data = true   -> long-running site (ryuzcloud.com since 2026-11-26): deletion protection on the database
+#                            and load balancer, final snapshot, buckets and registries keep their contents on destroy.
 #   protect_data = false  -> temporary environment: `terraform destroy` works directly; the database and ALL videos
 #                            are deleted with it (no final snapshot).
-#   protect_data = true   -> long-lived environment: deletion protection on, final snapshot, must be lifted first.
 # Choose before the first apply; changing it later needs an extra apply.
-protect_data = false
+protect_data = true
 
-# Stack budget alert. It is destroyed with the stack, so also create an account-level budget by hand (docs/phase5-plan.md).
-monthly_budget_usd = 60
+# Stack budget alert (80% actual, 100% forecast). Running 24/7 is estimated at about $90-117/month (docs/aws-costs.md),
+# so 60 would alert every month. Keep the account-level budgets in Billing too (docs/phase6-session-plan.md, section 3).
+monthly_budget_usd = 120
+
+# Public site: visitors watch without an account; only these addresses can register (SIGNUP_OPEN=false).
+signup_open           = false
+signup_allowed_emails = ["library@example.com"] # the seed.py demo account; add your own if you want one
+
+# Largest accepted upload. The biggest library clip is 49 MB; 100 MiB caps what an allow-listed account can send.
+upload_max_bytes = 104857600
 
 # Everything below is optional; these are the defaults.
 # environment                  = "prod"

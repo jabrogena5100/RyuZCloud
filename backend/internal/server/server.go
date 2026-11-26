@@ -66,7 +66,8 @@ func New(cfg config.Config, db *pgxpool.Pool, logger *slog.Logger, opts ...Optio
 	}
 
 	mux := http.NewServeMux()
-	authService := auth.NewService(db, cfg.SessionCookieName, cfg.SessionTTL, cfg.CookieSecure)
+	authService := auth.NewService(db, cfg.SessionCookieName, cfg.SessionTTL, cfg.CookieSecure).
+		WithSignup(cfg.Signup.Closed, cfg.Signup.AllowedEmails)
 
 	health.NewHandler(db, Version).Routes(mux, APIPrefix)
 	authService.Routes(mux, APIPrefix)
