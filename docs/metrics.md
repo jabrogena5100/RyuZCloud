@@ -84,20 +84,22 @@ the raw output was not kept.
 | ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | L0 | Local library before seeding | 1 public ready clip, 159 s, 2 renditions, 7,421,000 B of HLS; median processing time ÷ length **0.89×** (n = 1, so not a representative figure) | n/a | Local Compose, worker 2 CPU / 2 GB defaults (`WORKER_CPUS`, `WORKER_MEMORY` not confirmed for that run) | 2026-11-24 | Run (owner's terminal, output pasted) | `curl -s http://localhost:8000/api/v1/stats` |
-| L1 | Library seeded through the real upload path | Not measured yet (20 clips downloaded, 979 s kept per `library.py status`) | | Local Compose; `WORKER_CONCURRENCY` 1, `WORKER_CPUS` 2, `FFMPEG_THREADS` 2 unless changed in `.env` | | Not run | `python3 scripts/seed.py run`; raw: `docs/evidence/metrics/seed-<date>-<host>.json` |
-| L2 | Original bytes vs HLS bytes of the library | Not measured yet | | as L1 | | Not run | `summary.original_bytes`, `summary.hls_bytes` in the seed evidence file |
-| P1 | Transcode realtime factor (worker job wall time ÷ clip duration; median, min–max, n) | Not measured yet (only L0: 0.89×, n = 1) | | as L1 | | Not run | `summary.realtime_factor` in the seed evidence file |
-| P7 | Total seed time and browser-equivalent upload throughput | Not measured yet. **The first run (2026-11-24) includes about 1 h of worker outage**, so its total seed time is not a pipeline figure (see the note below) | | as L1, uploads from the VM to MinIO | | Not run | `summary.seed_wall_seconds_this_run`, `summary.upload_mbit_per_s` |
+| L1 | Library seeded through the real upload path | **40 clips ready**, 0 failed, 0 retried (every job 1 attempt); 971 s of footage; 21 Pixabay, 19 Wikimedia Commons; 7 collections | L0 had 1 ready clip; 40 seeded clips added (whether the earlier lecture clip is still public is not confirmed) | Local Compose on the VM; worker `WORKER_CONCURRENCY` 1, `WORKER_CPUS` 2, `FFMPEG_THREADS` 2 (defaults; `.env` overrides not confirmed); 360p + 720p renditions | 2026-11-24 | Run (owner's terminal, output pasted) | `python3 scripts/seed.py run`; raw: `docs/evidence/metrics/seed-2026-11-24-localhost-3000.json` |
+| L2 | Original bytes vs HLS bytes of the library | originals **430,635,085 B** (430.6 MB); HLS **288,496,910 B** (288.5 MB) for both renditions; ratio **0.67** | n/a | as L1 | 2026-11-24 | Run (owner's terminal, output pasted) | `summary.original_bytes`, `summary.hls_bytes` |
+| P1 | Transcode realtime factor (worker job wall time from first claim to finish ÷ clip duration; download, probe, both renditions, thumbnail, upload) | **median 0.768×**, range 0.321–2.789×, interquartile 0.574–0.999×, n = 40 clips of 8–60 s. By source: Pixabay MP4 median 0.582× (0.321–0.982, n = 21; median source bitrate 1.9 Mbit/s); Commons WebM median 1.005× (0.582–2.789, n = 19; 4.0 Mbit/s). The slowest two are 9–11 s Commons clips of 34–49 MB | L0 0.89× (n = 1) → 0.768× (n = 40); not a speed-up, just a real sample | as L1 | 2026-11-24 | Run (owner's terminal, output pasted) | `summary.realtime_factor`; per clip `clips.*.realtime_factor` |
+| P7 | Total seed time and upload throughput | **3,619.7 s** (60.3 min) from first upload to last job finished, of which about **47.6 min was the worker outage** (first upload 10:31:56 UTC, first job claimed 11:19:33). Without the outage: 39 uploads in 7.0 s, then the worker busy for 762.6 s (sum of job times 761.2 s, concurrency 1), so about **12.8 min**, derived, not separately run. Upload: 430.6 MB in 3.2 s of PUT time = 1,067.9 Mbit/s, VM to MinIO on the same host, so it says nothing about a real network upload. `seed_wall_seconds_this_run` 394.5 s is the resumed run only (waiting + the featured clip) | n/a | as L1, uploads from the VM to local MinIO | 2026-11-24 | Run (owner's terminal, output pasted); outage-free time Documented (derived from the same file) | evidence file: `clips.*.upload_started`, `job_started`, `job_finished` |
 
-**Note on the first seed run (2026-11-24, owner-reported).** The worker crash-looped for about the first hour of the run
-(`go: go.mod file not found`): its container was created before the project folder was renamed from `RyuCloud` to
+**Note on the first seed run (2026-11-24, owner-reported).** The worker crash-looped for about the first 48 minutes of the run
+(`go: go.mod file not found`; measured from the evidence file: 47.6 min between the first upload and the first claim): its container was created before the project folder was renamed from `RyuCloud` to
 `RyuZCloud`, so its bind mount still pointed at the old path. No job was claimed until the owner recreated the container
 (`docker compose up -d --force-recreate --no-deps worker`). Consequences for the rows above:
-- **P7 total seed time** includes that hour of idle queue. It will be recorded as measured, with this caveat, and is not
+- **P7 total seed time** includes that idle queue. It is recorded as measured, with the outage split out, and is not
   a measure of how long seeding takes. Upload throughput (`upload_mbit_per_s`) is timed per PUT and is not affected.
 - **P1 realtime factor** is not affected: it is measured from a job's first claim (`started_at`) to `finished_at`, so time
   spent queued does not count. The first job after the recreate also excludes the worker's `go run` compile, which
   happens before any claim.
+- The run was one seed; P1's spread is across 40 clips, not across repeated runs. A clean re-seed would give the
+  outage-free total as a Run figure.
 - Database status counts before the fix, as reported: draft 4, failed 4, queued 39, ready 5, uploading 4.
 - Since then `seed.py` stops with an error when no pending job moves for `SEED_STALL_MINUTES` (default 15).
 
