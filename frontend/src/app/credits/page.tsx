@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { CreditsList } from "@/components/CreditsList";
+import { CreditsList, type CreditsFile } from "@/components/CreditsList";
+import credits from "../../../public/credits.json";
 
 export const metadata: Metadata = { title: "Credits" };
 
@@ -7,7 +8,9 @@ const LINK = "text-sage underline underline-offset-4 hover:text-sage-hover";
 
 /**
  * Credits for the demo library. The per-clip list comes from public/credits.json, which
- * scripts/library.py writes from the content manifest when the clips are downloaded.
+ * scripts/library.py writes from the content manifest when the clips are downloaded. It is
+ * imported at build time, so the page is static; a new list needs a rebuild (the dev server
+ * picks it up by itself). The file also stays public at /credits.json.
  */
 export default function CreditsPage() {
   return (
@@ -40,7 +43,7 @@ export default function CreditsPage() {
       </ul>
       <p className="mt-4 text-muted">Nothing is taken from YouTube or other video platforms. Each clip and its source is listed below.</p>
 
-      <CreditsList />
+      <CreditsList file={credits as CreditsFile} />
 
       <h2 className="mt-12 text-xl font-semibold tracking-[-0.02em]">Software and design</h2>
       <ul className="mt-3 list-disc space-y-1.5 pl-5 text-muted">

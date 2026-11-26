@@ -1,7 +1,3 @@
-"use client";
-
-import { useEffect, useState } from "react";
-
 /** One clip's credit, as written by scripts/library.py into public/credits.json. */
 export type Credit = {
   key: string;
@@ -15,7 +11,7 @@ export type Credit = {
   retrieved: string;
 };
 
-type CreditsFile = { generated: string | null; items: Credit[] };
+export type CreditsFile = { generated: string | null; items: Credit[] };
 
 function MaybeLink({ href, children }: { href: string | null; children: React.ReactNode }) {
   return href ? (
@@ -27,28 +23,12 @@ function MaybeLink({ href, children }: { href: string | null; children: React.Re
   );
 }
 
-/** The per-clip credits table, grouped by collection. */
-export function CreditsList() {
-  const [file, setFile] = useState<CreditsFile | null>(null);
-  const [failed, setFailed] = useState(false);
-
-  useEffect(() => {
-    let cancelled = false;
-    fetch("/credits.json", { cache: "no-store" })
-      .then((res) => (res.ok ? (res.json() as Promise<CreditsFile>) : Promise.reject(new Error(String(res.status)))))
-      .then((data) => !cancelled && setFile(data))
-      .catch(() => !cancelled && setFailed(true));
-    return () => {
-      cancelled = true;
-    };
-  }, []);
-
-  if (failed) {
-    return <p className="mt-6 text-muted">The credits list could not be loaded.</p>;
-  }
-  if (!file) {
-    return <div aria-busy="true" aria-label="Loading credits" className="mt-6 h-40 rounded-[var(--radius-card)] bg-s1" />;
-  }
+/**
+ * The per-clip credits table, grouped by collection. Rendered on the server from the file it is
+ * given, so the page arrives complete: loading it in the browser made everything below the list
+ * jump when it arrived (CLS 0.67 on desktop, docs/metrics.md row P4).
+ */
+export function CreditsList({ file }: { file: CreditsFile }) {
   if (file.items.length === 0) {
     return <p className="mt-6 text-muted">The demo library has not been seeded yet, so there are no clips to credit.</p>;
   }

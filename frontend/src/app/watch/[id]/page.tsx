@@ -14,6 +14,13 @@ import { toVideoCardData } from "@/lib/videos";
 
 const POLL_MS = 3000;
 
+/*
+ * At least one screen tall in every state, so the footer starts below the fold. Without it the
+ * footer sat under the loading placeholder on phones and jumped twice, when the details and then
+ * the pipeline panel arrived (mobile CLS 0.17, docs/metrics.md row P4).
+ */
+const PAGE = "min-h-[100svh]";
+
 type State =
   | { kind: "loading" }
   | { kind: "missing" }
@@ -162,8 +169,10 @@ export default function WatchPage() {
 
   if (state.kind === "loading") {
     return (
-      <div className="bg-black">
-        <div aria-busy="true" aria-label="Loading video" className="mx-auto aspect-video w-[min(100%,calc((100vh-124px)*16/9),1600px)] bg-s1" />
+      <div className={PAGE}>
+        <div className="border-b border-line bg-black">
+          <div aria-busy="true" aria-label="Loading video" className="mx-auto aspect-video w-[min(100%,calc((100vh-124px)*16/9),1600px)] bg-s1" />
+        </div>
       </div>
     );
   }
@@ -181,7 +190,7 @@ export default function WatchPage() {
 
   const { video } = state;
   return (
-    <>
+    <div className={PAGE}>
       <div className="border-b border-line bg-black">
         <div className="mx-auto w-[min(100%,calc((100vh-124px)*16/9),1600px)]">
           {video.status === "ready" && video.playback_url ? (
@@ -257,6 +266,6 @@ export default function WatchPage() {
           </section>
         )}
       </div>
-    </>
+    </div>
   );
 }

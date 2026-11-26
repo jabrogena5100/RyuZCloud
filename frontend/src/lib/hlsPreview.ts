@@ -24,7 +24,7 @@ function isCrossOrigin(src: string): boolean {
 }
 
 /**
- * Starts a muted preview of an HLS playlist on the element, at the lowest rendition.
+ * Starts a muted preview of an HLS playlist on the element (at the lowest rendition where hls.js is used).
  * Returns a function that stops it and releases the network. Errors are swallowed: a preview
  * that cannot play simply leaves the poster in place.
  */
@@ -35,12 +35,14 @@ export async function startPreview(video: HTMLVideoElement, src: string): Promis
   video.loop = true;
   const crossOrigin = isCrossOrigin(src);
 
+  // Native HLS first (Safari, Chrome 14x+). hls.js-first was measured heavier on the home page
+  // (docs/metrics.md, row W1c); hls.js remains for browsers without native HLS.
   if (video.canPlayType("application/vnd.apple.mpegurl")) {
     if (crossOrigin) {
       video.crossOrigin = "use-credentials";
     }
     video.src = src;
-    await video.play().catch(() => undefined);
+    void video.play().catch(() => undefined);
     return () => {
       video.pause();
       video.removeAttribute("src");
@@ -48,7 +50,12 @@ export async function startPreview(video: HTMLVideoElement, src: string): Promis
     };
   }
 
-  const { default: Hls } = await import("hls.js");
+  let Hls: typeof import("hls.js").default;
+  try {
+    Hls = (await import("hls.js")).default;
+  } catch {
+    return () => undefined;
+  }
   if (!Hls.isSupported()) {
     return () => undefined;
   }

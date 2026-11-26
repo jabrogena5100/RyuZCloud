@@ -19,8 +19,10 @@ function isCrossOrigin(src: string): boolean {
 }
 
 /**
- * HLS player. Safari/iOS play HLS natively; other browsers get hls.js (loaded only
- * when needed, so it stays out of every other page's bundle). The playlist and
+ * HLS player. Browsers that play HLS natively (Safari, and Chrome 14x+) use their own player; hls.js
+ * (loaded only here, so it stays out of every other page's bundle) covers the rest through Media
+ * Source Extensions. hls.js-first was tried and measured worse in Chrome: slower to the first frame
+ * and more bytes, with no fewer rebuffers (docs/metrics.md, rows W1c and P3b). The playlist and
  * segment requests are same-origin locally, so the session cookie authorizes private media.
  * In AWS the playlist lives on the CDN host (a sibling subdomain); the API sets signed
  * CloudFront cookies when it returns the video, and requests to the CDN must send them.

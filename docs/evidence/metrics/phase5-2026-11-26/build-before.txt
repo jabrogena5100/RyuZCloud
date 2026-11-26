@@ -1,0 +1,18 @@
+Route (app)                                 Size  First Load JS
+┌ ○ /                                    3.73 kB         110 kB
+├ ○ /_not-found                            121 B         103 kB
+├ ○ /icon.svg                                0 B            0 B
+├ ○ /login                               2.59 kB         109 kB
+├ ○ /register                            2.58 kB         109 kB
+├ ○ /studio                              4.29 kB         110 kB
+├ ○ /upload                              7.05 kB         113 kB
+└ ƒ /watch/[id]                          3.87 kB         110 kB
++ First Load JS shared by all             103 kB
+  ├ chunks/839-ab0063bad32e0ea0.js       46.5 kB
+  ├ chunks/92df1ba5-6bc84021942f8df5.js  54.2 kB
+  └ other shared chunks (total)          1.96 kB
+
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+

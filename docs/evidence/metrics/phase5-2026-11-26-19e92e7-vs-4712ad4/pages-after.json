@@ -1,0 +1,329 @@
+{
+  "base": "http://localhost:3102",
+  "runs": 3,
+  "date": "2026-11-26T05:59:06.594Z",
+  "watch_id": "682895d7-dca6-4ceb-b555-03fa0dc14e20",
+  "skipped": [],
+  "result": {
+    "home": {
+      "totalBytes": {
+        "median": 4239529,
+        "min": 4239529,
+        "max": 4239529
+      },
+      "jsBytes": {
+        "median": 318681,
+        "min": 318681,
+        "max": 318681
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 769555,
+        "min": 769555,
+        "max": 769555
+      },
+      "requests": {
+        "median": 71,
+        "min": 71,
+        "max": 71
+      },
+      "dcl": {
+        "median": 361,
+        "min": 211,
+        "max": 586
+      },
+      "load": {
+        "median": 780,
+        "min": 484,
+        "max": 807
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "login": {
+      "totalBytes": {
+        "median": 581711,
+        "min": 452906,
+        "max": 891669
+      },
+      "jsBytes": {
+        "median": 129134,
+        "min": 126006,
+        "max": 129134
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 291374,
+        "min": 165697,
+        "max": 601332
+      },
+      "requests": {
+        "median": 29,
+        "min": 25,
+        "max": 40
+      },
+      "dcl": {
+        "median": 225,
+        "min": 217,
+        "max": 348
+      },
+      "load": {
+        "median": 890,
+        "min": 727,
+        "max": 973
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "register": {
+      "totalBytes": {
+        "median": 891756,
+        "min": 764680,
+        "max": 891756
+      },
+      "jsBytes": {
+        "median": 129134,
+        "min": 129134,
+        "max": 129134
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 601332,
+        "min": 474256,
+        "max": 601332
+      },
+      "requests": {
+        "median": 40,
+        "min": 35,
+        "max": 40
+      },
+      "dcl": {
+        "median": 161,
+        "min": 124,
+        "max": 232
+      },
+      "load": {
+        "median": 645,
+        "min": 488,
+        "max": 811
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "upload": {
+      "totalBytes": {
+        "median": 302176,
+        "min": 302176,
+        "max": 302176
+      },
+      "jsBytes": {
+        "median": 138093,
+        "min": 138093,
+        "max": 138093
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 21,
+        "min": 21,
+        "max": 21
+      },
+      "dcl": {
+        "median": 298,
+        "min": 234,
+        "max": 410
+      },
+      "load": {
+        "median": 640,
+        "min": 634,
+        "max": 792
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "studio": {
+      "totalBytes": {
+        "median": 308618,
+        "min": 308618,
+        "max": 308618
+      },
+      "jsBytes": {
+        "median": 142744,
+        "min": 142744,
+        "max": 142744
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 23,
+        "min": 23,
+        "max": 23
+      },
+      "dcl": {
+        "median": 247,
+        "min": 233,
+        "max": 349
+      },
+      "load": {
+        "median": 713,
+        "min": 499,
+        "max": 869
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "watch": {
+      "totalBytes": {
+        "median": 3662903,
+        "min": 690365,
+        "max": 3662903
+      },
+      "jsBytes": {
+        "median": 326179,
+        "min": 326179,
+        "max": 326179
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 160964,
+        "min": 160964,
+        "max": 160964
+      },
+      "requests": {
+        "median": 39,
+        "min": 33,
+        "max": 39
+      },
+      "dcl": {
+        "median": 189,
+        "min": 180,
+        "max": 333
+      },
+      "load": {
+        "median": 498,
+        "min": 456,
+        "max": 1120
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "collections": {
+      "totalBytes": {
+        "median": 480404,
+        "min": 480404,
+        "max": 480404
+      },
+      "jsBytes": {
+        "median": 138093,
+        "min": 138093,
+        "max": 138093
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 173785,
+        "min": 173785,
+        "max": 173785
+      },
+      "requests": {
+        "median": 36,
+        "min": 36,
+        "max": 36
+      },
+      "dcl": {
+        "median": 229,
+        "min": 217,
+        "max": 356
+      },
+      "load": {
+        "median": 690,
+        "min": 532,
+        "max": 775
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    },
+    "credits": {
+      "totalBytes": {
+        "median": 304879,
+        "min": 304879,
+        "max": 304879
+      },
+      "jsBytes": {
+        "median": 138093,
+        "min": 138093,
+        "max": 138093
+      },
+      "cssBytes": {
+        "median": 8335,
+        "min": 8335,
+        "max": 8335
+      },
+      "imgBytes": {
+        "median": 0,
+        "min": 0,
+        "max": 0
+      },
+      "requests": {
+        "median": 21,
+        "min": 21,
+        "max": 21
+      },
+      "dcl": {
+        "median": 309,
+        "min": 280,
+        "max": 474
+      },
+      "load": {
+        "median": 747,
+        "min": 743,
+        "max": 821
+      },
+      "overflow_390": 0,
+      "overflow_820": 0,
+      "overflow_1440": 0
+    }
+  }
+}
