@@ -98,6 +98,7 @@ and JSON read)**, 2026-11-26.
   previews checked that first (written for Safari), so in Chrome they skipped hls.js. P3/P3r therefore measure Chrome's
   own HLS player, and the hero preview ignored its "lowest rendition, 8 s buffer" settings. Inference: most of the
   home page's extra 1.8 MB (non-image, non-JS bytes) is that preview's video, since the before build has no preview.
+  (The re-measure contradicts the "ignored its settings" part: hls.js fetched more, see W1c.)
 - **`/login`, `/register` +740 KB:** 601,332 B of images, the 20 decorative thumbnails of the split layout (640 px wide
   JPEGs shown at about 200 px).
 - **Every page +141 KB:** the two Geist variable fonts, 69,488 B (sans) + 71,212 B (mono) (Documented: file sizes in
@@ -107,11 +108,47 @@ and JSON read)**, 2026-11-26.
 - **Mobile TBT** is 700–2,000 ms both before and after (React hydration under Lighthouse's 4× CPU model). The redesign
   did not cause it, and it is not fixed here.
 - Unthrottled rebuffering on a local server suggests the native player's rendition switches, not the network
-  (inference; the re-measure with hls.js tests it).
+  (inference; contradicted by P3rb: hls.js rebuffered as often).
 
-**Fixes made after this run (not yet measured):** hls.js first, native HLS only without MSE (player and previews);
-`/credits` rendered on the server; `/watch` reserves one screen of height; 12 instead of 20 decorative tiles on small
-screens. Re-measure: `BEFORE=19e92e7 AFTER=<fix commit> scripts/measure-phase5.sh`.
+**Fixes made after this run:** hls.js first, native HLS only without MSE (player and previews); `/credits` rendered on
+the server; `/watch` reserves one screen of height; 12 instead of 20 decorative tiles on small screens. Measured below.
+
+### Re-measure of the fixes (Phase 5, local)
+
+Before = `19e92e7` (the redesign as first measured), after = `4712ad4` (the fixes, from `e3104d9`). Same setup as W1b
+and the same 4 clips for playback. Both builds measured in one run, before first, then after. Status for all: **Run
+(owner's terminal; JSON read)**, 2026-11-26. Raw: `docs/evidence/metrics/phase5-2026-11-26-19e92e7-vs-4712ad4/`.
+Command: `BEFORE=19e92e7 AFTER=HEAD scripts/measure-phase5.sh` at `4712ad4`.
+
+| ID | Metric | Before → after (median, range) | Did the fix work? |
+| --- | --- | --- | --- |
+| W1c | Page weight, 1440 × 900 (`pages-*.json`) | `/` 2,692,639 → **4,239,529 B** (JS 139,533 → 318,681); `/watch` 2,639,082 (2,115,954–2,639,082) → **3,662,903** (690,365–3,662,903), JS 146,986 → 326,179; `/credits` 303,259 → 304,879; `/login` 891,597 → 581,711 (452,906–891,669); `/register` 891,683 → 891,756; `/collections`, `/upload`, `/studio` +1.5 KB each | **No** for `/` and `/watch`: both got heavier. The +179 KB of JS is the hls.js chunk, now loaded where Chrome used its built-in player; the rest is extra video (below). `/login` at desktop width still shows all 20 tiles by design, so its lower median is lazy-load timing, not the fix |
+| P4b | Lighthouse mobile: perf / CLS / transfer (`lighthouse-*.json`) | `/` 62 (48–67) → 49 (49–52), 3,122,022 → 4,144,674 B; `/login` 83 → 72, **895,742 → 694,978 B**; `/credits` 79 → 72; `/collections` 69 → 59; `/watch` 60 → 53, **CLS 0.17 → 0**, 2,240,004 → 3,670,716 B. Accessibility 100 → 100 everywhere | `/watch` CLS: **yes**. `/login` on a phone: **yes, −201 KB (−22%)**. Perf scores: **not comparable in this run** (see the TBT note) |
+| P4db | Lighthouse desktop: perf / CLS | `/credits` 76 (75–77) → **91** (87–95), **CLS 0.668 → 0**; `/watch` 94 → 79, CLS 0.012 → 0; `/` 94 → 68; `/login` 100 → 88; `/collections` 98 → 84 | `/credits` CLS: **yes**. `/watch` CLS: yes. Other perf scores: not comparable |
+| P3b | Time to first frame, native HLS (before) → hls.js (after), n = 12 per profile, 0 failures | unthrottled from `play()`: **653 ms (540–841) → 976 ms (821–1,284)**; from navigation 1,489 (1,237–1,926) → 1,941 (1,670–2,308). Slow 4G + 4× CPU from `play()`: **6,128 ms (3,127–9,323) → 7,723 ms (3,881–11,047)**; from navigation 9,656 (6,971–13,649) → 10,926 (7,338–17,994) | **No.** hls.js was slower to the first frame in both profiles. Every before sample was `native HLS` and every after sample `hls.js (MSE)`, so the player switch itself is confirmed |
+| P3rb | Rebuffers in 20 s after the first frame (`waiting` events / total stalled) | unthrottled: 19 / 1,595 ms → 23 / 2,385 ms; slow 4G: 18 / 1,514 ms → 11 / 1,623 ms. Same clip (`23687819`) had 0 in every run with both players | **No clear win.** Fewer events on slow 4G but about the same total stall time; more unthrottled. With n = 12 these are within run-to-run spread |
+
+**What the re-measure says (inferences are marked):**
+- **The hls.js-first change did not pay off in Chrome.** It is slower to the first frame (it must download and run a
+  179 KB chunk before it can request the playlist; inference, consistent with the gap being larger on slow 4G) and
+  makes `/` and `/watch` heavier. Inference for the extra bytes: hls.js starts buffering as soon as it attaches and
+  ignores `preload="metadata"`, and its bitrate logic climbs to 720p quickly on a local network; Chrome's built-in
+  player fetched less. The earlier inference that the native preview was the costly one (W1b note) is contradicted.
+- **Unthrottled rebuffering is not specific to Chrome's player:** hls.js had as many. Part of it is on the 15 s
+  featured clip, which ends inside the 20 s window (inference: some `waiting` events are around the loop or the end,
+  not real stalls).
+- **The CLS fixes worked:** `/credits` desktop 0.668 → 0 (perf 76 → 91 despite the noise below) and `/watch` mobile
+  0.17 → 0. Lighthouse CLS does not depend on CPU speed, so these are reliable in this run.
+- **Fewer tiles on phones worked:** −201 KB on mobile `/login`; desktop unchanged, as intended.
+- **TBT note, why perf scores are not compared here:** TBT and Speed Index rose on every page in the after half,
+  including `/collections` (911 → 1,446 ms mobile TBT) and `/credits` (897 → 1,931), whose JavaScript did not change
+  (138–140 KB both). The same `19e92e7` code also scored differently across the two runs (mobile `/` 57 vs 62). So the
+  host was likely busier during the after half (inference; cause not identified). Byte counts and CLS are not affected
+  by this; timings, TBT and perf scores are. The TTFF gap may be partly this too, but its direction matches the
+  structural cost above.
+
+**Proposed:** revert the player and preview to native HLS first (the `19e92e7` behaviour) and keep the CLS and tile
+fixes. Not done yet; needs the owner's go-ahead.
 
 ### Library and pipeline (from `GET /stats`)
 
@@ -145,3 +182,4 @@ screens. Re-measure: `BEFORE=19e92e7 AFTER=<fix commit> scripts/measure-phase5.s
 | P2 | Largest direct-to-storage upload (multipart is not implemented, so multipart throughput cannot be measured) | 4 |
 | P5 | Monthly S3 and CloudFront cost of the seeded library, from its measured GB | 4 to 6 |
 | P6 | Time to rebuild from zero using rebuild-from-zero.md | 6 |
+| P4c | Lighthouse perf scores before vs after with the build order swapped, to separate code from host load (see P4b TBT note) | 5 |
