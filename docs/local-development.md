@@ -199,6 +199,10 @@ docker compose up -d --renew-anon-volumes frontend
 docker compose logs -f minio minio-init     # object storage logs / bucket setup output
 docker compose logs -f worker redis         # video processing / queue logs
 
+# After renaming or moving the project folder: recreate every container. Containers keep the absolute
+# bind-mount paths they were created with, so old ones mount the old folder (see troubleshooting section 12).
+docker compose up -d --force-recreate
+
 docker compose down                         # stop (keeps data)
 docker compose down -v                      # stop AND delete the database, uploaded/processed files, queue and cache volumes
 ```

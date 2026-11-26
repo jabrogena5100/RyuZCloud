@@ -223,6 +223,43 @@ anonymous volumes.
 
 ---
 
+## 12. Worker crash-looping with `go: go.mod file not found` after renaming the project folder
+
+**Symptom:** during the first library seed (2026-11-24), uploads succeeded but every video stayed `queued` for about
+48 minutes. `docker compose ps worker` showed the worker restarting; its log repeated `go: go.mod file not found`.
+
+**Cause:** the worker container was created before the folder was renamed from `~/projects/RyuCloud` to
+`~/projects/RyuZCloud`. A container keeps the absolute host path of each bind mount from when it was created, so
+`./backend` still meant `~/projects/RyuCloud/backend`. That path no longer existed, so Docker created it as an empty,
+root-owned directory and mounted that. `go run ./cmd/worker` found no `go.mod`, exited, and `restart: unless-stopped`
+started it again. `docker compose up -d` doesn't recreate a container just because the folder moved.
+
+**Fix:**
+```bash
+cd ~/projects/RyuZCloud
+docker compose up -d --force-recreate          # every service, so no container keeps an old path
+docker compose ps                              # all Up; none Restarting
+ls -la ~/projects/RyuCloud                     # if it exists, it is the empty directory Docker made
+sudo rmdir ~/projects/RyuCloud/backend ~/projects/RyuCloud   # rmdir refuses if anything is inside
+```
+Named volumes (database, MinIO, Redis) are not touched by `--force-recreate`; data is kept.
+
+**Rule of thumb:** after renaming or moving the project folder, run `docker compose up -d --force-recreate`.
+`scripts/seed.py` now stops with this hint when no job moves for 15 minutes (`SEED_STALL_MINUTES`).
+
+---
+
+## 13. `validate-terraform.sh` fails with `No valid credential sources found` (S3 backend)
+
+**Cause:** a real `terraform init -backend-config=backend.hcl` during an AWS session records the S3 backend in
+`infra/terraform/.terraform/terraform.tfstate`. `terraform init -backend=false` means "use what was previously
+initialized", so the offline check tried to reach S3 and failed without credentials. CI was unaffected (clean checkout).
+
+**Fix (in the script):** it sets `TF_DATA_DIR=.terraform/validate`, so the offline check has its own providers and
+never sees the real backend. The first run downloads the AWS provider into that directory once.
+
+---
+
 ## Quick reference
 
 | Symptom | Likely cause | Look at |
@@ -235,3 +272,5 @@ anonymous volumes.
 | Next.js `Module not found` for a package that's in package.json | Stale `node_modules` volume / lockfile | Section 11 |
 | Container exited, logs gone | `up` recreated it | Capture logs before `up` |
 | Upload works on the VM but not from your laptop | Presigned URL points at the VM's `localhost` | SSH tunnel (section 6) |
+| Videos stay `queued`; worker log says `go.mod file not found` | Container created before the folder was renamed | Section 12 |
+| `validate-terraform.sh`: `No valid credential sources found` | `init -backend=false` reused a real S3 backend from `.terraform/` | Section 13 |
