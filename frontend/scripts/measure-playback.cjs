@@ -109,7 +109,7 @@ async function measureOnce(browser, id, profile) {
           height_end: m.el ? m.el.videoHeight : null,
           played_s: m.el ? Math.round(m.el.currentTime * 10) / 10 : null,
           ended: m.el ? m.el.ended : null,
-          player: m.el && m.el.canPlayType("application/vnd.apple.mpegurl") ? "native HLS" : "hls.js (MSE)",
+          player: m.el ? (m.el.currentSrc.startsWith("blob:") ? "hls.js (MSE)" : "native HLS") : null,
         };
       }),
     );

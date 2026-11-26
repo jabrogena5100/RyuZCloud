@@ -9,7 +9,7 @@
 # both use the same installed Next.js/React; only the app code differs. Nothing in the working tree changes.
 #
 # Needs: the Compose stack up with the seeded library (API on localhost:8000), Node, frontend/node_modules.
-# Writes: docs/evidence/metrics/phase5-<date>/ (JSON only). Takes about 30-40 minutes.
+# Writes: docs/evidence/metrics/phase5-<date>-<before>-vs-<after>/ (JSON only). Takes about 40 minutes.
 #
 # Usage: scripts/measure-phase5.sh            RUNS=3 BEFORE=f14c846 AFTER=HEAD PORT_BEFORE=3101 PORT_AFTER=3102
 set -euo pipefail
@@ -21,7 +21,8 @@ RUNS="${RUNS:-3}"
 PORT_BEFORE="${PORT_BEFORE:-3101}"
 PORT_AFTER="${PORT_AFTER:-3102}"
 API="${API:-http://localhost:8000}"
-OUT="$ROOT/docs/evidence/metrics/phase5-$(date -u +%F)"
+LABEL="${LABEL:-$(git -C "$ROOT" rev-parse --short "$BEFORE")-vs-$(git -C "$ROOT" rev-parse --short "$AFTER")}"
+OUT="$ROOT/docs/evidence/metrics/phase5-$(date -u +%F)-$LABEL"
 WORK="$(mktemp -d "${TMPDIR:-/tmp}/ryuzcloud-phase5.XXXXXX")"
 PIDS=()
 
@@ -30,6 +31,8 @@ cleanup() {
   rm -rf "$WORK"
 }
 trap cleanup EXIT
+
+[ ! -e "$OUT" ] || { echo "error: ${OUT#"$ROOT"/} already exists; set LABEL=<name> for a new run" >&2; exit 1; }
 
 curl -fsS -m 5 "$API/api/v1/health/ready" >/dev/null || { echo "error: API not ready at $API; start the stack first" >&2; exit 1; }
 for port in "$PORT_BEFORE" "$PORT_AFTER"; do
@@ -84,9 +87,9 @@ for name in before after; do
   cp "$WORK/pages-$name/metrics.json" "$OUT/pages-$name.json"
   echo "== lighthouse: $name" >&2
   node scripts/lighthouse.mjs "http://localhost:${!port}" "$OUT/lighthouse-$name.json" "$RUNS"
+  echo "== playback: $name" >&2
+  node scripts/measure-playback.cjs "http://localhost:${!port}" "$OUT/playback-$name.json" "$RUNS"
 done
-echo "== playback: after" >&2
-node scripts/measure-playback.cjs "http://localhost:$PORT_AFTER" "$OUT/playback-after.json" "$RUNS"
 
 echo
 echo "Done. Evidence: ${OUT#"$ROOT"/}"

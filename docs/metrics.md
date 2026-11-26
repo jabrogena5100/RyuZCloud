@@ -75,9 +75,43 @@ the raw output was not kept.
 
 | ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| W1 | Page weight, current UI (transferred bytes, median of 3 cold loads) | `/` 199,156 B; `/login` 151,148 B; `/watch` 550,963 B; JS 131–136 KB per page; 17–27 requests | **before** (after: Phase 5) | Prod build of `f14c846` on localhost:3100, local API, Chromium 1255 via Playwright, cold context per run | 2026-11-23 | Run | `node scripts/measure-pages.cjs http://localhost:3100 <out> 3`; `docs/evidence/metrics/P4-page-weight-before-2026-11-23.json` |
+| W1 | Page weight, current UI (transferred bytes, median of 3 cold loads; library of 1 clip, see W1b for a fair before/after) | `/` 199,156 B; `/login` 151,148 B; `/watch` 550,963 B; JS 131–136 KB per page; 17–27 requests | **before** (after: Phase 5) | Prod build of `f14c846` on localhost:3100, local API, Chromium 1255 via Playwright, cold context per run | 2026-11-23 | Run | `node scripts/measure-pages.cjs http://localhost:3100 <out> 3`; `docs/evidence/metrics/P4-page-weight-before-2026-11-23.json` |
 | W2 | Horizontal overflow at 390 / 820 / 1440 px, current UI | 0 px on all 6 pages | before | as W1 | 2026-11-23 | Run | as W1 (`overflow_*` fields) |
 | A1 | Token contrast (WCAG 2) | all text pairs ≥ 4.86:1 except subtle on s2 (4.17, banned); new `control` border 3.45:1 on bg | n/a | Python luminance formula | 2026-11-23 | Documented | design/README.md, "Tokens" |
+
+### Frontend performance, before vs after the redesign (Phase 5, local)
+
+All rows: 3 runs per page, median (range); same machine, same library, same installed Next.js, so only the app code
+differs. Local numbers: no CDN, no real network unless stated. Status for all: **Run (owner's terminal, output pasted
+and JSON read)**, 2026-11-26.
+
+| ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| W1b | Page weight, transferred bytes per cold load (Playwright, 1440 × 900) | after: `/` 2,692,617 B (2,692,617–3,215,745); `/login` 891,594; `/register` 891,679; `/upload` 300,675; `/studio` 307,114; `/watch` 2,115,946; `/collections` 478,888; `/credits` 303,245. JS 129–147 KB per page, CSS 8.3 KB | `/` 842,809 → 2,692,617; `/login` 151,507 → 891,594; `/upload` 146,728 → 300,675; `/watch` 1,794,407 → 2,115,946; JS 132–136 → 129–147 KB (flat). **Regressions**, causes below | Prod builds (`next build`/`next start`, Next.js 15.5.29) of `f14c846` (before) and `19e92e7` (after) on the VM (AMD Ryzen AI 5 340, 4 vCPU, 7 GiB), local Compose API and MinIO, seeded library (40 clips); Playwright Chromium 159 | 2026-11-26 | Run | `scripts/measure-phase5.sh`; raw: `docs/evidence/metrics/phase5-2026-11-26/`, `pages-*.json` |
+| P4 | Lighthouse 13.6.0, mobile (simulated slow 4G, 4× CPU) | perf / LCP / TBT / CLS, after: `/` 57 (55–61) / 4,364 ms / 1,956 ms / 0; `/login` 81 (74–83) / 824 / 807 / 0; `/credits` 78 (71–78) / 786 / 1,050 / 0; `/collections` 71 (63–73) / 3,710 / 748 / 0; `/watch` 64 (63–66) / 3,583 / 720 / **0.17**. Accessibility 100 on every page | perf `/` 58 → 57, `/login` 79 → 81, `/watch` 75 → 64; accessibility 95–96 → 100; best practices 96 → 96; SEO 100 → 100 | as W1b; Lighthouse default `simulate` throttling, so scores are modelled, not real throttling | 2026-11-26 | Run | `scripts/measure-phase5.sh`; raw: `docs/evidence/metrics/phase5-2026-11-26/`, `lighthouse-*.json` |
+| P4d | Lighthouse 13.6.0, desktop | after: `/` 91 (90–95) / LCP 1,230 ms / TBT 167 / CLS 0; `/login` 99 (95–99); `/credits` **76** (76–77) / CLS **0.666**; `/collections` 98 (91–98); `/watch` 97 (96–99) / CLS 0.012 | `/` 98 → 91; `/login` 100 → 99; `/watch` 92 → 97 (CLS 0.156 → 0.012) | as P4 | 2026-11-26 | Run | as P4 |
+| P3 | Time to first frame on `/watch`, `play()` as soon as the player exists (4 clips × 3 runs) | **unthrottled: 598 ms** (317–889) from `play()`, 1,217 ms (808–1,557) from navigation; **slow 4G + 4× CPU: 5,434 ms** (2,358–7,912) from `play()`, 8,612 ms (5,524–11,071) from navigation. n = 12 per profile, 0 failures | after only (not measured before) | as W1b; network throttling real (CDP: 150 ms RTT, 1.44 Mbit/s down, 675 kbit/s up) and CPU 4× | 2026-11-26 | Run | `scripts/measure-phase5.sh`; raw: `docs/evidence/metrics/phase5-2026-11-26/`, `playback-after.json` |
+| P3r | Rebuffers in the first 20 s after the first frame | unthrottled: 22 `waiting` events, 1,827 ms stalled in total over 12 runs; slow 4G: 19 events, 1,728 ms. One clip had 0 in all 6 runs | after only | as P3. **Every sample used Chrome's native HLS player, not hls.js** (see note) | 2026-11-26 | Run | as P3 (`player` field) |
+
+**What the numbers say (inferences are marked):**
+- **Native HLS in Chrome.** Chromium 159 answers `canPlayType("application/vnd.apple.mpegurl")`. The player and the
+  previews checked that first (written for Safari), so in Chrome they skipped hls.js. P3/P3r therefore measure Chrome's
+  own HLS player, and the hero preview ignored its "lowest rendition, 8 s buffer" settings. Inference: most of the
+  home page's extra 1.8 MB (non-image, non-JS bytes) is that preview's video, since the before build has no preview.
+- **`/login`, `/register` +740 KB:** 601,332 B of images, the 20 decorative thumbnails of the split layout (640 px wide
+  JPEGs shown at about 200 px).
+- **Every page +141 KB:** the two Geist variable fonts, 69,488 B (sans) + 71,212 B (mono) (Documented: file sizes in
+  `node_modules/geist`). That matches `/upload` and `/studio`, which have no images.
+- **`/credits` desktop CLS 0.666:** the list was fetched in the browser and pushed everything below it down.
+- **`/watch` mobile CLS 0.17:** the footer sat under the loading placeholder on a phone and moved twice.
+- **Mobile TBT** is 700–2,000 ms both before and after (React hydration under Lighthouse's 4× CPU model). The redesign
+  did not cause it, and it is not fixed here.
+- Unthrottled rebuffering on a local server suggests the native player's rendition switches, not the network
+  (inference; the re-measure with hls.js tests it).
+
+**Fixes made after this run (not yet measured):** hls.js first, native HLS only without MSE (player and previews);
+`/credits` rendered on the server; `/watch` reserves one screen of height; 12 instead of 20 decorative tiles on small
+screens. Re-measure: `BEFORE=19e92e7 AFTER=<fix commit> scripts/measure-phase5.sh`.
 
 ### Library and pipeline (from `GET /stats`)
 
@@ -109,8 +143,5 @@ the raw output was not kept.
 | --- | --- | --- |
 | P1b | Transcode realtime factor on Fargate (stated CPU and memory) | 6 |
 | P2 | Largest direct-to-storage upload (multipart is not implemented, so multipart throughput cannot be measured) | 4 |
-| P3 | Time to first frame and rebuffer count, unthrottled and on slow 4G + 4x CPU (`frontend/scripts/measure-playback.cjs`, run by `scripts/measure-phase5.sh`) | 5 |
-| P4 | Lighthouse mobile and desktop per main page, before and after the redesign (`frontend/scripts/lighthouse.mjs`, Lighthouse 13.6.0 from devDependencies; run by `scripts/measure-phase5.sh`) | 5 |
-| W1b | Page weight before vs after on the same seeded library (W1's before had 1 clip, so it is not comparable with an after on 41) | 5 |
 | P5 | Monthly S3 and CloudFront cost of the seeded library, from its measured GB | 4 to 6 |
 | P6 | Time to rebuild from zero using rebuild-from-zero.md | 6 |
