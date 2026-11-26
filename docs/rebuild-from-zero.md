@@ -198,10 +198,9 @@ tf init -backend-config=backend.hcl
 tf plan -out=tfplan
 ```
 
-**Expect:** `Plan: 115 to add, 0 to change, 0 to destroy` with `github_repository` unset. The 2026-11-14 plan showed
-115 (User-reported). The Cloudflare DNS change removed 4 resources (two validation records, two old alias records) and
-added 4 (the ALB alias, the media A and AAAA aliases, the frontend host rule), so the total should not move. That is derived, not run. Any `to destroy` on an empty state means the
-state is not empty: stop and run `tf state list`.
+**Expect:** `Plan: 111 to add, 0 to change, 0 to destroy` with `github_repository` unset (2026-11-26, metrics row C1b).
+The 2026-11-14 plan for the old `ryucloud.link` setup showed 115; the difference was not broken down. Any `to destroy` on
+an empty state means the state is not empty: stop and run `tf state list`.
 
 Do not apply this saved plan yet. Apply it in the stages below.
 

@@ -64,6 +64,7 @@ the raw output was not kept.
 | ID | Metric | Value | Before → after | Setup | Date | Status | Command / raw output |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | C1 | Terraform plan from an empty state | 115 to add, 0 to change, 0 to destroy | n/a | `deploy_services = false`, `github_repository` unset | 2026-11-14 | User-reported | `tf plan -out=tfplan` |
+| C1b | Terraform plan from an empty state, ryuzcloud.com DNS split, long-running settings | **111 to add, 0 to change, 0 to destroy**; no warnings | n/a (C1's 115 was the old `ryucloud.link` configuration; the difference was not broken down) | `protect_data = true`, `deploy_services = false`, `signup_open = false`, `github_repository` unset, Terraform 1.10.5 in Docker, commit `cb8bd53` | 2026-11-26 | Run (owner's terminal; saved plan output read) | `tf plan -out=tfplan`; output kept locally in `~/tfplan-2026-11-26.txt` (not committed: it contains the alert email and account ID) |
 | C2 | Resources destroyed at teardown | 94 (staged destroy) | n/a | Same stack | 2026-11-14 | User-reported | Does not match C1's 115. Unexplained, raw output not kept |
 | C3 | Cloud transcodes | 2 uploads (10 s and 6 s HEVC), each to 2 renditions (360p, 720p); worker logged 33 s and 16 s | n/a | Fargate worker; task size not confirmed for this run; unclear whether the times are job wall time | 2026-11-14 | User-reported | worker log |
 | C4 | CloudWatch alarms | 20 defined; 19 of 20 `OK` at the first check | n/a | | 2026-11-14 | User-reported | |

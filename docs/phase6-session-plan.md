@@ -103,7 +103,7 @@ this domain, so stage A needs the Cloudflare steps in §6.1. Times are **estimat
 | Step | Runbook | Estimate | Notes |
 | --- | --- | --- | --- |
 | 1. Start, login, `dig` | §2.0 | 5 min | |
-| 2. `tf init`, full plan | §2.1 | 5 min | Expect about 115 to add (derived, not run since the DNS change). Record the real count as C1 |
+| 2. `tf init`, full plan | §2.1 | 5 min | **Done 2026-11-26: 111 to add, 0 to change, 0 to destroy** (C1b). Deletion protection, final snapshot and no force-delete confirmed in the plan |
 | 3. Stage A: certificates and the two Cloudflare CNAMEs | §2.2, §6.1 | 10–25 min | |
 | 4. Stage B: CloudFront | §2.3 | 5–15 min | **BILLS** from here |
 | 5. Stage C: everything else; SNS email; store the signing key | §2.4 | 10–20 min | **BILLS** (ALB, RDS, IPv4) |
