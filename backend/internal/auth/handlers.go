@@ -10,6 +10,7 @@ import (
 // Routes registers the authentication endpoints.
 func (s *Service) Routes(mux *http.ServeMux, prefix string) {
 	mux.Handle("POST "+prefix+"/auth/register", httpx.Handler(s.handleRegister))
+	mux.Handle("GET "+prefix+"/auth/signup", httpx.Handler(s.handleSignupStatus))
 	mux.Handle("POST "+prefix+"/auth/login", httpx.Handler(s.handleLogin))
 	mux.Handle("POST "+prefix+"/auth/logout", httpx.Handler(s.handleLogout))
 	mux.Handle("GET "+prefix+"/auth/me", s.Required(s.handleMe))
@@ -72,12 +73,23 @@ func (s *Service) handleRegister(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
+	// After validation (so malformed input still gets field errors) and before any hashing.
+	if !s.mayRegister(email) {
+		return errSignupClosed
+	}
+
 	user, token, err := s.register(r.Context(), email, password, displayName)
 	if err != nil {
 		return err
 	}
 	http.SetCookie(w, s.cookie(token, int(s.ttl.Seconds())))
 	httpx.WriteJSON(w, http.StatusCreated, user)
+	return nil
+}
+
+// handleSignupStatus tells the register page whether to show the form. It does not reveal the allow-list.
+func (s *Service) handleSignupStatus(w http.ResponseWriter, _ *http.Request) error {
+	httpx.WriteJSON(w, http.StatusOK, map[string]bool{"open": s.SignupOpen()})
 	return nil
 }
 

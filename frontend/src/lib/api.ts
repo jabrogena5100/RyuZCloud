@@ -82,6 +82,8 @@ export const api = {
   register: (input: { email: string; password: string; display_name: string }) =>
     apiFetch<User>("/auth/register", { method: "POST", body: JSON.stringify(input) }),
   logout: () => apiFetch<void>("/auth/logout", { method: "POST" }),
+  /** Whether public sign-up is open (`SIGNUP_OPEN`); the API enforces it either way. */
+  signupStatus: () => apiFetch<{ open: boolean }>("/auth/signup"),
   listVideos: ({ limit = 24, offset = 0, q = "" }: { limit?: number; offset?: number; q?: string } = {}) =>
     apiFetch<VideoPage>(`/videos?limit=${limit}&offset=${offset}${q ? `&q=${encodeURIComponent(q)}` : ""}`),
   featuredVideo: () => apiFetch<Video>("/videos/featured"),

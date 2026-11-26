@@ -32,6 +32,15 @@ type Config struct {
 	Upload            UploadConfig
 	Redis             RedisConfig
 	Worker            WorkerConfig
+	Signup            SignupConfig
+}
+
+// SignupConfig decides who may create an account. The zero value is open sign-up (local development).
+// A public deployment sets SIGNUP_OPEN=false; the addresses in SIGNUP_ALLOWED_EMAILS can still register
+// (the demo library account, the owner), everyone else gets 403 signup_closed. Existing accounts are unaffected.
+type SignupConfig struct {
+	Closed        bool
+	AllowedEmails []string // lower-cased
 }
 
 // RedisConfig configures the job queue transport used when QUEUE_BACKEND=redis.
@@ -151,6 +160,12 @@ func Load() (Config, error) {
 	if cfg.EnableAPIDocs, err = getbool("ENABLE_API_DOCS", true); err != nil {
 		return Config{}, err
 	}
+
+	signupOpen, err := getbool("SIGNUP_OPEN", true)
+	if err != nil {
+		return Config{}, err
+	}
+	cfg.Signup = SignupConfig{Closed: !signupOpen, AllowedEmails: splitEmails(os.Getenv("SIGNUP_ALLOWED_EMAILS"))}
 
 	hours, err := strconv.Atoi(getenv("SESSION_TTL_HOURS", "168"))
 	if err != nil || hours < 1 || hours > maxSessionTTLHours {
@@ -327,6 +342,16 @@ func getbool(key string, fallback bool) (bool, error) {
 		return false, fmt.Errorf("%s must be true or false, got %q", key, value)
 	}
 	return b, nil
+}
+
+func splitEmails(value string) []string {
+	var emails []string
+	for _, email := range strings.Split(value, ",") {
+		if email = strings.ToLower(strings.TrimSpace(email)); email != "" {
+			emails = append(emails, email)
+		}
+	}
+	return emails
 }
 
 func splitOrigins(value string) []string {

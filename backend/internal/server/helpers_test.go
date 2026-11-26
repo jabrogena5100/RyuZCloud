@@ -13,6 +13,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/jabrogena5100/RyuCloud/backend/internal/config"
 	"github.com/jabrogena5100/RyuCloud/backend/internal/integrations"
 	"github.com/jabrogena5100/RyuCloud/backend/internal/server"
 )
@@ -44,10 +45,16 @@ func newTestApp(t *testing.T) *testApp {
 // newTestAppWithStorage is newTestApp with a caller-supplied object store.
 func newTestAppWithStorage(t *testing.T, storage integrations.ObjectStorage) *testApp {
 	t.Helper()
+	return newTestAppWithConfig(t, testConfig, storage)
+}
+
+// newTestAppWithConfig is newTestAppWithStorage with a caller-modified copy of testConfig.
+func newTestAppWithConfig(t *testing.T, cfg config.Config, storage integrations.ObjectStorage) *testApp {
+	t.Helper()
 	truncateTables(t)
 	logger := slog.New(slog.NewJSONHandler(io.Discard, nil))
 	queue := integrations.NewMemoryQueue()
-	srv := httptest.NewServer(server.New(testConfig, testPool, logger, server.WithStorage(storage), server.WithQueue(queue)))
+	srv := httptest.NewServer(server.New(cfg, testPool, logger, server.WithStorage(storage), server.WithQueue(queue)))
 	t.Cleanup(srv.Close)
 	return &testApp{t: t, url: srv.URL, queue: queue}
 }

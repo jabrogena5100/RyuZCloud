@@ -45,6 +45,14 @@ paths:
       requestBody: { required: true, content: { application/json: { schema: { $ref: "#/components/schemas/RegisterRequest" } } } }
       responses:
         "201": { $ref: "#/components/responses/UserWithCookie" }
+        "403": { description: "`signup_closed`: the site has closed public sign-up (`SIGNUP_OPEN=false`) and this address is not on the allow-list", content: { application/json: { schema: { $ref: "#/components/schemas/Error" } } } }
+        default: { $ref: "#/components/responses/Error" }
+  /auth/signup:
+    get:
+      tags: [auth]
+      summary: Whether public sign-up is open (the register page uses it to show the form or a notice)
+      responses:
+        "200": { description: OK, content: { application/json: { schema: { type: object, required: [open], properties: { open: { type: boolean } } } } } }
         default: { $ref: "#/components/responses/Error" }
   /auth/login:
     post:

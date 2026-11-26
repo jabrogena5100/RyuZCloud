@@ -20,6 +20,7 @@ func clearEnv(t *testing.T) {
 		"DB_HOST", "DB_PORT", "DB_NAME", "DB_USER", "DB_PASSWORD", "DB_SSLMODE",
 		"STORAGE_BACKEND", "S3_ENDPOINT", "S3_PUBLIC_ENDPOINT", "S3_REGION", "S3_BUCKET", "S3_ACCESS_KEY_ID",
 		"S3_SECRET_ACCESS_KEY", "S3_USE_PATH_STYLE", "UPLOAD_MAX_BYTES", "UPLOAD_URL_TTL_MINUTES",
+		"SIGNUP_OPEN", "SIGNUP_ALLOWED_EMAILS",
 	} {
 		t.Setenv(key, "")
 	}
@@ -48,6 +49,34 @@ func TestLoadDefaults(t *testing.T) {
 	}
 	if len(cfg.TrustedOrigins) != 1 || cfg.TrustedOrigins[0] != "http://localhost:3000" {
 		t.Errorf("TrustedOrigins = %v", cfg.TrustedOrigins)
+	}
+}
+
+func TestSignupDefaultsOpenAndParsesAllowList(t *testing.T) {
+	clearEnv(t)
+	cfg, err := Load()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if cfg.Signup.Closed || len(cfg.Signup.AllowedEmails) != 0 {
+		t.Fatalf("Signup = %+v, want open with no allow-list", cfg.Signup)
+	}
+
+	t.Setenv("SIGNUP_OPEN", "false")
+	t.Setenv("SIGNUP_ALLOWED_EMAILS", " Library@Example.com, ,owner@example.org ")
+	if cfg, err = Load(); err != nil {
+		t.Fatal(err)
+	}
+	if !cfg.Signup.Closed {
+		t.Error("SIGNUP_OPEN=false should close sign-up")
+	}
+	if got := cfg.Signup.AllowedEmails; len(got) != 2 || got[0] != "library@example.com" || got[1] != "owner@example.org" {
+		t.Errorf("AllowedEmails = %q", got)
+	}
+
+	t.Setenv("SIGNUP_OPEN", "maybe")
+	if _, err := Load(); err == nil {
+		t.Error("expected an error for SIGNUP_OPEN=maybe")
 	}
 }
 

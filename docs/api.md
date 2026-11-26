@@ -20,7 +20,8 @@ to turn both off.
 
 | Method | Path | Auth | Body | Success |
 | --- | --- | --- | --- | --- |
-| POST | `/auth/register` | none | `{email, password (8-128), display_name (1-100)}` | `201` user + session cookie |
+| POST | `/auth/register` | none | `{email, password (8-128), display_name (1-100)}` | `201` user + session cookie; `403 signup_closed` when `SIGNUP_OPEN=false` and the address is not in `SIGNUP_ALLOWED_EMAILS` |
+| GET | `/auth/signup` | none | | `200 {open}`: whether public sign-up is open (the allow-list is never revealed) |
 | POST | `/auth/login` | none | `{email, password}` | `200` user + session cookie |
 | POST | `/auth/logout` | optional | none | `204`, session revoked, cookie cleared |
 | GET | `/auth/me` | required | none | `200` user |

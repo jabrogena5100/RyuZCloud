@@ -96,6 +96,8 @@ resource "aws_ecs_task_definition" "api" {
       { name = "TRUSTED_ORIGINS", value = "https://${local.app_host}" },
       { name = "ENABLE_API_DOCS", value = "false" },
       { name = "UPLOAD_MAX_BYTES", value = tostring(var.upload_max_bytes) },
+      { name = "SIGNUP_OPEN", value = tostring(var.signup_open) },
+      { name = "SIGNUP_ALLOWED_EMAILS", value = join(",", var.signup_allowed_emails) },
       { name = "PLAYBACK_BACKEND", value = "cloudfront" },
       { name = "CLOUDFRONT_DOMAIN", value = local.media_host },
       { name = "CLOUDFRONT_KEY_PAIR_ID", value = aws_cloudfront_public_key.signing.id },

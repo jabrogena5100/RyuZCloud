@@ -298,6 +298,23 @@ variable "upload_max_bytes" {
   }
 }
 
+variable "signup_open" {
+  description = "Whether anyone may create an account (SIGNUP_OPEN). false for a public site: visitors can watch, only signup_allowed_emails can register."
+  type        = bool
+  default     = false
+}
+
+variable "signup_allowed_emails" {
+  description = "Addresses that may register while signup_open is false (SIGNUP_ALLOWED_EMAILS), e.g. the demo library account. Not secret, but visible in the task definition."
+  type        = list(string)
+  default     = []
+
+  validation {
+    condition     = alltrue([for e in var.signup_allowed_emails : can(regex("^[^@,[:space:]]+@[^@,[:space:]]+$", e))])
+    error_message = "signup_allowed_emails must be plain email addresses (no commas or spaces)."
+  }
+}
+
 # ---------------------------------------------------------------------------------------
 # Storage, queue, CDN
 # ---------------------------------------------------------------------------------------

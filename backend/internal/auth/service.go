@@ -36,6 +36,7 @@ var (
 	errInvalidCredentials = httpx.NewError(http.StatusUnauthorized, "invalid_credentials", "Invalid email or password.")
 	errEmailTaken         = httpx.NewError(http.StatusConflict, "email_taken", "An account with this email already exists.")
 	errTooManyLogins      = httpx.NewError(http.StatusTooManyRequests, "too_many_login_attempts", "Too many failed sign-in attempts. Try again later.")
+	errSignupClosed       = httpx.NewError(http.StatusForbidden, "signup_closed", "New accounts are closed on this site. You can still watch every public video.")
 )
 
 // Failed sign-ins allowed per e-mail address per window before further attempts are refused.
@@ -51,12 +52,34 @@ type Service struct {
 	ttl        time.Duration
 	secure     bool
 	logins     *loginLimiter
+
+	// Sign-up policy; the zero value is open. See WithSignup.
+	signupClosed  bool
+	signupAllowed map[string]bool
 }
 
 // NewService returns an auth service. secureCookie must be true whenever the
 // site is served over HTTPS.
 func NewService(db *pgxpool.Pool, cookieName string, ttl time.Duration, secureCookie bool) *Service {
 	return &Service{db: db, cookieName: cookieName, ttl: ttl, secure: secureCookie, logins: newLoginLimiter(loginMaxFailures, loginWindow)}
+}
+
+// WithSignup closes public sign-up when closed is true; the allowed addresses (lower-case) can still
+// register. It returns s so it can be chained onto NewService.
+func (s *Service) WithSignup(closed bool, allowed []string) *Service {
+	s.signupClosed = closed
+	s.signupAllowed = make(map[string]bool, len(allowed))
+	for _, email := range allowed {
+		s.signupAllowed[email] = true
+	}
+	return s
+}
+
+// SignupOpen reports whether anyone may create an account.
+func (s *Service) SignupOpen() bool { return !s.signupClosed }
+
+func (s *Service) mayRegister(email string) bool {
+	return !s.signupClosed || s.signupAllowed[email]
 }
 
 // execer is satisfied by both *pgxpool.Pool and pgx.Tx.
