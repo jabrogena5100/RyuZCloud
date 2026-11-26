@@ -147,8 +147,10 @@ Command: `BEFORE=19e92e7 AFTER=HEAD scripts/measure-phase5.sh` at `4712ad4`.
   by this; timings, TBT and perf scores are. The TTFF gap may be partly this too, but its direction matches the
   structural cost above.
 
-**Proposed:** revert the player and preview to native HLS first (the `19e92e7` behaviour) and keep the CLS and tile
-fixes. Not done yet; needs the owner's go-ahead.
+**Change made after this re-measure (not yet measured):** the player and previews are back to native HLS first (the
+`19e92e7` behaviour, hls.js only where there is no native HLS); the CLS and tile fixes stay. Expected: `/` and
+`/watch` weight and time to first frame back near the `19e92e7` numbers above. Re-measure:
+`BEFORE=19e92e7 AFTER=HEAD scripts/measure-phase5.sh`.
 
 ### Library and pipeline (from `GET /stats`)
 

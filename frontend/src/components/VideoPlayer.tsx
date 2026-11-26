@@ -19,11 +19,10 @@ function isCrossOrigin(src: string): boolean {
 }
 
 /**
- * HLS player. hls.js (loaded only here, so it stays out of every other page's bundle) is used
- * wherever Media Source Extensions exist, so every browser gets the same adaptive-bitrate logic.
- * Native HLS is the fallback for browsers without MSE (older iOS). Chrome 14x+ also plays HLS
- * natively, so checking canPlayType first would silently hand Chrome its own player instead
- * (measured in docs/metrics.md, row P3). The playlist and
+ * HLS player. Browsers that play HLS natively (Safari, and Chrome 14x+) use their own player; hls.js
+ * (loaded only here, so it stays out of every other page's bundle) covers the rest through Media
+ * Source Extensions. hls.js-first was tried and measured worse in Chrome: slower to the first frame
+ * and more bytes, with no fewer rebuffers (docs/metrics.md, rows W1c and P3b). The playlist and
  * segment requests are same-origin locally, so the session cookie authorizes private media.
  * In AWS the playlist lives on the CDN host (a sibling subdomain); the API sets signed
  * CloudFront cookies when it returns the video, and requests to the CDN must send them.
@@ -40,31 +39,27 @@ export function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
     setError(null);
 
     const crossOrigin = isCrossOrigin(src);
-    let cancelled = false;
-    let destroy: (() => void) | undefined;
 
-    const playNatively = () => {
+    if (video.canPlayType("application/vnd.apple.mpegurl")) {
       if (crossOrigin) {
         video.crossOrigin = "use-credentials";
       }
       video.src = src;
-      destroy = () => {
+      return () => {
         video.removeAttribute("src");
         video.load();
       };
-    };
+    }
 
+    let cancelled = false;
+    let destroy: (() => void) | undefined;
     import("hls.js")
       .then(({ default: Hls }) => {
         if (cancelled) {
           return;
         }
         if (!Hls.isSupported()) {
-          if (video.canPlayType("application/vnd.apple.mpegurl")) {
-            playNatively();
-          } else {
-            setError("This browser can't play streaming video.");
-          }
+          setError("This browser can't play streaming video.");
           return;
         }
         const hls = new Hls(
@@ -88,12 +83,7 @@ export function VideoPlayer({ src, poster, title }: VideoPlayerProps) {
         hls.attachMedia(video);
       })
       .catch(() => {
-        if (cancelled) {
-          return;
-        }
-        if (video.canPlayType("application/vnd.apple.mpegurl")) {
-          playNatively();
-        } else {
+        if (!cancelled) {
           setError("The video player couldn't be loaded.");
         }
       });
