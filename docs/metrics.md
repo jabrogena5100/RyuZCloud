@@ -109,7 +109,8 @@ the raw output was not kept.
 | --- | --- | --- |
 | P1b | Transcode realtime factor on Fargate (stated CPU and memory) | 6 |
 | P2 | Largest direct-to-storage upload (multipart is not implemented, so multipart throughput cannot be measured) | 4 |
-| P3 | Time to first frame and rebuffer count on a throttled mobile profile | 5 |
-| P4 | Lighthouse mobile and desktop per main page, before and after the redesign (page weight before is row W1) | 5 (Lighthouse is not installed) |
+| P3 | Time to first frame and rebuffer count, unthrottled and on slow 4G + 4x CPU (`frontend/scripts/measure-playback.cjs`, run by `scripts/measure-phase5.sh`) | 5 |
+| P4 | Lighthouse mobile and desktop per main page, before and after the redesign (`frontend/scripts/lighthouse.mjs`, Lighthouse 13.6.0 from devDependencies; run by `scripts/measure-phase5.sh`) | 5 |
+| W1b | Page weight before vs after on the same seeded library (W1's before had 1 clip, so it is not comparable with an after on 41) | 5 |
 | P5 | Monthly S3 and CloudFront cost of the seeded library, from its measured GB | 4 to 6 |
 | P6 | Time to rebuild from zero using rebuild-from-zero.md | 6 |
